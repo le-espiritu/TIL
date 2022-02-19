@@ -100,6 +100,8 @@
 
   + write()를 통해 출력할 값을 버퍼에 저장시켰다가 flush()를 통해 버퍼에 저장되어 있던 값들을 출력시켜 준다.
 
+    + Flush()메소드는 버퍼가 아직 가득 차지 않은 상황에서 강제로 버퍼의 내용을 전송함으로써 데드락(deadlock)상태를 해제한다.
+
   + BufferedWriter는 대량의 데이터들을 출력해줄때 속도가 System.out보다 빠르다.
 
 + BufferedReader
