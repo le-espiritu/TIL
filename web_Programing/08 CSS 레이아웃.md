@@ -105,9 +105,24 @@ Positon 속성을 사용하면 상대적/ 절대적으로 어떤 위치에 엘�
 + 최근에는 css-grid나 flex속성등 layout을 위한 속성을 사용하기 시작했으며 브라우저 지원범위를 확인해서 사용하도록 한다.
 + 특별한 위치에 배치하기 위해서는 position : absolute를 사용하고, 기준점을 static이 아닌 relative로 설정한다.
 + 네비게이션과 같은 엘리먼트는 block엘리먼트를 inline-block 으로 변경해서 가로로 배치하기도 한다.(크기를 지정할 수 있으면서 좌우로 배치될 수 있게 한다.)
-+ 엘리번트안의 텍스트의 간격과, 다른엘리먼트간의 간격은 padding과 margin속성을 잘 활용한다.
++ 엘리먼트안의 텍스트의 간격과, 다른엘리먼트간의 간격은 padding과 margin속성을 잘 활용한다.
 
 
 
+### float
 
++ clear 는 어떤 엘리먼트 위에 있는 float를 인식하게 하는것
+
+  ~~~css
+  footer{
+    clear : left
+  }
+  ~~~
+
+  + Clear 다음에 오는 left나 right는 float가 left인지 right인지를 따름 (both로 할 수도 있음)
+
+
+
++ 자식이 float인 경우에는 자기의 자식으로 생각하지 않는다.
+  + float를 자식으로 인식시키기 위해서는 부모 엘리먼트 css에 overflow : auto;를 해준다.
 
