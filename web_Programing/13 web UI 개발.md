@@ -33,7 +33,7 @@ el.addEventListener("click", function(){
 ~~~
 
 + addEventListener함수의 두번재 인자는 함수다. 
-+ 이 함 수는 나중에 이벤트가 발생할때 실행되는 함수로 이벤트핸들러 또는 이벤트리스터 또는 콜백함수라고 한다.
++ 이 함 수는 나중에 이벤트가 발생할때 실행되는 함수로 이벤트핸들러 또는 이벤트리스너 또는 콜백함수라고 한다.
 
 + Event Handler(Event Listener)콜백함수는 이벤트가 발생할 때 실행 됨
 
