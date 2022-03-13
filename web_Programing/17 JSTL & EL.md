@@ -276,3 +276,273 @@
 
 + 자바 언어를 공부할때 객체에 property라는 용어가 나오면 이 객체의 값을 변경하거나 값을 읽어들이기 위한 getter, setter 메서드를 생각하면 된다.
 
+![2](https://user-images.githubusercontent.com/88477839/158040790-64deab03-0e3f-4e76-8f74-be223b115585.png)
+
++ set 태그를 이용해서 특정한 객체의 메서드에 값을 전달할 수도 있다.
+
+
+
+### 코어 태그 : 흐름제어 태그 - if
+
++ 자바의 if와는 조금 다르게 else에 대한 처리는 없다.
+
+![3](https://user-images.githubusercontent.com/88477839/158041066-cbdfcb8d-3da9-406a-be10-7173f63dc2ed.png)
+
++ if 실습
+
+  ~~~jsp
+  <!-- jstl02.jsp -->
+  
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8"%>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  
+  <%-- <%
+  	request.setAttribute("n", 10); 아래 jstl 코드와 동일
+  %> --%>
+  <c:set var="n" scope="request" value="10"/>
+      
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  </head>
+  <body>
+  
+  <c:if test="${n == 0 }">
+  	n과 0은 같습니다.
+  </c:if>
+  <c:if test="${n == 10 }">
+  	n과 10은 같습니다.
+  </c:if>
+  	
+  </body>
+  </html>
+  
+  
+  <!-- 
+  출력 결과는
+  
+  n과 10은 같습니다.
+  -->
+  ~~~
+
+
+
+### 코어 태그 : 흐름제어 태그 - choose
+
+![2_6_2__choose](https://user-images.githubusercontent.com/88477839/158041682-ab079ad1-7b05-4d38-b45b-4aaaf9132d5d.png)
+
++ Choose 실습
+
+~~~jsp
+<!-- jstl03.jsp -->
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%
+	request.setAttribute("score", 83);
+ %>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<c:choose>
+	<c:when test="${score >= 90 }">
+		A학점입니다.
+	</c:when>
+	<c:when test="${score >= 80 }">
+		B학점입니다.
+	</c:when>
+	<c:when test="${score >= 70 }">
+		C학점입니다.
+	</c:when>
+	<c:when test="${score >= 60 }">
+		D학점입니다.
+	</c:when>
+	<c:otherwise>
+		F학점입니다.
+	</c:otherwise>
+</c:choose>
+
+</body>
+</html>
+
+<!-- 
+출력 결과는
+
+B학점입니다.
+-->
+~~~
+
+
+
+### 코어 태그 : 흐름제어 태그 - forEach
+
++ 배열이나 리스트 같은 자료구조에서 정보를 하나씩 하나씩 뽑아내올 수 있다.
+
+![2_6_2__forEach](https://user-images.githubusercontent.com/88477839/158041935-c6ced7a7-7fae-4007-a74b-ba71fa1e20dd.png)
+
++ 변수는 리스트 중에서 꺼낸 거 하나 이것을 가리킬 변수를 의미함
+
++ begin과 end를 설정해주지 않으면 처음부터 끝까지임
+
++ ForEach 실습
+
+  ~~~jsp
+  <!-- jstl04.jsp -->
+  
+  <%@page import="java.util.ArrayList"%>
+  <%@page import="java.util.List"%>
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8"%>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  <%
+  	List<String> list = new ArrayList<>();
+  	list.add("hello");
+  	list.add("world");
+  	list.add("!!!");
+  	
+  	request.setAttribute("list",list);
+  
+  %>
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  </head>
+  <body>
+  
+  <c:forEach items="${list }" var="item" begin="1">
+  	${item } <br>
+  </c:forEach>
+  
+  </body>
+  </html>
+  
+  <!-- 
+  begin ="1"일때
+  
+  world 
+  !!!  출력
+  
+  
+  begin 사용하지 않았을때
+  
+  hello 
+  world 
+  !!!  출력
+  
+  -->
+  ~~~
+
+
+
+### 코어 태그 : 흐름제어 태그 - import
+
+![2_6_2__import](https://user-images.githubusercontent.com/88477839/158042278-a0b56a1f-29bd-42ec-b1b8-bda6cd855515.png)
+
++ Import 실습
+
+  ~~~jsp
+  <!--
+  jstlValue.jsp
+  
+  실행시켰을때 url -> http://localhost:8080/firstweb/jstlValue.jsp
+  
+  -->
+  
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8"%>
+  Lee DongYeon
+  ~~~
+
+  ~~~jsp
+  <!-- jstl05.jsp -->
+  
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8"%>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  
+  <c:import url="http://localhost:8080/firstweb/jstlValue.jsp" var="urlValue" scope="request"/>
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  </head>
+  <body>
+  
+  ${urlValue}
+  
+  </body>
+  </html>
+  ~~~
+
+  
+
+### 코어 태그 : 흐름제어 태그 - redirect
+
+![2_6_2__redirect](https://user-images.githubusercontent.com/88477839/158042596-0bfcd1db-7521-4dab-a9ca-b99043f1273a.png)
+
++ 리다이렉트 하면서 페이지에 전달할 값이 존재한다면 파라미터 이름과 파라미터 값을 넣어서 지정할 수 있음
+
++ 리다이렉트 실습
+
+  ~~~jsp
+  <!-- jstl06.jsp -->
+  
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8"%>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  <c:redirect url="http://localhost:8080/firstweb/jstl05.jsp"></c:redirect>
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  </head>
+  <body>
+  
+  </body>
+  </html>
+  ~~~
+
+  
+
+### 코어 태그 : 기타 태그 - out
+
+![2_6_2__out](https://user-images.githubusercontent.com/88477839/158042870-c982eb42-2b42-450b-8162-78717506d01c.png)
+
++ 실습
+
+  ~~~jsp
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8"%>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  </head>
+  <body>
+  <c:set var = "t" value="<script type='text/javascript'>alert(1);</script>"/>
+  
+  <c:out value="${t }" escapeXml="true" />
+  </body>
+  </html>
+  ~~~
+
+  
+
