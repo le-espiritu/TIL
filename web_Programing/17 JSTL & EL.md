@@ -214,3 +214,65 @@
 >
 >이런 문제를 해결하기 위해서 등장한 것이 JSTL이다.
 
+
+
+### JSTL이란?
+
++ JSTL(JSP Standard Tag Library)은 JSP페이지에서 조건문 처리, 반복문 처리 등을 html tag형태로 작성할 수 있게 도와준다.
+
+![2_6_2_jstl](https://user-images.githubusercontent.com/88477839/158021960-6b0893a0-87be-4ac9-806e-60e9b68f3b95.png)
+
+
+
+### JSTL을 사용하려면?
+
+- http://tomcat.apache.org/download-taglibs.cgi
+- 위의 사이트에서 3가지 jar파일을 다운로드 한 후 WEB-INF/lib/ 폴더에 복사를 한다.
+
+![2_6_2_jstl_](https://user-images.githubusercontent.com/88477839/158022040-dec1470c-846c-461f-8dc4-63d3a1e4c128.png)
+
+### JSTL이 제공하는 태그의 종류
+
+![2_6_2_jstl___](https://user-images.githubusercontent.com/88477839/158022176-cdf7f78a-8ee9-4ad3-a0de-cb3d434353b0.png)
+
+###  코어 태그
+
+![2_6_2_jstl_ (1)](https://user-images.githubusercontent.com/88477839/158022202-ae9a11eb-de65-4606-b067-fd257328add3.png)
+
+
+
+### 코어태그 : 변수 지원 태그 - set, remove
+
+![1](https://user-images.githubusercontent.com/88477839/158022293-e59d56db-7b94-4ddc-9420-dddcecf51146.png)
+
+
+
+### 실습
+
+~~~jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="value1" scope="request" value="kang"></c:set>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+성 : ${value1} <br>
+<c:remove var="value1" scope="request"/> 
+성 : ${value1} <br>
+</body>
+</html>
+~~~
+
+
+
+### 코어태그 : 변수 지원 태그 - 프로퍼티, 맵의 처리
+
++ 자바 언어를 공부할때 객체에 property라는 용어가 나오면 이 객체의 값을 변경하거나 값을 읽어들이기 위한 getter, setter 메서드를 생각하면 된다.
+
