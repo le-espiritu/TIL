@@ -108,7 +108,7 @@
 + JSP페이지에서는 선언문(Declaration), 스크립트릿(Scriptlet), 표현식(Expression) 이라는 3가지의 스크립트 요소를 제공.
 
   ~~~
-  선언문(Declaration) - <%! %> : 전연변수 선언 및 메소드 선언에 사용
+  선언문(Declaration) - <%! %> : 전역변수 선언 및 메소드 선언에 사용
   스크립트릿(Scriptlet) - <% %> : 프로그래밍 코드 기술에 사용
   표현식(Expression) - <%=%> : 화면에 출력할 내용 기술에 사용
   ~~~
