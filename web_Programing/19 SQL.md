@@ -18,12 +18,13 @@
   + Insert, Update, Delete, Select 등이 여기에 해당한다.
 + **DDL (Data Definition Language) : 정의어**
   + 데이터베이스의 스키마를 정의 하거나 조작하기 위해 사용한다.
-    + 데이터베스 내에 어떤 구조로 데이터가 저장되는지를 나타내는 데이터베이스 구조를 스키마라고 칭한다.
+    + 데이터베이스 내에 어떤 구조로 데이터가 저장되는지를 나타내는 데이터베이스 구조를 스키마라고 칭한다.
   + Create, Drop, Alter 등이 여기에 해당한다.
 + **DCL (Data Control Language) : 제어어**
   + 데이터를 제어하는 언어이다.
   + 권한을 관리하고, 데이터의 보안, 무결성등을 정의한다.
   + Grant, revoke 등이 여기에 해당한다.
++ 기본적인 *SQL*문을 *CRUD*(Create Read Update Delete)라고 부릅니다
 
 
 
@@ -210,7 +211,7 @@ mysql> show databases;
 + 열(Column): 테이블 상에서의 단일 종류의 데이터를 나타냄.
   + 특정 데이터 타입 및 크기를 가지고 있음
 + 행(Row) : Column들의 값의 조합. 레코드라고 불린다.
-  + 기본키(PK)에 의해 귀분된다. 기본키는 중복을 허용하지 않으며 없어서는 안 된다.
+  + 기본키(PK)에 의해 구분된다. 기본키는 중복을 허용하지 않으며 없어서는 안 된다.
 + Field : Row와 Column의 교차점으로 Field는 데이터를 포함할 수 있고 없을 때는 NULL값을 가지고 있다.
 
 
@@ -419,7 +420,7 @@ Empty set (0.02 sec)
   + 이름이 A로 시작하는 사원 찾기
 
   ~~~sql
-  select name, job from employee where name like 'A%';
+  select name, job from employee where name like '%A';
   ~~~
 
   + 이름이 A로 끝나는 사원 찾기

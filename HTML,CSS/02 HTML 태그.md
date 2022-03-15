@@ -226,3 +226,355 @@ src 속성에는 이미지의 경로가 들어가며, 이미지의 상대경로�
 + ./ - 현재 페이지가 있는 폴더를 나타냄
 + ../ - 상위 폴더로 한번 이동하라는 명령임
 + folder/이미지파일 - 현재 폴더에서 하위 폴더로 갈때는 폴더명만 입력해주면 된다.
+
+
+
+## 테이블 요소
+
+### 표의 구성 요소
+
+표는 셀(내용이 들어가는 하나의 칸)로 이루어져 있습니다.
+
+표의 행(가로 방향)을 row, 열(세로 방향)을 column이라 합니다.
+
+- <table> : 표를 나타내는 태그
+- <tr> : 행을 나타내는 태그
+- <th> : 제목 셀을 나타내는 태그
+- <td> : 셀을 나타내는 태그
+
+~~~html
+<!-- 기본적인 테이블의 형태 -->
+
+<head>
+  <style>
+      th, td { border: 1px solid; }
+  </style>
+</head>
+
+<body>
+  <table>
+    <tr>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>10</td>
+        <td>11</td>
+        <td>12</td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td>14</td>
+        <td>15</td>
+        <td>16</td>
+    </tr>
+  </table>
+</body>
+
+~~~
+
+
+
+<img width="862" alt="스크린샷 2022-03-15 13 05 23" src="https://user-images.githubusercontent.com/88477839/158304273-553189eb-ecf4-4bf9-b28c-c3b34d3bb81a.png">
+
+
+
+<img width="749" alt="스크린샷 2022-03-15 13 12 26" src="https://user-images.githubusercontent.com/88477839/158305028-3f7484a7-3817-41b1-ad30-3ab3ac3fd0b8.png">
+
+
+
++ 실습
+
+  ~~~html
+  <!doctype html>
+  <html lang="ko">
+    <head>
+      <meta charset="UTF-8">
+      <title>테이블</title>
+      <style>
+        th,td { border: 1px solid; width: 50px; height:50px}
+      </style>
+    </head>
+    <body>
+      <table>
+        <caption>Monthly Savings</caption>
+        <thead>
+        	<tr>
+          	<th>Month</th>
+            <th>Savings</th>
+          </tr>
+        </thead>
+        <tfoot>
+        	<tr>
+          	<td colspan="2">sum</td>
+          </tr>
+        </tfoot>
+        <tbody>
+        	<tr>
+          	<td>January</td>
+            <td rowspan="2">$100</td>
+          </tr>
+          <tr>
+          	<td>Fabruary</td>
+          </tr>
+        </tbody>
+      </table>
+    </body>
+  </html>
+  
+  
+  ~~~
+
+
+
+### 테이블 기타 태그 및 속성
+
+- <colgroup>
+- <col>
+- scope 속성
+- header 속성
+
+
+
+## 폼 요소
+
+> 텍스트를 입력받거나 선택을 하게끔 하는등 사용자로부터 데이터를 받아야하는 경우 사용되는 요소들을 폼 요소라고 한다.
+
+
+
+### INPUT 요소
+
+대표적인 폼 요소로, 다양한 type 속성으로 여러 종류의 입력 양식으로 나타난다.
+
+~~~html
+<input type= " ">
+~~~
+
++ text, password, radio, checkbox, tile, image, submit, reset, button...
+
++ https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+
+
+
+#### type = "text"
+
+~~~html
+<input type="text" placeholder="영문으로만 써주세요">
+~~~
+
++ placeholder 속성 : 사용자가 입력하기 전 미리 화면에 노출하는 값으로, 양식 가이드 역할을 한다.
+
+
+
+#### type = "password"
+
+~~~html
+<input type="password">
+~~~
+
++ 실제로 입력할 때 값이 노출되지 않는다.
+
+
+
+#### type="radio"
+
+~~~html
+<input type="radio" name="gender" checked >남자
+<input type="radio" name="gender">여자
+~~~
+
++ 라디오 버튼은 중복 선택이 불가능 하며 하나의 항목만을 선택해야 하며, 하나를 선택하면 나머지들은 자동으로 선택취소가 된다.
++ name이라는 속성으로 같은 radio 버튼임을 명시해줘야 한다.(그렇지 않으면 중복선택이 가능하게 됨)
++ Checke 속성므로 미리 선택되어 있게끔 할 수도 있다.
+
+
+
+#### type="checkbox"
+
+~~~html
+<input type="checkbox" name="hobby" checked>등산
+<input type="checkbox" name="hobby">독서
+<input type="checkbox" name="hobby">운동
+~~~
+
++ 체크 박스는 중복선택이 가능하다.
++ radio와 마찬가지로 name 값을 동일하게해 묶어 줘야 한다.
++ Checked 속성으로 미리 선택되어 있게끔 할 수도 있다.
+
+
+
+### type="file"
+
+~~~html
+<input type="file">
+~~~
+
++ 파일을 서버에 올릴 때 사용한다.
+
+
+
+#### type="submit" / type="reset"
+
+~~~html
+<form action="./text.html">
+  메시지 : <input type="text" name="message"><br>
+  <input type="submit" value="전송"><br>
+  <input type="reset" value="취소">
+</form>
+~~~
+
++ submit : form의 값을 서버로 전송하는 버튼
++ reset : form의 값을 초기화 하는 버튼
++ Value 속성의 값으로 이름을 변경할 수 있다.
+  + submit과 reset은 이름이 변경되더라도 기본으로 갖고 있는 동작은 변함이 없다.
+
+
+
+#### type="button"
+
+~~~html
+<form action="./text.html">
+  메시지 : <input type="text" name="message"><br>
+  <input type="button" value="등록"><br>
+</form>
+~~~
+
++ button type은 아무런 기본 동작이 없다.
+  + 그렇기 때문에 개발자가 직접 커스텀 해서 기능을 추가해줘야 할때 사용한다.
+
+
+
+#### type="image"
+
+~~~html
+<form action="./text.html">
+  메시지 : <input type="text" name="message"><br>
+  <input type="image" src="" alt="로그인" width="100px" height="50px">
+</form>
+~~~
+
++ 기능은 submit과 동일하게 값을 전송하는 것임
++ 버튼의 모양에 이미지를 삽입할 수 있음
+
+
+
+### SELECT 요소
+
+> 선택 목록상자 (콤보박스) - 누르면 아래로 옵션들이 뜨는 것
+
+~~~html
+<select>
+  <option>서울</option>
+  <option selected>경기</option>
+  <option>강원</option>
+</select>
+~~~
+
++ Selected 속성이 되어있으면 기본값으로 selected 된 옵션이 노출됨
+
+
+
+### TEXTAREA요소
+
+> 여러 줄 텍스트 입력 상자
+
+~~~html
+<textarea cols="30" rows="5" placeholder="자기소개는 짧게 해주세요">
+</textarea>
+~~~
+
++ \<input type="text"\> 는 한줄만 입력 받을 수 있었던 반면 textarea는 여러줄을 입력 받을 수 있음
+
++ cols(가로)와 rows(세로)로 박스 크기를 조절 할 수 있다.
+
+
+
+### BUTTON 요소
+
+~~~html
+<button type=" ">...</button>
+~~~
+
+~~~html
+<form action="./text.html">
+  메시지 : <input type="text" name="message"><br>
+  <button type ="submit">전송</button>
+  <button type="reset">취소</button>
+</form>
+~~~
+
++ \<input type="submit">과 \<input type="reset">과 역할이 동일함.
+
++ button type="button"도 있음
+
+
+
+### LABEL 요소
+
+> 폼 컨트롤과 연결시켜주기 위함으로 웹 접근성 향상에 도움이 된다.(필수적)
+
+~~~html
+<label for="username">이름:</label>
+<input type="text" id="username">
+
+<label for="userlocation">사는곳:</label>
+<select id="userlocation">
+  <option>서울</option>
+</select>
+
+<label for="usercomment">하고 싶은말:</label>
+<textarea id="usercomment">
+
+</textarea>
+~~~
+
++ 연결해주고자 하는 폼 요소의 id 속성의 값과 해당 label 요소의 for 속성의 값을 동일하게 적어줘야 한다.
+
+
+
+### FIELDSET, LEGEND 요소
+
+~~~html
+<form>
+  <fieldset>
+    <legend>기본 정보</legend>
+		<input type="...">
+  </fieldset>
+  
+  <fieldset>
+    <legend>부가 정보</legend>
+		<input type="...">
+  </fieldset>
+</form>
+
+~~~
+
++ \<fieldset> : 여러 개의 폼 요소를 그룹화하여 구조적으로 만들기 위해 사용
++ \<legend> : 폼 요소의 제목으로 \<fieldset> 요소 내부에 작성
+  + \<fieldset> 태그로 묶인 그룹의 이름을 지정해주는 태그임
+  + \<fieldset>요소에 가장 먼저 자식으로 선언되어야 함
+
+
+
+### FORM 요소
+
+> 폼 데이터를 그룹화하여 서버에 전송한다.
+
+~~~html
+<form action="..." method="...">
+  
+</form>
+~~~
+
++ action : 폼 데이터를 처리하기 위한 서버의 주소
++ Method : 데이터를 전송하는 방식을 지정(get, post)
++ 폼 태그는  fieldset 요소까지 다 감싸줌
