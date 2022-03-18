@@ -29,8 +29,18 @@
     <version>5.1.45</version>
   </dependency>
   ~~~
-
-
+  
+  ~~~xml
+  <!-- mysql 버전 8.x.x일 경우  -->
+  
+  <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.28</version>
+  </dependency>
+  ~~~
+  
+  
 
 ### 참고
 
@@ -82,8 +92,11 @@
   Class.forName("com.mysql.jdbc.Driver");
   ~~~
 
+  ~~~java
+  Class.forName("com.mysql.cj.jdbc.Driver"); // mysql 버전 8.x.x일 경우 
+  ~~~
+  
   + Class라는 클래스가 갖고 있는 forName이라는 메서드를 이용하면 com.mysql.jdbc.Driver <- 이 객체가 메모리에 올라간다.
-
   + Com.mysql.jdbc(패키지명).Driver(클래스명) 
     + 각각 DB벤더에서 제공하는 객체
     + 여기서는 MySQL이라는 DB 벤더가 제공하는 객체
@@ -419,11 +432,13 @@ public class RoleDao {
 		try { // 연결하는 과정에서 생길 에러나 예외 처리를 예방하기 위해 try catch로 감
 			Class.forName("com.mysql.cj.jdbc.Driver"); // mysql 버전 8.x.x일 경우 "com.mysql.cj.jdbc.Driver" 임.
 			conn = DriverManager.getConnection(dburl, dbUser, dbpasswd);
+      
 			// where 조건 부분의 인자 값은 매번 바뀔것이다.
 			// 이런 부분을 사용할때 물음표를 대신해서 사용해주는 것이 preparedStatement 라는 쿼리의 특징이다.
 			// 이렇게 사용하게 되면 쿼리 자체는 계속 변경되지 않고 물음표가 바인딩 되는 부분만 바뀐다.
 			String sql = "SELECT description,role_id FROM role WHERE role_id = ?";
 			ps = conn.prepareStatement(sql);
+      
 			//v role_id컬럼이 Integer기 때문에 setInt이다.
 			ps.setInt(1, roleId); //parameterIndex는 물음표의 순서이다. 첫번째 물음표에 roleId 값(getRole()의 인자)을 넣으라는 의미 
 			rs = ps.executeQuery(); // 실행해주세요 라는 의미 
@@ -582,7 +597,7 @@ public class RoleDao {
   	
   	
   	// 모두 SELECT 하는 메서드
-  	//tri-with resource 이용
+  	//try-with resource 이용 - 자원 쉽게 반납, 자원 자동해제
   	public List<Role> getRoles() { // 리턴타입 List<Role>로 바뀜 Role의 list를 리턴 
   		List<Role> list = new ArrayList<>();
   
@@ -594,7 +609,7 @@ public class RoleDao {
   
   		String sql = "SELECT description, role_id FROM role order by role_id desc";
   		
-  		// V 이부분에다가 사용할 리소스를 얻어주는 코드를 만들면 알아서 여기데 들어있는 객체들을 close하는 일을 수행함 
+  		// V 이부분에다가 사용할 리소스를 얻어주는 코드를 만들면 알아서 여기에 들어있는 객체들을 close하는 일을 수행함 
   		try (Connection conn = DriverManager.getConnection(dburl, dbUser, dbpasswd);
   				PreparedStatement ps = conn.prepareStatement(sql)) {
   
