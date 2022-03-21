@@ -146,7 +146,7 @@ http://domain/departments/1/employees : 모든 부서들 중에서 1번 부서, 
 
 <img width="1128" alt="스크린샷 2022-03-18 18 10 04" src="https://user-images.githubusercontent.com/88477839/158973927-ada12939-144b-4fed-a696-909630982b08.png">
 
-+ pom.xaml dependencies에 jdbc, Json라이브러리, 서블릿 api, JSTL dependency 추가한다.
++ pom.xml dependencies에 jdbc, Json라이브러리, 서블릿 api, JSTL dependency 추가한다.
 
   ~~~xml
   <!-- jdbc -->
@@ -342,7 +342,7 @@ public class RolesServlet extends HttpServlet {
 
 <img width="546" alt="스크린샷 2022-03-18 23 28 06" src="https://user-images.githubusercontent.com/88477839/159022198-1908933d-016f-4914-b7b3-f34258d75a09.png">
 
-+ repository 안에 사용하고 있는 라이브러리들이 다 여기에 위치한것을 확인 할 수 있다.
++ repository 안에, 사용하고 있는 라이브러리들이 다 여기에 위치한것을 확인 할 수 있다.
 + 이 부분을 제대로 읽어오지 못했다던가 하는 문제들이 발생했을때 import가 제대로 되지 않는 문제들이 발생한다.
 + 이런 경우에는 이클립스를 종료하고 user 폴더의 .m2 폴더를 삭제해준다.
 + 이클립스를 재실행하고 프로젝트 우클릭 - properties -  maven - update project를 눌러서 실행하면 된다.
@@ -412,21 +412,24 @@ public class RoleByIdServlet extends HttpServlet {
 
   <img width="835" alt="스크린샷 2022-03-19 00 57 19" src="https://user-images.githubusercontent.com/88477839/159038660-aa06b3f4-ca25-4b23-8b7e-84717300b7ef.png">
 
-  + Url을 /roles/100으로 해줬을 때의 결과
+  + URI을 /roles/100으로 해줬을 때의 결과
 
   <img width="835" alt="스크린샷 2022-03-19 00 57 30" src="https://user-images.githubusercontent.com/88477839/159038955-b7033e03-f793-4417-971d-856b500f83e0.png">
 
-  + url을 /roles/101으로 해줬을 때의 결과
+  + URI을 /roles/101으로 해줬을 때의 결과
 
   <img width="838" alt="스크린샷 2022-03-19 00 57 41" src="https://user-images.githubusercontent.com/88477839/159039101-d7dd6a70-4ad1-4c3f-aaf5-c9fc11072c8c.png">
 
-  + url을 /roles/102로 해줬을 때의 결과
+  + URI을 /roles/102로 해줬을 때의 결과
 
   
 
-  
++ URI와 URL의 차이
+  + https://velog.io/@torang/URL%EA%B3%BC-URI%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90
 
-  
+
+
+
 
 
 
