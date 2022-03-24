@@ -150,3 +150,89 @@ requestAnimationFrame(run);
 
 
 
+### CSS 기법으로 애니메이션 구현
+
++ transition을 이용한 방법
+
++ 이 방법이 JavaScript로 구현한 것보다 더 빠르다고 알려져 있다.
+
++ 특히 모바일웹에서는 transform을 사용한 element의 조작을 많이 구현한다.
+
++ [링크 바로가기](https://robots.thoughtbot.com/transitions-and-transforms)
+
+  ~~~css
+  /*css */
+  
+  .wrap {
+    margin: 50px;
+  }
+  
+  .container {
+    display: inline-block;
+    width: 300px;
+  }
+  
+  h1 {
+    color: lightgray;
+    font-family: lato;
+    font-size: 20px;
+    font-weight: 200;
+    padding: 20px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  
+  .box {
+    border-radius: 5px;
+    height: 40px;
+    margin: 50px auto;
+    width: 80px;
+    
+    .wrap:hover & {
+      transform: scale(2);
+    }
+  }
+  
+  .box1 {
+    background: mediumturquoise;
+  }
+  
+  .box2 {
+    background: #2b3f53;
+    transition: all 1s; /*애니메이션과 함께 모든 css 속성(all)을 1초(1s)동안 변화시키라는 의미*/
+  }
+  ~~~
+
+  ~~~html
+  <div class="wrap">
+    <div class="container">
+      <h1>Without transition</p>
+      <div class="box1 box"></div>
+    </div>
+     <div class="container">
+      <h1>With transition</p>
+      <div class="box2 box"></div>
+    </div>
+  </div>
+  ~~~
+
+  + transition이 없으면 애니메이션 동작 없이 박스의 크기가 변한다.(사진 두장을 바꿔서 보여주듯이)
+  + transition이 있으면 부드러운 애니메이션으로 박스크기가 점진적으로 변한다.
+
+
+
+### 더 빠른 css3 애니메이션 관련 속성들
+
++ GPU가속을 이용하는 속성을 사용하면 애니메이션 처리가 빠르다.
+  + transform : translateXX();
+  + transform : scale();
+  + transform : rotate();
+  + opacity
+
++ [링크 바로가기](http://d2.naver.com/helloworld/2061385)
+
+
+
+### 참고
+
++ vendor prefix가 무엇이고, 왜 필요한지 알아보자.
