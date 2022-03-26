@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
 ### load 이벤트 이후에 작업하는게 좋은 경우는?
 
-+ 이미지가 다 보이고나서 사용자에게 알을 보내준다던가 하는 경우
++ 이미지가 다 보이고나서 사용자에게 알림을 보내준다던가 하는 경우
 + load를 쓸일은 그렇게 많지는 않다.
 
 
@@ -145,14 +145,14 @@ document.addEventListener("DOMContentLoaded",function(){
   ~~~html
   <ul>
     <li>
-      <img src="https://images-na.,,,,,/513hgbYgL._AC_SY400_.jpg" class="product-image" >    </li>
+      <img src="https://images-na.,,,,,/513hgbYgL._AC_SY400_.jpg" class="product-image" >    	 </li>
     <li>
-      <img src="https://images-n,,,,,/41HoczB2L._AC_SY400_.jpg" class="product-image" >    </li>
+      <img src="https://images-n,,,,,/41HoczB2L._AC_SY400_.jpg" class="product-image" >    	 </li>
     <li>
-      <img src="https://images-na.,,,,51AEisFiL._AC_SY400_.jpg" class="product-image" >  </li>
-   <li>
+      <img src="https://images-na.,,,,51AEisFiL._AC_SY400_.jpg" class="product-image" >  	 	 </li>
+   	<li>
       <img src="https://images-na,,,,/51JVpV3ZL._AC_SY400_.jpg" class="product-image" >
-   </li>
+   	</li>
   </ul>
   
   <section class="log"></section>
@@ -366,8 +366,8 @@ var html = "<li><h4>{title}</h4><p>{content}</p><div>{price}</div></li>";
       var resultHTML="";
       for(var i =0; i<data.length; i++){
         resultHTML += html.replace("{title}",data[i].title)
-        							.replace("{content}",data[i].content)
-        							.replace("{price}",data[i].price);
+        									.replace("{content}",data[i].content)
+        									.replace("{price}",data[i].price);
       }
       
       document.querySelector(".content").innerHTML = resultHTML;

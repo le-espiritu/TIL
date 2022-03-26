@@ -125,7 +125,7 @@ window.clearInterval(interval); // =>setInterval()을 멈추는 명령어
 ~~~javascript
 var count = 0;
 var el = document.querySelector(".outside");
-es.style.left="0px";
+el.style.left="0px";
 
 function run(){
   if(count>70)return;
