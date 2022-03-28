@@ -523,3 +523,226 @@ public class Car {
 
 + 어떤 객체에게 객체를 주입하는 것을 DI라고 한다.
 
+
+
+## Java config를 이용한 설정
+
+> Java Config와 어노테이션을 이용해 스프링에서 사용하는 빈을 정의하고 DI하는 방법에 대해 알아보자
+
+
+
+### 어노테이션
+
++ @를 붙여서 시작한다.
++ 어노테이션은 jdk 5부터 지원이 되기 시작했다.( 이보다 낮은 버전에서는 사용할 수 없다.)
++ 사전적인 의미는 주석이지만 자바 어노테이션은 특수한 의미를 부여하는 역할을 수행한다.
+  + 이런 특수한 의미는 컴파일 시에, 혹은 런타임 시에 해석 될 수 있다.
++ 스프링은 설정을 위해서 다양한 어노테이션을 제공한다.
+
+
+
+### Java config를 이용한 설정을 위한 어노테이션
+
+~~~java
+// ApplicationConfig.java
+
+package kr.or.connect.diexam01;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class ApplicationConfig {
+	@Bean
+	public Car car(Engine e) {
+		Car c = new Car();
+		c.setEngine(e);
+		return c;
+	}
+	
+	@Bean
+	public Engine engine() {
+		return new Engine();
+	}
+}
+
+~~~
+
++ @Configuration
+  + 스프링 설정 클래스를 선언하는 어노테이션
+  + 클래스 위에 위치해야 한다.
+  + 나는 config 파일이에요 하고 알려주는 일을 한다.
++ Bean
+  + bean을 정의하는 어노테이션
+
+
+
+~~~java
+// ApplicationContextExam03.java
+
+package kr.or.connect.diexam01;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class ApplicationContextExam03 {
+	public static void main(String[] args) {
+		ApplicationContext ac = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+		
+		Car car = (Car) ac.getBean("car");
+		car.run();
+	}
+
+}
+~~~
+
++ 위 설정 파일을 읽어서 실행시키는  클래스 작성
+
+~~~java
+package kr.or.connect.diexam01;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class ApplicationContextExam03 {
+	public static void main(String[] args) {
+		ApplicationContext ac = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+		
+		Car car = (Car) ac.getBean(Car.class); // 클래스 타입을 파라미터로 넣어줌. 이 경우 bean 이름이 오타가 났어도 오타와 상관없이 bean을 불러 올 수 있다.
+		car.run();
+	}
+
+}
+~~~
+
++ 이렇게 해도 동일한 결과가 나옴
+
+
+
+### 위 코드들을 수정
+
+~~~java
+// ApplicationConfig2.java
+
+package kr.or.connect.diexam01;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan("kr.or.connect.diexam01")
+public class ApplicationConfig2 {
+
+}
+~~~
+
++ @ComponentScan
+
+  + @Controller,@Service,@Repository,@Component 어노테이션이 붙은 클래스를 찾아 컨테이너에 등록	
+
+  + 알아서 여기 있는 것들을 읽어들여서 지정해. 사용자가 일일이 하나하나 알려주지 않아도 어노테이션 붙어있는 것들을 잘 찾아내서 등록해. 이런 의미
+  + @ComponentScan 뒤에는 패키지명을 적어준다.
+    + 굉장히 광범위하기 때문에 @ComponentScan을 할 정확한 패키지를 알려주는 것임
+    + 이 패키지 안에 있는 것들 중에 스캔해와 이런 의미
+
+
+
+~~~java
+//Car.java
+
+package kr.or.connect.diexam01;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Car {
+	@Autowired
+	private Engine v8;
+	
+	public Car() {
+		System.out.println("Car 생성");
+	}
+	
+	public void run() {
+		System.out.println("엔진을 이용하여 달립니다.");
+		v8.exec();
+	}
+	
+//	public static void main(String[] args) {
+//		Engine e = new Engine(); // 이 부분을 IoC로 구현해야 함 
+//		Car c = new Car(); // 이 부분을 IcO로 구현해야 함 
+//		c.setEngine(e);
+//		c.run();
+//	}
+}
+~~~
+
++ 기존에 있던 Car 클래스에 @Component 어노테이션을 달아준다.
+
++ @Component
+
+  + 컴포넌트 스캔의 대상이 되는 어노테이션 중 하나로써 주로 유틸, 기타 지원 클래스에 붙이는 어노테이션이다.
+
++ Car가 갖고있는 setEngine()이라는 메서드를 없앤다.
+
+  + ~~~java
+    public void setEngine(Engine e) {
+    		this.v8 = e;
+    	}
+    ~~~
+
++ 대신 필드인 private Engine v8 위에 @Autowired을 붙인다.
+
+  + ~~~java
+    @Autowired
+    private Engine v8;
+    ~~~
+
++ @Autowired
+
+  + 주입 대상이 되는 bean을 컨테이너에 찾아 주입하는 어노테이션
+  + 이런 객체 (Engine 타입의 객체)가 있으면 알아서 여기다가 주입해 줘 이런 의미.
+  + @Autowired가 알아서 해주기 때문에 굳이 setter메서드는 없어도 괜찮다.
+
+~~~java
+//Engine.java
+
+package kr.or.connect.diexam01;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Engine {
+	public Engine() {
+		System.out.println("Engine 생성");
+	}
+	
+	public void exec() {
+		System.out.println("엔진이 동작합니다.");
+	}
+
+}
+~~~
+
++ 기존에 있던 Engine 클래스에 @Component 어노테이션을 달아준다.
+
+
+
+~~~java
+package kr.or.connect.diexam01;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class ApplicationContextExam04 {
+	public static void main(String[] args) {
+		ApplicationContext ac = new AnnotationConfigApplicationContext(ApplicationConfig2.class);
+		
+		Car car = (Car) ac.getBean(Car.class);
+		car.run();
+	}
+
+}
+~~~
+
++ 위 어노테이션으로 수정된 코드들을 읽어서 실행시켜주는 객체 생성.
