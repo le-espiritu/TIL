@@ -93,7 +93,7 @@
 
 ### DI 란?
 
-+ DI는 Dependency Injection의 약자로, 의조선 주입이란 뜻을 가지고 있다.
++ DI는 Dependency Injection의 약자로, 의존성 주입이란 뜻을 가지고 있다.
 + DI는 클래스 사이의 의존 관계를 빈(Bean)설정 정보를 바탕으로 컨테이너가 자동으로 연결해주는 것을 말한다.
 
 
