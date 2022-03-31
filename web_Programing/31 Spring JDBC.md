@@ -160,3 +160,249 @@
 
 
 
+### Spring JDBC를 이용한 DAO작성 실습
+
+![3_8_2_Spring_JDBC__DAO_](https://user-images.githubusercontent.com/88477839/160966336-f8634e16-3826-4d6c-84d0-f73e86bb01f9.png)
+
+
+
+## Spring JDBC 실습2
+
+
+
+### Spring JDBC를 사용하기 위한 준비
+
++ 메이븐 프로젝트 생성 (퀵스타트 1.1로)
+
++ 
+
+  ~~~xml
+  <build>
+       <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.6.1</version>
+              <configuration>
+                  <source>1.8</source>
+                  <target>1.8</target>
+              </configuration>
+          </plugin>
+      </plugins>
+    </build>
+  ~~~
+
+  + Pom.xml에 jdk를 사용하기 위한 플러그인 설정을 추가한다.
+
++ ~~~xml
+  <!-- Spring -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-context</artifactId>
+  		<version>${spring.version}</version> 
+  	</dependency>
+  ~~~
+
+  + Spring-context 추가
+
++ ~~~xml
+  <dependency>
+  	<groupId>org.springframework</groupId>
+  	<artifactId>spring-jdbc</artifactId>
+  	<version>${spring.version}</version>
+  </dependency>
+  
+  <dependency>
+  	<groupId>org.springframework</groupId>
+  	<artifactId>spring-tx</artifactId>
+  	<version>${spring.version}</version>
+  </dependency>
+  ~~~
+
+  + spring-jdbc와 spring-tx 부분을 라이브러리로 추가
+
++  ~~~xml
+   <spring.version>4.3.5.RELEASE</spring.version>
+   ~~~
+
+  + 프로퍼티즈에 스프링 버전 추가
+
++ ~~~xml
+  <!-- mysql 버전 8.x.x일 경우  -->
+  
+  <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.28</version>
+  </dependency>
+  ~~~
+
+  + mysql에서 제공하는 드라이버 추가
+
++ ~~~xml
+  <!-- basic data source -->
+  		<dependency>
+  			<groupId>org.apache.commons</groupId>
+  			<artifactId>commons-dbcp2</artifactId>
+  			<version>2.1.1</version>
+  		</dependency>
+  ~~~
+
+  + DataSource 설치
+  + 여기서 사용하는 DataSource는 Apache에서 제공하는 commons-dbcp2이다.
+
++ 라이브러리들을 추가했으면 저장을 눌러주고 프로젝트 우클릭 - 메이븐 - 업데이트프로젝트를 반드시 눌러준다.
+
+
+
+### ApplicationConfig
+
++ Config 설정파일만 따로 보관하기 위해 kr.or.connect.daoexam.config 패키지를 만든다.
+
++ ~~~java
+  // ApplicationConfig.java
+  
+  package kr.or.connect.daoexam.config;
+  
+  import org.springframework.context.annotation.Configuration;
+  import org.springframework.context.annotation.Import;
+  
+  @Configuration
+  @Import({DBConfig.class})
+  public class ApplicationConfig {
+  
+  }
+  ~~~
+
+  + ApplicationConfig 파일을 만든다.
+  + Import 어노테이션 
+    + 설정 파일을 여러개로 나눠서 작성할 수 있다.
+    + 예를 들어 이 설정 파일 하나에다가 모든 설정을 다 넣는게 아니라 데이터베이스 연결에 관련된 설정은 따로 빼주고 싶은 것이다.
+    + 하나의 클래스가 모든 정보를 갖고 있으면 나중에 유지 보수하기가 힘들다.
+    + 위 코드는(@Import({DBConfig.class})) DBConfig라는 파일에다가 DB 관련된 설정을 따로 작성하겠다는 의미
+
++ DBconfig 작성
+
+  ~~~java
+  // DBConfig.java
+  
+  package kr.or.connect.daoexam.config;
+  
+  import javax.sql.DataSource;
+  
+  import org.apache.commons.dbcp2.BasicDataSource;
+  import org.springframework.context.annotation.Bean;
+  import org.springframework.context.annotation.Configuration;
+  import org.springframework.transaction.annotation.EnableTransactionManagement;
+  
+  @Configuration
+  @EnableTransactionManagement // 트랜잭션때문에 필요한 어노테이
+  public class DBConfig {
+  	private String driverClassName = "com.mysql.cj.jdbc.Driver";
+  	private String url = "jdbc:mysql://localhost:3306/connectdb?useUnicode=true&characterEncoding=utf8";
+  
+  	private String username = "connectuser";
+  	private String password = "connect123!@#";
+  	
+  	@Bean
+  	public DataSource dataSource() {
+  		BasicDataSource dataSource = new BasicDataSource();
+  		dataSource.setDriverClassName(driverClassName);
+  		dataSource.setUrl(url);
+  		dataSource.setUsername(username);
+  		dataSource.setPassword(password);
+  		return dataSource;
+  	}
+  }
+  ~~~
+
+  + DataSource 객체는 우리가 작성할 객체가 아니고 이미 작성되어 있는 객체를 사용할 것임
+
+
+
+### DataSourceTest.java 파일
+
++ 실행파일만 따로 보관하기 위해 kr.or.connect.daoexam.name 패키지를 만든다.
+
++ ~~~java
+  package kr.or.connect.daoexam.name;
+  
+  import java.sql.Connection;
+  
+  import javax.sql.DataSource;
+  
+  import org.springframework.context.ApplicationContext;
+  import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+  
+  import kr.or.connect.daoexam.config.ApplicationConfig;
+  
+  public class DataSourceTest {
+  
+  	public static void main(String[] args) {
+  		ApplicationContext ac = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+  		DataSource ds = ac.getBean(DataSource.class);
+  		Connection conn = null;
+  		try {
+  			conn = ds.getConnection();
+  			if(conn != null)
+  				System.out.println("접속 성공");
+  		}catch (Exception e) {
+  			e.printStackTrace();
+  		}finally {
+  			if(conn != null) {
+  				try {
+  					conn.close();
+  				}catch(Exception e) {
+  					e.printStackTrace();
+  				}
+  			}
+  		}
+  		
+  	}
+  
+  }
+  ~~~
+
+
+
+## Spring JDBC 실습 3
+
+### DTO 생성
+
++ kr.or.connect.daoexam.dto 패키지 생성
+
++ Role.java(dto) 생성
+
+  ~~~java
+  package kr.or.connect.daoexam.dto;
+  
+  public class Role {
+  	private int roleId;
+  	private String description;
+  	
+  	public int getRoleId() {
+  		return roleId;
+  	}
+  	public void setRoleId(int roleId) {
+  		this.roleId = roleId;
+  	}
+  	public String getDescription() {
+  		return description;
+  	}
+  	public void setDescription(String description) {
+  		this.description = description;
+  	}
+  	@Override
+  	public String toString() {
+  		return "Role [roleId=" + roleId + ", description=" + description + "]";
+  	}
+  
+  
+  }
+  ~~~
+
+  
+
+### DAO 생성
+
++ kr.or.connect.daoexam.dao 패키지 생성
