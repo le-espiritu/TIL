@@ -260,13 +260,6 @@
 
 
 
-### Controller 작성 실습
-
-1. 웹 브라우저에서 http://localhost:8080/mvcexam/plusform 이라고 요청을 보내면 서버는 웹 브라우저에게 2개의 값을  입력받을 수 있는 입력 창과 버튼이 있는 화면을 출력한다.
-2. 웹 브라우저에 2개의 값을 입력하고 버튼을 클릭하면 http://localhost:8080/mvcexam/plus URL로 2개의 입력값이 POST방식으로 서버에게 전달한다. 서버는 2개의 값을 더한 후, 그 결과 값을 JSP에게 request scope으로 전달하여 출력한다.
-
-
-
 ### 프로젝트 생성
 
 + 메이븐 프로젝트를 하나 생성한다 
@@ -424,6 +417,9 @@
 
 + DispatcherServlet이 읽어들여야 될 설정은 별도로 하게 된다. - 자바 config로 한다.
 
+  + DispatcherServlet은 해당 설정 파일을 읽어들여서 내부적으로 Spring 컨테이너인 ApplicationContext를 생성하게 되는 것이다.
+
+
 
 
 ### **@Configuration**
@@ -496,7 +492,7 @@
 
 + 해당 클래스는 DispatcherServlet이 실행될 때 읽어들이는 설정 파일이다.
 
-+ 프로젝트 우클릭 -> 패키지를 새로 생성한다. (패키지 이름은 kr.or.connect.mvcexam)
++ 프로젝트 우클릭 -> 패키지를 새로 생성한다. (패키지 이름은 kr.or.connect.mvcexam.config)
 
 + 해당 패키지에 클래스를 작성한다.
 
@@ -575,7 +571,17 @@
   }
   ~~~
 
-  
+  + addResourceHandlers() 
+    + Web.xml에서 모든 요청이 들어 왔을때 서블릿(디스패처서블릿)을 실행하게 해줘요 라고 설정했었다.
+    + 그런데 이때 들어오는 모든 요청중에는 컨트롤러의 URL이 매핑되어있는 요청만 들어오는 것이 아니라 CSS라던가, 이미지라던가 자바스크립트같은 요청들도 들어와서 문제가 생긴다.
+    + 위 문제를 해결하기 위한 메소드이고 "/css/**" 이렇게 시작하는 URL 요청은 애플리케이션 루트 디렉토리 아래에 있는 "/css/"에서 찾아요 라는 의미임.
+  + addViewControllers() 메서드
+    + 특정 URL에 대한 처리를 컨트롤러 클래스를 작성하지 않고 매핑할 수 있도록 해준다.
+    + "/" 라는 요청이 들어오면 "main"이라고 하는 뷰의 이름으로 보여준다.
+      + View name("main")은 ViewResolver라는 객체를 이용해서 찾는다. 
+  + getInternalResourceViewResolver() 메서드
+    + 이 메서드에서 설정된 형태로 뷰를 사용하게 된다.
+    + InternalResourceViewResolver를 생성하고 있고 이 리졸버에게 Prefix, Suffix를 지정하고 있다.
 
   ### web.xml 파일에 DispatcherServlet을 FrontController로 설정하기
 
@@ -620,3 +626,199 @@
   + 만약 난데 없이 Hello world라는 텍스트가 담긴 브라우저 화면이 뜬다면 WEB-INF 안에 있는 indext.jsp 파일을 삭제 시켜준다.
   + 그 이후 정상적으로 main page!! 라는 텍스트가 출력 되는 것을 확인할 수 있다.
 
+
+
+## Spring MVC를 이용한 웹 페이지 작성 실습3
+
+
+
+### Controller 작성 실습
+
+1. 웹 브라우저에서 http://localhost:8080/mvcexam/plusform 이라고 요청을 보내면 서버는 웹 브라우저에게 2개의 값을  입력받을 수 있는 입력 창과 버튼이 있는 화면을 출력한다.
+2. 웹 브라우저에 2개의 값을 입력하고 버튼을 클릭하면 http://localhost:8080/mvcexam/plus URL로 2개의 입력값이 POST방식으로 서버에게 전달한다. 서버는 2개의 값을 더한 후, 그 결과 값을 JSP에게 request scope으로 전달하여 출력한다.
+
+
+
+### view 만들기
+
++ <img width="793" alt="스크린샷 2022-04-03 13 56 45" src="https://user-images.githubusercontent.com/88477839/161412200-576eea6b-3d8d-4d59-888b-25d8ddfc20f5.png">
+  + Views 폴더 밑에 plusform.jsp 파일을 만든다.
++ <img width="852" alt="스크린샷 2022-04-03 14 01 32" src="https://user-images.githubusercontent.com/88477839/161412350-c4610cca-c65c-4053-8969-620575b22794.png">
+  + Views 폴더 밑에  plusResult.jsp 파일을 만든다. - 처리해서 보여주기 위해
+  + request scope에 넣어줬던 ${value1},${value2}, ${result}을 꺼내와서 (EL표기법으로) 출력할 수 있는 JSP파일
+
+
+
+### Controller 만들기
+
++ 컨트롤러만 보관하기 위해 kr.or.connect.mvcexam.controller 패키지를 생성한다.
+
++ plusController 클래스 파일을 생성한다.
+
+  <img width="845" alt="스크린샷 2022-04-03 14 13 16" src="https://user-images.githubusercontent.com/88477839/161412699-a1365f3a-c469-4ca4-a84b-76406f43fdb9.png">
+
+  + 클래스명 위에 @Controller 어노테이션을 표기해준다.
+  + @GetMapping 어노테이션으로 RequestMapping을 사용한다.
+  + 보여주고자 하는 뷰(jsp)의 이름을 리턴해준다.
+  + 저장후 프로젝트 우클릭 - 런 - 런온서버를 클릭해서 웹 어플리케이션을 실행시켜준다.
+  + 실행된 웹 어플리케이션 URL에 RequestMapping 경로를 추가하여 실행시켜본다
+    + ocalhost:8080/mvcexam/plusform
+
+  <img width="1010" alt="스크린샷 2022-04-03 14 34 28" src="https://user-images.githubusercontent.com/88477839/161413353-c3f3f520-db04-4dda-bdcc-5fb3166e7017.png">
+
+  + Plus 메서드를 추가한다.
+
+  + 위 메서드의 인자 부분 코드는 form의 input에서 name이 value1으로 넘어오는데 그 부분이 @Requestparam이다. 이것의 이름이 value1인거, 이것을 int형 변수 value1에 넣어달라는 의미임
+
+  + 위 메서드에서 구한 값들을 request scope에 넣어줘야 한다.
+
+  + 이 때 HttpServletRequest 를 선언해서 쓸 수 있지만 그렇게 되면 이것에 종속되는 것이기 때문에 여기서는 쓰지 않고
+
+  + Spring이 제공하고 있는 ModelMap 객체에 넣어줄 것이다.
+
+  + 그렇게 되면 Spring이 알아서 request scope에다가 매핑 시켜준다.
+
+  + 저장하고 실행시켰을때 만약 EL 표기법이 제대로 인식하지 않았다면
+
+    <img width="1048" alt="스크린샷 2022-04-03 14 54 47" src="https://user-images.githubusercontent.com/88477839/161413949-11cac5b5-580a-41fc-a758-bdb8bd2106f5.png">
+
+    + wem.xml 파일을 위와 같이 변경해준다.
+
+  + 그리고 변경후 잘 인식하지 못할 수 있기 때문에 servers 패널에서 해당 프로젝트를 삭제하고 다시 시작해준다.
+
+  
+
+
+
+### **Spring MVC가 지원하는 Controller메소드 인수 타입**
+
+- javax.servlet.ServletRequest
+- **javax.servlet.http.HttpServletRequest**
+- org.springframework.web.multipart.MultipartRequest
+- org.springframework.web.multipart.MultipartHttpServletRequest
+- javax.servlet.ServletResponse
+- **javax.servlet.http.HttpServletResponse**
+- **javax.servlet.http.HttpSession**
+- org.springframework.web.context.request.WebRequest
+- org.springframework.web.context.request.NativeWebRequest
+- java.util.Locale
+- java.io.InputStream
+- java.io.Reader
+- java.io.OutputStream
+- java.io.Writer
+- javax.security.Principal
+- java.util.Map
+- org.springframework.ui.Model
+- org.springframework.ui.ModelMap
+- **org.springframework.web.multipart.MultipartFile**
+- javax.servlet.http.Part
+- org.springframework.web.servlet.mvc.support.RedirectAttributes
+- org.springframework.validation.Errors
+- org.springframework.validation.BindingResult
+- org.springframework.web.bind.support.SessionStatus
+- org.springframework.web.util.UriComponentsBuilder
+- org.springframework.http.HttpEntity<?>
+- Command 또는 Form 객체
+
+
+
+### **Spring MVC가 지원하는 메소드 인수 애노테이션**
+
+- **@RequestParam**
+- **@RequestHeader**
+- **@RequestBody**
+- @RequestPart
+- **@ModelAttribute**
+- **@PathVariable**
+- @CookieValue
+
+
+
+### **@RequestParam**
+
+- Mapping된 메소드의 Argument에 붙일 수 있는 어노테이션
+- @RequestParam의 name에는 http parameter의 name과 멥핑
+- @RequestParam의 required는 필수인지 아닌지 판단
+
+
+
+### **@PathVariable**
+
++ URL path에다가 '?변수명 =값' 이런식으로 값을 넘겨올 때가 있었는데 이럴 때 path에서 넘겨온 값을 받기 위한 어노테이션 
+
+- @RequestMapping의 path에 변수명을 입력받기 위한 place holder가 필요함
+- place holder의 이름과 PathVariable의 name 값과 같으면 mapping 됨
+- required 속성은 default true 임
+
+
+
+### **@RequestHeader**
+
+- 요청 정보의 헤더 정보를 읽어들 일 때 사용
+- @RequestHeader(name="헤더명") String 변수명
+
+
+
+### **Spring MVC가 지원하는 메소드 리턴 값**
+
+- **org.springframework.web.servlet.ModelAndView**
+- org.springframework.ui.Model
+- java.util.Map
+- org.springframework.ui.ModelMap
+- org.springframework.web.servlet.View
+- **java.lang.String**
+- java.lang.Void
+- org.springframework.http.HttpEntity<?>
+- org.springframework.http.ResponseEntity<?>
+- **기타 리턴 타입**
+
+
+
+## Spring MVC를 이용한 웹 페이지 작성 실습 4
+
+
+
+### Controller 작성 실습2
+
+1. http://localhost:8080/mvcexam/userform 으로 요청을 보내면 이름, email, 나이를 물어보는 폼이 보여진다.
+2. 폼에서 값을 입력하고 확인을 누르면 post방식으로 http://localhost:8080/mvcexam/regist에 정보를 전달하게 된다.
+3. regist에서는 입력받은 결과를 콘솔 화면에 출력한다.
+
+
+
++ userform.jsp 뷰 작성
+
+  <img width="956" alt="스크린샷 2022-04-04 01 57 33" src="https://user-images.githubusercontent.com/88477839/161439211-c2bf7bd1-36aa-4dff-a8b9-c4c03b448942.png">
+
+
+
++ UserController 작성
+
+  <img width="861" alt="스크린샷 2022-04-04 02 03 33" src="https://user-images.githubusercontent.com/88477839/161439366-d3d93648-5489-4e73-81c8-3b7edd7dd18b.png">
+
+  
+
+  + @Controller 어노테이션을 붙여준다.
+
+  + 여기서는 @GetMapping 어노테이션 대신에 @RequestMapping 어노테이션을 붙여줬다.
+
++ regitst 메서드 생성
+
+  <img width="1006" alt="스크린샷 2022-04-04 02 12 18" src="https://user-images.githubusercontent.com/88477839/161439677-d0af1689-3330-4fc7-82ad-336ce60ecd48.png">
+
+  + Resist()메서드의 인자로 값을 하나하나 받아올 것이 아니라 DTO로 한꺼번에 받아온다.
+
++ DTO 생성
+
+  <img width="952" alt="스크린샷 2022-04-04 02 14 57" src="https://user-images.githubusercontent.com/88477839/161439767-4acc3aab-2e63-4e45-823b-af049a06a148.png">
+
+  
+
+  + kr.or.connect.mvcexam.dto 패키지를 만들어준다.
+  + 그 아래 User.java DTO를 만들어 준다.
+
++ regsit.jsp 뷰 생성
+
+  <img width="926" alt="스크린샷 2022-04-04 02 17 53" src="https://user-images.githubusercontent.com/88477839/161439881-733ba3f2-e75f-4790-aa9b-c5ea2f65797f.png">
+
+  
