@@ -332,7 +332,7 @@
 
 
 
-### 데이터 정보를 담을 수 있는 객체 생성 
+### DTO - 데이터 정보를 담을 수 있는 객체 생성 
 
 <img width="690" alt="스크린샷 2022-03-17 14 50 33" src="https://user-images.githubusercontent.com/88477839/158745677-d7b201c7-97b0-42c4-9799-eddd3747ebf0.png">
 
