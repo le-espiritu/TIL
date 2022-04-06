@@ -807,6 +807,7 @@
   <img width="1006" alt="스크린샷 2022-04-04 02 12 18" src="https://user-images.githubusercontent.com/88477839/161439677-d0af1689-3330-4fc7-82ad-336ce60ecd48.png">
 
   + Resist()메서드의 인자로 값을 하나하나 받아올 것이 아니라 DTO로 한꺼번에 받아온다.
+  + Spring MVC가 알아서 userform.jsp 에서 일치하는 name에 있는 값을 user 객체안에 넣어준다. (객체 생성해서)
 
 + DTO 생성
 
@@ -816,9 +817,39 @@
 
   + kr.or.connect.mvcexam.dto 패키지를 만들어준다.
   + 그 아래 User.java DTO를 만들어 준다.
+  + 스프링이 알아서 값들을 채줘줄건데 이때 스프링은 setter 메서드를 사용한다.
 
 + regsit.jsp 뷰 생성
 
   <img width="926" alt="스크린샷 2022-04-04 02 17 53" src="https://user-images.githubusercontent.com/88477839/161439881-733ba3f2-e75f-4790-aa9b-c5ea2f65797f.png">
+
+  
+
+
+
+### Controller 작성 실습2
+
+1. http://localhost:8080/mvcexam/goods/{id} 으로 요청을 보낸다.
+   + {id} - 이렇게 넘기는 값을 path variable 이라고 한다.
+2. 서버는 id를 콘솔에 출력하고, 사용자의 브라우저 정보를 콘솔에 출력한다.
+3. 서버는 HttpServletRequest를 이용해서 사용자가 요청한 PATH정보를 콘솔에 출련한다.
+
+
+
++ goodsById.jsp 작성
+
+  <img width="890" alt="스크린샷 2022-04-06 12 41 33" src="https://user-images.githubusercontent.com/88477839/161891675-85accc93-2ff2-46b2-b1f2-a72cc471cf14.png">
+
++ GoodsController.java 작성
+
+  <img width="1174" alt="스크린샷 2022-04-06 12 41 46" src="https://user-images.githubusercontent.com/88477839/161891753-5c2d708d-bb9e-4839-971c-08916f1dc939.png">
+
+  
+
++ 실행결과
+
+  <img width="888" alt="스크린샷 2022-04-06 12 47 51" src="https://user-images.githubusercontent.com/88477839/161891965-87d634d2-9c6e-46ac-b81a-eac08e4f6591.png">
+
+  
 
   
