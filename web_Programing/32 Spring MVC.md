@@ -662,7 +662,7 @@
   + 보여주고자 하는 뷰(jsp)의 이름을 리턴해준다.
   + 저장후 프로젝트 우클릭 - 런 - 런온서버를 클릭해서 웹 어플리케이션을 실행시켜준다.
   + 실행된 웹 어플리케이션 URL에 RequestMapping 경로를 추가하여 실행시켜본다
-    + ocalhost:8080/mvcexam/plusform
+    + localhost:8080/mvcexam/plusform
 
   <img width="1010" alt="스크린샷 2022-04-03 14 34 28" src="https://user-images.githubusercontent.com/88477839/161413353-c3f3f520-db04-4dda-bdcc-5fb3166e7017.png">
 
@@ -682,7 +682,7 @@
 
     <img width="1048" alt="스크린샷 2022-04-03 14 54 47" src="https://user-images.githubusercontent.com/88477839/161413949-11cac5b5-580a-41fc-a758-bdb8bd2106f5.png">
 
-    + wem.xml 파일을 위와 같이 변경해준다.
+    + web.xml 파일을 위와 같이 변경해준다.
 
   + 그리고 변경후 잘 인식하지 못할 수 있기 때문에 servers 패널에서 해당 프로젝트를 삭제하고 다시 시작해준다.
 
@@ -806,7 +806,7 @@
 
   <img width="1006" alt="스크린샷 2022-04-04 02 12 18" src="https://user-images.githubusercontent.com/88477839/161439677-d0af1689-3330-4fc7-82ad-336ce60ecd48.png">
 
-  + Resist()메서드의 인자로 값을 하나하나 받아올 것이 아니라 DTO로 한꺼번에 받아온다.
+  + regist()메서드의 인자로 값을 하나하나 받아올 것이 아니라 DTO로 한꺼번에 받아온다.
   + Spring MVC가 알아서 userform.jsp 에서 일치하는 name에 있는 값을 user 객체안에 넣어준다. (객체 생성해서)
 
 + DTO 생성
