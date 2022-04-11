@@ -15,18 +15,18 @@
 
 
 
-### MessageConvertor
+### MessageConverter
 
 + 자바 객체와 HTTP요청/응답 바디를 변환하는 역할
 + @ResponseBody, @RequestBody
 + @EnableWebMvc로 인한 기본 설정
   + WebMvcConfigurationSupport를 사용하여 Spring MVC 구현을 하고 있음
-  + Default MessageConvertor를 제공하고 있음
+  + Default MessageConverter를 제공하고 있음
   + [링크 바로가기](https://github.com/spring-projects/spring-framework/blob/master/spring-webmvc/src/main/java/org/springframework/web/servlet/config/annotation/WebMvcConfigurationSupport.java) 의 addDefaultHttpMessageConverters메소드 항목 참조
-+ RestController를 사용하기 위해서는 MessageConvertor가 굉장히 중요한다.
++ RestController를 사용하기 위해서는 MessageConverter가 굉장히 중요한다.
   + 예를 들면 외부에서 전달받은 JSON 메서드를 내부에서 사용할 수 있는 객체로 변환하거나 
   + 컨트롤러를 리턴 한 객체가 클라이언트에게 JSON으로 변환해서 전달할 수 있도록 하는 역할을 수행
-+ 이런 MessageConvertor를 @EnableWebMvc로 사용하게 되면 기본으로 제공이 된다.
++ 이런 MessageConverter를 @EnableWebMvc로 사용하게 되면 기본으로 제공이 된다.
 
 
 
@@ -98,6 +98,8 @@
   		if(count % GuestbookService.LIMIT > 0)
   			pageCount++;
   		
+      //array는 크기가 고정되어 있기 때문에
+      //아래 코드와 같이 크기가 가변적인 상황에서 쓸 수 없다.
   		List<Integer> pageStartList = new ArrayList<>();
   		for(int i = 0; i < pageCount; i++) {
   			pageStartList.add(i * GuestbookService.LIMIT);

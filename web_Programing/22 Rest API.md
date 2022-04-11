@@ -50,7 +50,7 @@
 
 ### REST API란?
 
-+ REST는 REpresentational State Transfer라는 용어의 약자로서 2000년도에 로이 필딩 (Roy Fielding)의 박사학위 논문에서 최초로 소개되었습니다.
++ REST는 Representational State Transfer라는 용어의 약자로서 2000년도에 로이 필딩 (Roy Fielding)의 박사학위 논문에서 최초로 소개되었습니다.
 
 + REST API란 말 그대로 REST형식의 API를 말합니다. 
 

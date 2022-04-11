@@ -365,7 +365,7 @@ public class ApplicationContextExam01 {
 		System.out.println("초기화 완료 ");
 		
 		// 공장의 getBean()메서드를 이용해서 객체를 얻어온다.
-		// getBea()의 리턴타입은 오브젝트이기 때문에 (UserBean)으로 형변환 해준다. 
+		// getBean()의 리턴타입은 오브젝트이기 때문에 (UserBean)으로 형변환 해준다. 
     // 리턴타입이 오브젝트인 이유는 스프링이 제공하는 공장이 만들어 내는 객체는 다양할 것이기 때문이다.
 		UserBean userBean = (UserBean)ac.getBean("userBean");
 		userBean.setName("kang");

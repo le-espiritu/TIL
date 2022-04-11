@@ -6,6 +6,14 @@
 
 + REST API의 모든 스타일을 구현하지 못할 경우에는 REST API라고 부르기 보다는 Web API나 HTTP API라고 부른다.
 
+  
+
++ 통신을 통해 한 곳의 자원들을 다른 곳에서 쉽게 접근할 수 있도록 하는 것을 Web API라고 합니다. 
+
++ 그 중에서도 HTTP 통신을 활용하는 API를 HTTP API라고 하며, REST API의 특성들을 가지는 API를 REST API라고 합니다.
+
+  출처: https://til-devsong.tistory.com/111 [Personal Repo.]
+
 
 
 ### Web API 디자인 가이드
