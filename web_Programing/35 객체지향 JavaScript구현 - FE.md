@@ -175,7 +175,7 @@ healthObj.showHealth();
   + 위 함수에서 this는 Window를 가리킨다.
   + showHealth는 이미 반환이 된 이후이기 때문이다.
 
-+ ES6의 arrow함수를 사용하는 경우에 this는 healthObj를 그대로 가르키고 있다.
++ ES6의 arrow함수를 사용하는 경우에 this는 healthObj를 그대로 가리키고 있다.
 
   ~~~javascript
   var healthObj = {
@@ -219,7 +219,7 @@ healthObj.showHealth();
 
   + setTimeout의 콜백 함수 에서 this가 healthObj를 가르키게 할려면 bind()를 사용하면 된다.
 
-  + 위 코드에서 bind(this)는 콜백함수 바깥에 위치하고 있어 여기서 this는 healthObj를 가르키고 있는 것이다. 즉 아직은 showHealth가 실행되고 있는 공간인 것이다.
+  + 위 코드에서 bind(this)는 콜백함수 바깥에 위치하고 있기 때문에 여기서 this는 healthObj를 가르키고 있는 것이다. 즉 아직은 showHealth가 실행되고 있는 공간인 것이다.
 
   + ~~~
     function(){
