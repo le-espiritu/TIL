@@ -165,3 +165,202 @@
 
 
 
+### 이전에 작성했던 TabUI 코드
+
+~~~css
+/*  tabui.css */
+
+h2{text-align: center;}
+h2,h4{
+  margin:0px;
+}
+.tab{
+  width:600px;
+  margin:0px auto;
+}
+.tabmenu{
+  background-color: bisque;
+}
+.tabmenu > div{
+  display: inline-block;
+  width: 146px;
+  text-align : center;
+  height : 50px;
+  line-height: 50px;
+  cursor: pointer;
+}
+.content{
+  padding:5%;
+  background-color: antiquewhite;
+}
+~~~
+
+~~~html
+<html>
+  <head>
+    <link rel="stylesheet" href="tabui.css"
+  </head>
+  <body>
+    <h2>TAB UI TEST</h2>
+    
+    <div class="tab">
+      <div class="tabmenu"> <!-- div대신 nav 쓸 수 있음 또는 ul li 사용 -->
+        <div>crong</div>
+        <div>jk</div>
+        <div>pobi</div>
+        <div>honux</div>
+      </div>
+      <section class="content">
+      	<h4>hello jk</h4>
+        <p>golf, facebook</p>
+      </section>
+    </div>
+    
+    <script src="tabuiJS.js"></script>
+    
+    <script id="tabcontent" type="my-template">
+    	<h4>hello {name}</h4>
+    	<p>{faborites}</p>
+    </script>
+    
+  </body>
+</html>
+~~~
+
+~~~javascript
+//tabuiJs.js
+
+function makeTemplate(data, clickedName){
+  var html = document.getElementById("tabcontent").innerHTML;
+  var resultHTML = "";
+  
+  for(var i =0, len=data.length; i<len; i++){
+		if(data[i].name === clickedName){
+      resultHTML = html.replace("{name}",data[i].name)
+    									 .replace("{favorites}",data[i].favorites.join(" ")); 
+      break;
+    }
+  }
+  document.querySelector(".content").innerHTML = resultHTML;
+}
+
+function sendAjax(url, clickedName){
+  var oReq = XMLHttpRequest();
+  oReq.addEventListener("load",function(){
+    var data = JSON.parse(oReq.responseText);
+    makeTemplate(data, clickedName);
+  });
+  oReq.open("GET", url);
+  oReq.send();
+}
+
+var tabmenu = document.querySelector(".tabmenu");
+tabmenu.addEventListener("click", function(evt){
+  sendAjax("./json.txt", evt.target.innertext);
+});
+~~~
+
+~~~
+<jostn.txt>
+
+[
+	{
+	"name":"crong",
+	"favorites" : ["golf","facebook"]
+	},
+	{
+	"name":"jk",
+	"favorites" : ["soccer","apple"]
+	},
+	{
+	"name":"honux",
+	"favorites" : ["game","orange"]
+	},
+	{
+	"name":"pobi",
+	"favorites" : ["book","youtube"]
+	}
+]
+~~~
+
+
+
+### 생성자를 통해 위 코드를 리팩토링하기
+
+~~~javascript
+//tabuiJs.js
+
+function Tab(){
+  this.registerEvent(); // Tab이 생성될 때에는 this.registerEvents()를 디폴트로 실행하게 한다.
+}
+
+Tab.prototype ={
+  registerEvents : function(){
+    var tabmenu = document.querySelector(".tabmenu");
+    tabmenu.addEventListener("click", function(evt){
+      this.sendAjax("./json.txt", evt.target.innertext);
+    }.bind(this)); // bind(this)에서 this는 Tab.prototype인듯
+  },
+  sendAjax : function(url, clickedName){
+    var oReq = XMLHttpRequest();
+    oReq.addEventListener("load",function(){
+      var data = JSON.parse(oReq.responseText);
+      this.makeTemplate(data, clickedName);
+    }.bind(this));
+    oReq.open("GET", url);
+    oReq.send();    
+  },
+  makeTemplate : function(data, clickedName){
+    var html = document.getElementById("tabcontent").innerHTML;
+    var resultHTML = "";
+
+    for(var i =0, len=data.length; i<len; i++){
+      if(data[i].name === clickedName){
+        resultHTML = html.replace("{name}",data[i].name)
+                         .replace("{favorites}",data[i].favorites.join(" ")); 
+        break;
+      }
+    }
+    document.querySelector(".content").innerHTML = resultHTML;    
+  }
+}
+
+
+
+//function makeTemplate(data, clickedName){
+//  var html = document.getElementById("tabcontent").innerHTML;
+//  var resultHTML = "";
+  
+//  for(var i =0, len=data.length; i<len; i++){
+//		if(data[i].name === clickedName){
+//      resultHTML = html.replace("{name}",data[i].name)
+//    									 .replace("{favorites}",data[i].favorites.join(" ")); 
+//      break;
+//    }
+//  }
+//  document.querySelector(".content").innerHTML = resultHTML;
+//}
+
+//function sendAjax(url, clickedName){
+//  var oReq = XMLHttpRequest();
+//  oReq.addEventListener("load",function(){
+//    var data = JSON.parse(oReq.responseText);
+//    makeTemplate(data, clickedName);
+//  });
+//  oReq.open("GET", url);
+//  oReq.send();
+//}
+
+//var tabmenu = document.querySelector(".tabmenu");
+//tabmenu.addEventListener("click", function(evt){
+//  sendAjax("./json.txt", evt.target.innertext);
+//});
+~~~
+
+~~~javascript
+var oTab = new Tab();
+~~~
+
++ object literal(객체 리터럴)을 할 때 arrow 함수를 쓰면 문제가 생길 수 있다.
++ 그래서 object literal 안세더는 arrow 함수를 잘 쓰지 않는다.
+

@@ -24,7 +24,7 @@
   }
   
   data.forEach(function(value){
-    console.log(v.tile,v.price);
+    console.log(value.tile,value.price);
   })
   ~~~
 
