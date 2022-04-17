@@ -81,7 +81,7 @@
   + 서버에서 클라이언트의 브라우저로 전송되어 사용자의 컴퓨터에 저장
   + 저장된 쿠키는 다시 해당하는 웹 페이지에 접속 할 때, 브라우저에서 서버로 쿠키를 전송
   + 쿠키는 이름(name)과 값(value)으로 구성된 자료를 저장
-    + 이릅과 값 외에도 주석(comment), 경로(path), 유효기간(Max-Age,Expires), 버전(version), 도메인(domain)과 같은 추가적인 정보를 저장
+    + 이름과 값 외에도 주석(comment), 경로(path), 유효기간(Max-Age,Expires), 버전(version), 도메인(domain)과 같은 추가적인 정보를 저장
 + 쿠키는 그 수와 크키에 제한
   + 하나의 쿠키는 4K Byte 크기로 제한
   + 브라우저는 각각의 웹사이트 당 20개의 쿠키를 허용
@@ -267,9 +267,7 @@
   	GuestbookService guestbookService;
   	
   	@GetMapping(path="/list")
-  	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,
-  						ModelMap model,HttpServletRequest request,
-  						HttpServletResponse response) {
+  	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,ModelMap model,HttpServletRequest request,HttpServletResponse response) {
   		
   		// V 쿠키
   		String value = null;
@@ -296,7 +294,7 @@
   			}
   		}
   		
-  		Cookie cookie = new Cookie("count",value); // 변경된 value의 값을 클라이언트쪽에도 적용하게 하려면 반드시 쿠키는 매번 새로 만들어서 보내줘야 한다. 그렇게 되면 클라이언트 쪽은 똑같은 이림의 쿠키가 들어왔을 때 기존의 쿠키와 교체한다.  
+  		Cookie cookie = new Cookie("count",value); // 변경된 value의 값을 클라이언트쪽에도 적용하게 하려면 반드시 쿠키는 매번 새로 만들어서 보내줘야 한다. 그렇게 되면 클라이언트 쪽은 똑같은 이름의 쿠키가 들어왔을 때 기존의 쿠키와 교체한다.  
   		cookie.setMaxAge(60*60*24*365);//1년 동안 유지.
   		cookie.setPath("/"); // /경로 이하에 모두 쿠키 적용.
   		response.addCookie(cookie); // 쿠키가 클라이언트한테 저장
@@ -339,13 +337,13 @@
   	
   }
   ~~~
-
+  
   + ~~~java
     @GetMapping(path="/list")
     	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,ModelMap model,HttpServletRequest request,HttpServletResponse response) 
         
     ~~~
-
+  
     + HttpServletRequest와 HttpServletResponse를 메서드 인자에 추가
 
   + ~~~java
@@ -374,7 +372,7 @@
     			}
     		}
     ~~~
-
+  
   + ~~~java
     model.addAttribute("cookieCount", value);
     ~~~
@@ -430,3 +428,321 @@
 
     
 
+## 쿠키를 이용한 상태정보 유지하기 2
+
+
+
+### 스프링 MVC가 지원하는 @CookieValue 어노테이션을 활용하여 쿠키 만들기
+
++ HttpServletRequest 대신 스프링 MVC가 지원하는 @CookieValue 어노테이션 활용
+
+  ~~~java
+  package kr.or.connect.guestbook.controller;
+  
+  import java.util.ArrayList;
+  import java.util.List;
+  
+  import javax.servlet.http.Cookie;
+  import javax.servlet.http.HttpServletRequest;
+  import javax.servlet.http.HttpServletResponse;
+  
+  import org.springframework.beans.factory.annotation.Autowired;
+  import org.springframework.stereotype.Controller;
+  import org.springframework.ui.ModelMap;
+  import org.springframework.web.bind.annotation.CookieValue;
+  import org.springframework.web.bind.annotation.GetMapping;
+  import org.springframework.web.bind.annotation.ModelAttribute;
+  import org.springframework.web.bind.annotation.PostMapping;
+  import org.springframework.web.bind.annotation.RequestParam;
+  
+  import kr.or.connect.guestbook.dto.Guestbook;
+  import kr.or.connect.guestbook.service.GuestbookService;
+  
+  @Controller
+  public class GuestbookController {
+  	@Autowired // 서비스 이용하기 위함
+  	GuestbookService guestbookService;
+  	
+  	@GetMapping(path="/list")
+  	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,ModelMap model,@CookieValue(value="count", defaultValue="0", required = true) String value,HttpServletResponse response) {
+  		
+  
+      try {
+        int i = Integer.parseInt(value);
+        value = Integer.toString(++i);
+      }catch(Exception ex) {
+        value="1";
+      }
+  
+  		
+  		Cookie cookie = new Cookie("count",value); // 변경된 value의 값을 클라이언트쪽에도 적용하게 하려면 반드시 쿠키는 매번 새로 만들어서 보내줘야 한다. 그렇게 되면 클라이언트 쪽은 똑같은 이림의 쿠키가 들어왔을 때 기존의 쿠키와 교체한다.  
+  		cookie.setMaxAge(60*60*24*365);//1년 동안 유지.
+  		cookie.setPath("/"); // /경로 이하에 모두 쿠키 적용.
+  		response.addCookie(cookie); // 쿠키가 클라이언트한테 저장
+  		
+  		
+  		//start로 시작하는 방명록 목록 구하기
+  		List<Guestbook> list = guestbookService.getGuestbooks(start);
+  		
+  		// 전체 페이지수 구하기
+  		int count = guestbookService.getCount();
+  		int pageCount = count/GuestbookService.LIMIT;
+  		if(count%GuestbookService.LIMIT>0)
+  			pageCount++;
+  		
+  		// 페이지 수만큼 start의 값을 리스트로 저장
+  		// 예를 들면 페이지수가 3이면
+  		// 0, 5, 10 이렇게 저장된다.
+  		// lsit?start=0, list?start=5, list?start=10으로 링크가 걸린다.
+  		List<Integer> pageStartList = new ArrayList<>();
+  		for(int i=0; i< pageCount; i++) {
+  			pageStartList.add(i*GuestbookService.LIMIT);
+  		}
+  		
+  		model.addAttribute("list", list);
+  		model.addAttribute("count", count);
+  		model.addAttribute("pageStartList", pageStartList);
+  		model.addAttribute("cookieCount", value);
+  		
+  		return"list";
+  	}
+  	
+  	@PostMapping(path="/write")
+  	public String write(@ModelAttribute Guestbook guestbook,
+  			HttpServletRequest request) {
+  		String clientIp = request.getRemoteAddr();
+  		System.out.println("clientIp : "+clientIp);
+  		guestbookService.addGuestbook(guestbook, clientIp);
+  		return "redirect:list";
+  	}
+  	
+  }
+  ~~~
+
+  + ~~~java
+    	@GetMapping(path="/list")
+    	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,ModelMap model,@CookieValue(value="count", defaultValue="0", required = true) String value,HttpServletResponse response)
+    ~~~
+
+  + ~~~java
+        try {
+          int i = Integer.parseInt(value);
+          value = Integer.toString(++i);
+        }catch(Exception ex) {
+          value="1";
+        }
+    
+    		
+    		Cookie cookie = new Cookie("count",value); // 변경된 value의 값을 클라이언트쪽에도 적용하게 하려면 반드시 쿠키는 매번 새로 만들어서 보내줘야 한다. 그렇게 되면 클라이언트 쪽은 똑같은 이림의 쿠키가 들어왔을 때 기존의 쿠키와 교체한다.  
+    		cookie.setMaxAge(60*60*24*365);//1년 동안 유지.
+    		cookie.setPath("/"); // /경로 이하에 모두 쿠키 적용.
+    		response.addCookie(cookie); // 쿠키가 클라이언트한테 저장
+    ~~~
+
+  + ~~~java
+    		model.addAttribute("cookieCount", value);
+    ~~~
+
+
+
+## Session 이란?
+
+
+
+### 세션 정의
+
++ 정의
+  + 클라이언트 별로 서버에 저장되는 정보
++ 이용 방법
+  + 웹 클라이언트가 서버측에 요청을 보내게 되면 서버는 클라이언트를 식별하는 session id를 생성
+  + 서버는 session id를 이용해서 key와 value를 이용한 저장소인 HttpSession을 생성
+  + 서버는 session id를 저장하고 있는 쿠키를 생성하여 클라이언트에 전송
+  + 클라이언트는 서버측에 요청을 보낼때 session id를 가지고 있는 쿠키를 전송
+  + 서버는 쿠키에 있는 session id를 이용해서 그 전 요청에서 생성한 HttpSession을 찾고 사용한다.
+
+
+
+### 세션 생성 및 얻기
+
++ ~~~java
+  HttpSession session = request.getSession();
+  HttpSession session = request.getSession(true);
+  ~~~
+
+  + request의 getSession()메소드는 서버에 생성된 세션이 있다면 세션을 반환하고,
+  + 없다면 새롭게 세션을 생성하여 반환한다.
+  + 새롭게 생성된 세션인지는  HttpSession이 가지고 있는 isNew()메소드를 통해 알 수 있다.
+
+
+
++ ~~~java
+  HttpSession session = request.getSession(false);
+  ~~~
+
+  + request의 getSession()메소드에 파라미터로 false를 전달하면, 이미 생성된 세션이 있다면 반환하고 없으면 null을 반환한다.
+
+
+
+### 세션에 값 저장
+
++ ~~~java
+  setAttribute(String name, Object value)
+  session.setAttribute(이름,값)
+  ~~~
+
+  + name과 value의 쌍으로 객체 Object를 저장하는 메소드
+  + 세션이 유지되는 동안 저장할 자료를 저장
+
+
+
+### 세션에 값 조회
+
++ getAttribute(String name) 메소드
+
+  + 세션에 저장된 자료는 다시 getAttribute(String name) 메소드를 이용해 조회
+
+  + 반환 값은 Object 유형이므로 저장된 객체로 자료유형 변환이 필요
+
+  + 메소드 setAttribute()에 이용한 name인 "id"를 알고 있다면 다음과 같이 바로 조회
+
+    ~~~
+    String value = (String) session.getAttribute("id");
+    ~~~
+
+    
+
+### 세션에 값 삭제
+
++ removeAttribute(String name)메소드
+  + name값에 해당하는 세션 정보를 삭제한다.
++ invalidate()메소드
+  + 모든 세션 정보를 삭제한다.
+
+
+
+### javax.servlet.http.HttpSession
+
+![1 (1)](https://user-images.githubusercontent.com/88477839/163679054-7181ac6b-bc89-4225-b2a0-b0c40f38313c.png)
+
+![2 (1)](https://user-images.githubusercontent.com/88477839/163679085-745bcd69-66ae-4d3d-ac78-c4b964d22a18.png)
+
+
+
++ 세션은 클라이언트가 서버에 접속하는 순간 생성
+
+  + 특별히 지정하지 않으면 세션의 유지 시간은 기본 값으로 30분 설정
+
+  + 세션의 유지 시간이란 서버에 접속한 후 서버에 요청을 하지 않는 최대 시간
+
+  + 30분 이상 서버에 전혀 반응을 보이지 않으면 세션이 자동으로 끊어짐.
+
+  + 이 세션 유지 시간은 web.xml파일에서 설정 가능
+
+    ~~~xml
+    <session-config>
+    	<session-timeout>30</session-timeout>
+    </session-config>
+    ~~~
+
+    
+
+## Session을 이용한 상태정보 유지하기
+
+
+
+### 세션 실습 조건
+
++ /guess로 요청을 하면 컴퓨터가 1부터 100사이의 임의의 값중의 하나를 맞춰보라는 메시지를 출력함. 해당 값은 세션에 저장함
++ 사용자는 1부터 100사이의 값을 입력함
++ 입력한 값이 세션값보다 작으면, 입력한 값이 작다고 출력함
++ 입력한 값이 세션값보다 크면, 입력한 값이 크다고 출력함
++ 입력한 값이 세션값과 같다면 몇번째에 맞췄다고 출력함
+
+
+
+### 컨트롤러 생성
+
++ controller 패키지에 GuessNumberController 생성함.
+
+  ~~~java
+  package kr.or.connect.guestbook.controller;
+  
+  import javax.servlet.http.HttpSession;
+  
+  import org.springframework.stereotype.Controller;
+  import org.springframework.ui.ModelMap;
+  import org.springframework.web.bind.annotation.GetMapping;
+  import org.springframework.web.bind.annotation.RequestParam;
+  
+  @Controller
+  public class GuessNumberController {
+  	@GetMapping("/guess")
+  	public String guess(@RequestParam(name="number", required=false)Integer number,HttpSession session, ModelMap model) {
+  		String message = null;
+  		if(number == null) { // 요청이 최초로 들어왔을때가 number == null 이다.
+  			session.setAttribute("count", 0);
+  			session.setAttribute("randomNumber", (int)(Math.random()*100)+1);
+  			message = "내가 생각한 숫자를 맞춰보세요.";
+  		}else {
+  			int count = (Integer)session.getAttribute("count"); //세션의 값이 object로 들어있었을 거기 때문에 Integer
+  			int randomNumber = (Integer)session.getAttribute("randomNumber");
+  			
+  			if(number < randomNumber) {
+  				message = "입력한 값은 내가 생각하고 있는 숫자보다 작습니다.";
+  				session.setAttribute("count", ++count);
+  			}else if (number > randomNumber) {
+  				message = "입력한 값은 내가 생각하고 있는 숫자보다 큽니다.";
+  				session.setAttribute("count", ++count);
+  			}else {
+  				message="OK ^^" + ++count + "번째 맞췄습니다.내가 생각한 숫자는"+number+"입니다.";
+  				session.removeAttribute("count");
+  				session.removeAttribute("randomNumber");
+  			}
+  		}
+  		
+  		model.addAttribute("message", message);
+  		return "guess";
+  	}
+  	
+  }
+  ~~~
+
+  + ~~~java
+    @GetMapping("/guess")
+    	public String guess(@RequestParam(name="number", required=false)Integer number,HttpSession session, ModelMap model) 
+    ~~~
+
+    + 스프링을 사용하지 않을때는 세션을 사용하기 위해 request로 부터 getSession()메서드를 이용하여 얻어와야 했었는데 스프링은 이 일을 대신 처리해준다. 그래서 스프링에서는 session하고 선언만 해주면 된다.
+
++ guess.jsp 생성
+
+  ~~~jsp
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8"%>
+  
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+   
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="UTF-8">
+  <title>숫자 맞추기 게임 </title>
+  </head>
+  <body>
+  	<h1>숫자 맞추기 게</h1>
+  	<hr>
+  	<h3>${message }</h3>
+  	
+  	<c:if test="${sessionScope.count != null }"> <!-- 정답을 맞췄을 때에는 해당 폼이 보여지지 않을 것 --> 
+  		<form method="get" action="guess">
+  			1부터 100까지의 숫자로 맞춰주세요.<br> <input type="text" name="number"><br>
+  			<input type="submit" value="확인">
+  		</form>
+  	</c:if>
+  	
+  	<a href="guess">게임 다시 시작하기 </a>
+  </body>
+  </html>
+  ~~~
+
+  
