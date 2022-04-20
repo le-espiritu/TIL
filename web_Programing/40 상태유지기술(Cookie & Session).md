@@ -729,7 +729,7 @@
   <title>숫자 맞추기 게임 </title>
   </head>
   <body>
-  	<h1>숫자 맞추기 게</h1>
+  	<h1>숫자 맞추기 게임</h1>
   	<hr>
   	<h3>${message }</h3>
   	
