@@ -22,7 +22,7 @@
   }
   ~~~
 
-  + 인자로 전달할 이름이 같은 경우에 메서드가 return 한 값은 argumnet의 이름을 key로 하여 세션에 저장된다.
+  + 인자로 전달할 이름이 같은 경우에 메서드가 return 한 값(new User())은 argumnet의 이름("user")을 key로 하여 세션에 저장된다.
   + 위 코드에서는 setUpUserForm()이라는 메서드에서 return 하고 있는 User 객체가 "user"라는 이름으로 세션에 저장된다.
 
 + @SessionAttributes의 파라미터와 같은 이름이 @ModelAttribute에 있을 경우 세션에 있는 객체를 가져온 후, 클라이언트로 전송받은 값을 설정한다.
@@ -38,8 +38,8 @@
     }
   }
   ~~~
-
-
+  
+  + @SessionAttributes와 @ModelAttribute 인자로 전달된 이름("user")이 같을 경우에, 먼저 세션에서 인자로 전달된 이름("user")으로 저장된 객체를 찾고, 요청으로 부터 넘어온 값을 해당 객체에 설정해서 전달하게 된다. 
 
 ### @SessionAttribute
 
@@ -54,7 +54,7 @@
   }
   ~~~
 
-  
+  + @SessionAttribute 어노테이션은 인자로 전달된 이름("user")에 해당하는 정보를 세션에서 찾아서 User user로 선언되어 있는 인자에다가 전달해준다.
 
 ### SessionStatus
 
@@ -75,10 +75,15 @@
     }
   }
   ~~~
+  
+  + @SessionAttributes 와 @ModelAttribute 어노테이션의 인자 이름이 같을 경우에 세션에서 정보를 찾아서 User user에다가 전달해준다.
+  + 전달받은 값을 삭제하고자 할때에는 sessionStatus가 가지고 있는 setComplete()이라는 메서드를 호출하면 삭제할 수 있다.
 
 
 
 ### Spring MVC - form tag 라이브러리
+
++ Spring MVC가 제공하는 tag 라이브러리를 이용하면 세션에 있는 정보들을 form에다가 출력 할 수도 있다.
 
 + modelAttribute속성으로 지정된 이름의 객체를 세션에서 읽어와서 form 태그로 설정된 태그에 값을 설정한다.
 
@@ -369,7 +374,7 @@
   						@SessionAttribute("isAdmin") String isAdmin,
   						HttpServletRequest request,
   						RedirectAttributes redirectAttr) {
-  		if(isAdmin == null || !"true".equals(isAdmin)) { // 세션값이 true가 아닐 경
+  		if(isAdmin == null || !"true".equals(isAdmin)) { // 세션값이 true가 아닐 경우 
   			redirectAttr.addFlashAttribute("errorMessage", "로그인을 하지 않았습니다.");
   			return "redirect:loginform";
   		}

@@ -569,6 +569,7 @@
   HttpSession session = request.getSession(true);
   ~~~
 
+  + 개발자가 직접 new해서 만들지 않고, 클라이언트의 요청이 들어오면 서버가 알아서 저절로 session을 만든다. (Session id를 만들고 sesion 객체를 만들고 해당하는 쿠키를 만들어서 응답을 보내고 이런 일련의 과정)
   + request의 getSession()메소드는 서버에 생성된 세션이 있다면 세션을 반환하고,
   + 없다면 새롭게 세션을 생성하여 반환한다.
   + 새롭게 생성된 세션인지는  HttpSession이 가지고 있는 isNew()메소드를 통해 알 수 있다.
@@ -585,17 +586,20 @@
 
 ### 세션에 값 저장
 
++ setAttribute(String name, Object value)
+
 + ~~~java
   setAttribute(String name, Object value)
   session.setAttribute(이름,값)
   ~~~
 
+  + 사용방법은 sope에서 setAttribute(), getAttribute() 사용했던 것과 동일하다.
   + name과 value의 쌍으로 객체 Object를 저장하는 메소드
   + 세션이 유지되는 동안 저장할 자료를 저장
 
 
 
-### 세션에 값 조회
+### 세션 값 조회
 
 + getAttribute(String name) 메소드
 
