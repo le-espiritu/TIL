@@ -55,6 +55,8 @@ Positon 속성을 사용하면 상대적/ 절대적으로 어떤 위치에 엘�
 
 <img width="1280" alt="스크린샷 2022-02-28 13 12 42" src="https://user-images.githubusercontent.com/88477839/155922918-4f3e8bb4-7101-4f90-aac3-f33e5060904b.png">
 
++ line-height - "display" 속성이 "block", "inline-block" 으로 지정된 박스 블록 요소에는 "line-height" 속성을 적용해 박스 안에 있는 인라인 요소, 또는 인라인 태그에 행 높이를 적용할 수 있다.
+
 
 
 ### Float - 기본 배치에서 벗어나서 떠있기

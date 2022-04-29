@@ -103,6 +103,14 @@
 
 ![2_6_1_empty_,__](https://user-images.githubusercontent.com/88477839/158015273-42eaa3ee-706f-4793-980a-7df56bbdaf73.png)
 
++ ~~~jsp
+  <c:if test ="!empty${list}">
+  	....
+  </c>
+  ~~~
+
+  + list 길이가 0이 아니면, 즉 0보다 크면 이라는 의미
+
 
 
 ### 연산자 우선순위

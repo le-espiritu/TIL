@@ -215,7 +215,7 @@ http://domain/departments/1/employees : 모든 부서들 중에서 1번 부서, 
 <img width="953" alt="스크린샷 2022-03-18 18 35 46" src="https://user-images.githubusercontent.com/88477839/158978206-46316986-14c3-42e0-a210-e8fc99de19bf.png">
 
 + pom.xml \<properties>에 \<failOnMissingWebXml> 엘리먼트를 추가해주어야 오류가 발생하지 않는다.
-  + 기본적으로 web.xml을 찾으려고 할 것이기 때문에 web.xm.을 찾지 말라고 설정하는 것임
+  + 기본적으로 web.xml을 찾으려고 할 것이기 때문에 web.xml을 찾지 말라고 설정하는 것임
 
 <img width="942" alt="스크린샷 2022-03-18 18 42 30" src="https://user-images.githubusercontent.com/88477839/158979285-71b61530-b5f9-45fd-9cbe-1d2d04201799.png">
 

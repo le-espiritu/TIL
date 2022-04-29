@@ -155,7 +155,7 @@
 ### CSS 상속
 
 + 상위에서 적용한 스타일은 하위에도 반영이 된다.
-+ Box-model이라고 불리는 속성들(width, height, margin, padding, border)과 같이 크기아 배치 관련된 속성들은 하위엘리먼트로 상속이 되지 않는다.
++ Box-model이라고 불리는 속성들(width, height, margin, padding, border)과 같이 크기와 배치 관련된 속성들은 하위엘리먼트로 상속이 되지 않는다.
 
 
 
@@ -228,9 +228,11 @@
     
     <body>
       <div id="jisu">
-        <span> span tag </span>
+        <div>
+          <span> span tag </span>
+        </div>
+        <span> span tag2</span>
       </div>
-      <span> span tag2</span>
     </body>
     ~~~
 
@@ -247,9 +249,11 @@
     
     <body>
       <div id="jisu">
-        <span> span tag </span>
+        <div>
+          <span> span tag </span>
+        </div>
+        <span> span tag2</span>
       </div>
-      <span> span tag2</span>
     </body>
     ~~~
 
@@ -271,7 +275,12 @@
   </body>
   ~~~
 
+  + #jisu > p:nth-child(2){color:red}
   
+    + id가 jisu인 태그의 자식 태그들 중에서 2번째 자식 태그가 p이면 색상을 red로 변경
+    + 위 코드에서 \<p>첫번째 단락입니다.\</p> 가 red로 변경됨
+  
+    
 
 ### CSS 기본 Style 변경하기
 

@@ -241,11 +241,11 @@
 
 + ~~~xml
   <!-- basic data source -->
-  		<dependency>
-  			<groupId>org.apache.commons</groupId>
-  			<artifactId>commons-dbcp2</artifactId>
-  			<version>2.1.1</version>
-  		</dependency>
+  <dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-dbcp2</artifactId>
+    <version>2.1.1</version>
+  </dependency>
   ~~~
 
   + DataSource 설치
@@ -526,6 +526,18 @@
   }
   
   ~~~
+  
+  ~~~
+  < 실행결과>
+  
+  Role [roleId=100, description=Developer]
+  Role [roleId=101, description=Researcher]
+  Role [roleId=102, description=Project manager]
+  Role [roleId=501, description=PROGRAMMER]
+  
+  ~~~
+  
+  
 
 
 
@@ -588,7 +600,7 @@
     + .withTableName("role") - 어떤 테이블에 insert할 것인지 명시하는 것.
 
 
-  
+
 
 + 위 코드를 실행하는 JDBCTest.java 클래스 생성
 

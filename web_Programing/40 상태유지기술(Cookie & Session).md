@@ -98,7 +98,7 @@
 
   + ~~~java
     Cookie cookie = new Cookie(이름, 값);
-    response.addCookei(cookie);
+    response.addCookie(cookie);
     ~~~
 
   + 쿠키는 (이름,값)의 쌍 정보를 입력하여 생성
@@ -196,8 +196,7 @@
   	GuestbookService guestbookService;
   	
   	@GetMapping(path="/list")
-  	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,
-  						ModelMap model) {
+  	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,ModelMap model) {
   		
   		//start로 시작하는 방명록 목록 구하기
   		List<Guestbook> list = guestbookService.getGuestbooks(start);
@@ -235,9 +234,9 @@
   	
   }
   ~~~
-
+  
    
-
+  
 + 기존 GuestbookController 코드 에 쿠키와 관련된 코드 추가
 
   ~~~java
@@ -593,7 +592,7 @@
   session.setAttribute(이름,값)
   ~~~
 
-  + 사용방법은 sope에서 setAttribute(), getAttribute() 사용했던 것과 동일하다.
+  + 사용방법은 scope에서 setAttribute(), getAttribute() 사용했던 것과 동일하다.
   + name과 value의 쌍으로 객체 Object를 저장하는 메소드
   + 세션이 유지되는 동안 저장할 자료를 저장
 

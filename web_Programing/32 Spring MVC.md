@@ -588,9 +588,11 @@
   <img width="1168" alt="스크린샷 2022-04-02 23 38 13" src="https://user-images.githubusercontent.com/88477839/161388290-15dcef00-7c29-47da-b5e8-da2e24a8706e.png">
 
 + ~~~xml
-  <!DOCTYPE web-app PUBLIC
+  <!-- <!DOCTYPE web-app PUBLIC
    "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-   "http://java.sun.com/dtd/web-app_2_3.dtd" >
+   "http://java.sun.com/dtd/web-app_2_3.dtd" > -->
+  
+  <?xml version="1.0" encoding="UTF-8"?> <!-- 메이븐 강의에서 web.xml에서 바꿔줬던 부분이니 참고 -->
   
   <web-app>
     <display-name>Archetype Created Web Application</display-name>

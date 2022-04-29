@@ -71,6 +71,8 @@ WAS는 init() 메서드를 호출하고 service()라는 메서드를 호출하�
   	}
   ~~~
 
+  
+  
   ~~~html
   <html>
     <head>
@@ -88,6 +90,6 @@ WAS는 init() 메서드를 호출하고 service()라는 메서드를 호출하�
   submit이라는 버튼이 눌렸을때 action 뒤에 있는 /firstweb/LifecycleServlet 이 주소로 요청하고 메소드는 post로 하라는 의미
   -->
   ~~~
-
+  
   + 이렇게 같은 URL주소이지만 GET방식이냐 POST 방식이냐에 따라서 다른 메서드가 호출된다.
 

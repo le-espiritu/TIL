@@ -79,3 +79,4 @@ element. 으로 사용할 수 있는 APIs : [링크 바로가기](https://www.w3
 - insertAdjacentHTML()
   - HTML로 텍스트를 지정된 위치에 삽입
   - [insertAdjacentHTML() 예제](https://jsbin.com/puwoqov/4/edit?html,js,output)
+

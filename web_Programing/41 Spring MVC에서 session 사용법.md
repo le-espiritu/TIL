@@ -259,7 +259,7 @@
   						@SessionAttribute("isAdmin") String isAdmin,
   						HttpServletRequest request,
   						RedirectAttributes redirectAttr) {
-  		if(isAdmin == null || !"true".equals(isAdmin)) { // 세션값이 true가 아닐 경
+  		if(isAdmin == null || !"true".equals(isAdmin)) { // 세션값이 true가 아닐 경우 
   			redirectAttr.addFlashAttribute("errorMessage", "로그인을 하지 않았습니다.");
   			return "redirect:loginform";
   		}

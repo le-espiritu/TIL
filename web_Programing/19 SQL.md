@@ -13,7 +13,7 @@
 + SQL은 데이터를 보다 쉽게 검색하고 추가, 삭제, 수정같은 조작을 할 수 있도록 고안된 컴퓨터 언어이다.
 + 관계형 데이터베이스에서 데이터를 조작하고 쿼리하는 표준 수단이다.
 
-+ **DML (Data Mainpulation Language) : 조작어**
++ **DML (Data Manipulation Language) : 조작어**
   + 데이터를 조작하기 위해 사용한다.
   + Insert, Update, Delete, Select 등이 여기에 해당한다.
 + **DDL (Data Definition Language) : 정의어**
@@ -480,7 +480,7 @@ Empty set (0.02 sec)
     +-----------------+-----------------+
   ~~~
 
-  + 자바는 0번 인덱스부터 시작하지만 mysql은 1번 인데스부터 시작함
+  + 자바는 0번 인덱스부터 시작하지만 mysql은 1번 인덱스부터 시작함
   + 위 쿼리문은 Happy day의 3번 인덱스부터 2개만 select하라는 의미임
 
 

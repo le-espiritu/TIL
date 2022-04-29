@@ -63,13 +63,17 @@ window.clearInterval(interval); // =>setInterval()을 멈추는 명령어
 
 + 하지만 지연 문제가 발생할 수 있다.
 
+  + Interval 사이에 다른일이 일어나면 (예를 들어 mouse click callback, 그리고 동기적인 작업이 중간에 들어오면) 작업이 밀려서 나중에 실행된다.(interval로 정해진게 비동기 작업이기때문)
+
 + 아래 그림을 보면 제때 일어나야 할 이벤트 콜백이 지연되고, 없어지고 하는 것을 볼 수 있다.
+
+  + 정해진 시간마다 실행되지 않고 밀려서 더 나중에 실행되거나 중간에 끼인 게 날라가 버리기도 하고 한다.
 
 + 따라서 setInterval을 사용한다고 해서 정해진 시간에 함수가 실행된다고 보장할 수 없다.
 
   ![3-4-1_setInterval](https://user-images.githubusercontent.com/88477839/159616470-62265dbc-35ca-407e-ba88-c9f94ebf2a3f.png)
 
-+ 일반적으로 setInterval을 사용하는 애니메이션 구현을 잘 하지 않는다.
++ 일반적으로 setInterval을 사용하는 애니메이션 구현을 잘 하지 않는다.(위 문제들로 애니메이션이 끊길 수도 있기 때문에)
 
 
 
@@ -182,16 +186,17 @@ requestAnimationFrame(run);
     text-transform: uppercase;
   }
   
+  
   .box {
     border-radius: 5px;
     height: 40px;
     margin: 50px auto;
     width: 80px;
-    
     .wrap:hover & {
       transform: scale(2);
     }
   }
+  
   
   .box1 {
     background: mediumturquoise;
@@ -202,20 +207,20 @@ requestAnimationFrame(run);
     transition: all 1s; /*애니메이션과 함께 모든 css 속성(all)을 1초(1s)동안 변화시키라는 의미*/
   }
   ~~~
-
+  
   ~~~html
   <div class="wrap">
     <div class="container">
       <h1>Without transition</p>
       <div class="box1 box"></div>
     </div>
-     <div class="container">
+    <div class="container">
       <h1>With transition</p>
       <div class="box2 box"></div>
     </div>
   </div>
   ~~~
-
+  
   + transition이 없으면 애니메이션 동작 없이 박스의 크기가 변한다.(사진 두장을 바꿔서 보여주듯이)
   + transition이 있으면 부드러운 애니메이션으로 박스크기가 점진적으로 변한다.
 
