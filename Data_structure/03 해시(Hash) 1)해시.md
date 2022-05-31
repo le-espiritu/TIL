@@ -499,3 +499,79 @@ public V getValue(K key){
 
 > 해시의 크기를 조정하는 resize에 대해 살펴보자
 
+
+
+### resize
+
++ 해시가 가득차서, 연결 리스트가 너무 길어질 경우 **해시의 크기를 조절**하는 resize 함수이다. 
++ 연결 리스트 크기가 너무 커진다면, 새로운 연결 리스트 배열을 만들고, 기존 해시의 모든 연결 리스트에 있는 요소의 키와 값을 각각 찾아내야 한다.
++ 이렇게 찾아낸 데이터들을 모두 복사하고, 새로운 연결 리스트 배열에 넣어줘야한다.
+
+~~~java
+public void resize(int newSize){
+  //새로운 체인 해시 생성
+  LinkedList<HashElement<K,V>>[] new_array = (LinkedList<HashElement<K,V>>[]) new LinkedList[newSize];
+  for(int i=0; i<newSize; i++)
+    new_array[i]=new LinkedList<HashElent<K,V>>();
+  
+  //기존 배열의 데이터들을 새로운 체인 해시에 채워넣기
+  for(K key : this){ // this는 현재 클래스를 의미함
+    V val = getValue(key); // 아마 this.getValue(key) 일듯
+    HashElement<K,V> he = new HashElement<K,V>(key,val);
+    int hashVal = (key.hashCode()&0x7FFFFFFF)% newSize;
+    new_array[hashVal].add(he);
+  }
+  
+  //덮어쓰기
+  harray=new_array;
+  tableSize=newSize;
+}
+~~~
+
+
+
+## 1-18 Key 반복자
+
+> 해시의 내용을 살펴보는 Key반복자에 대해 알아보자
+
+
+
+###  Key반복자
+
++ 모든 키에 대해 반복하여 해시의 전체 내용을 살펴보자. (모든 키를 반환하기)
++ 시간 복잡도는  O(n) 이다.
+
+~~~java
+class IteratorHelper<T> implement Iterator<T>{
+  T[] keys;
+  int position; // keys의 데이터를 확인할 때 사용하는 인덱스 변수
+  
+  public IteratorHelper(){ // 생성자
+    keys=(t[])Object[numElements];
+    int p=0; // keys에 데이터를 넣을 때 사용하는 인덱스 변수
+    for(int i=0; I<tableSize; i++){
+      LinkedList<HashElement<K,V>> list = harray[i];
+      for(HashElement<K,V>h : list)
+        keys[p++]=(T)h.key();
+    }
+    position=0;
+  }
+  
+  //오버라이드
+  public boolean hasNext(){
+    return position<keys.length;
+  }
+  
+  //오버라이드
+  public T next(){
+    if( !hasNext())
+      return null;
+    return keys[position++];
+  }
+  
+}
+~~~
+
++ 위 코드를 사용하려면 위 IteratorHelper 객체를 생성하는 코드나 메서드가 있어야 할것이고 [생성된 객체.next()] 등을 통해 모든 key를 확인하거나 반환할 수 있을 것이다.  
+
++ 위 코드들 참고 자료 - https://zangzangs.tistory.com/124
