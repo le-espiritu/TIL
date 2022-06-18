@@ -147,3 +147,36 @@ public void add(Node<E> parent, Node<E> newNode){
   ~~~
 
   
+
+## 1-6 Rebalance 메소드
+
+> AVL 트리 규칙을 만족하도록 회전을 해주는 Rebalance 메소드에 대해 알아보자
+
+
+
+### Rebalance 메소드
+
++ Rebalance 메소드는 **어느 쪽에서 균형이 깨졌는지 확인하고 회전을 하여 균형을 유지**한다.
+
+~~~java
+public void rebalance(Node<E> node){
+  // 왼쪽 자식 > 오른쪽 자식
+  if(height(node.left)-height(node.right)>1){
+    if(height(node.left.left)>height(node.left.right)) // 왼쪽 서브 트리 > 오른쪽 서브 트리
+      node = rightRotate(node); // 우측 회전
+    else // 왼쪽 서브 트리 < 오른쪽 서브 트리
+      node = leftRightRotate(node); // 좌측 - 우측 회전
+  }
+  // 왼쪽 자식 < 오른쪽 자식
+  else{
+    if(height(node.right.left)>height(node.right.right)) // 왼쪽 서브 트리 > 오른쪽 서브 트리
+      node = rightLeftRotate(node); // 우측-좌측 회전
+    else // 왼쪽 서브 트리 < 오른쪽 서브 트리
+      node = leftRotate(node); // 좌측 회전
+  }
+  //루트를 재 조정해야할 경우 조정한다.
+  if(node.parent == null)
+    root=node;
+}
+~~~
+
