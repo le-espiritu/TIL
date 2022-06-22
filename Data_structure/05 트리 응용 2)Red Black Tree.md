@@ -217,3 +217,59 @@ public void correctTree(Node<K,V> node){
 
 > 레드 블랙 트리 규칙을 만족하도록 회전을 해주는 Rotate 메소드에 대해 알아보자
 
+
+
+### Rotate 메소드
+
++ 현재 노드와 부모 노드가 각각 오른쪽 자식인지 왼쪽 자식인지에 따라 필요한 회전이 달라진다. 각각의 경우에 대해 코딩하면 다음과 같다.
+
+  ~~~java
+  public void rotate(Node<K,V> node){
+    // 현재 노드가 왼쪽 자식
+    if(node.isLeftChild){
+      // 부모 노드가 왼쪽 자식인 경우
+      if(node.parent.isLeftChild){
+        //조부모 노드를 우측회전
+       	rightRotate(node.parent.parent);
+        node.black = false;
+        node.parent.black = true;
+        if(node.parent.right !=null)
+          node.parent.right.black = false;
+        return;
+      }
+      //부모 노드가 오른쪽 자식인 경우
+      //조부모 노드를 우측-좌측 회전
+      rightLeftRotate(node.parent.parent);
+      node.black = true;
+      node.right.black=false;
+      node.left.black = false;
+      return;
+    }
+    //현재 노드가 오른쪽 자식일 경우
+    else{
+      //부모 노드가 왼쪽 자식일 경우 - 조부모 노드를 좌측-우측 회전
+      if(node.parent.isLeftChild){
+        leftRightRotate(node.parent.parent);
+        node.black = true;
+        node.right.black = false;
+        node.left.black = false;
+        return;
+      }
+      // 부모 노드가 오른쪽 자식일 경우 - 좌측회전
+      leftRotate(node.parent.parent);
+      node.black = false;
+      node.parent.black = true;
+      if(node.parent.left !=null) // 굳이 null체크를 해줄 필요가 있는지?? 의문.
+        node.parent.left.black = false;
+      return;
+    }
+  }
+  ~~~
+
+  
+
+  
+
+## 2-7 좌측 회전
+
+> 레드 블랙 트리에서 좌측 회전을 하는 방법에 대해 알아보자
