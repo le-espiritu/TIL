@@ -132,12 +132,12 @@ public void add(Node<E> parent, Node<E> newNode){
 
   ~~~java
   public void checkBalance(Node<E> node){
-    // 높이 차이가 1초과 혹은 -1 미난 이면 AVL 트리 규칙 위반이다.
+    // 높이 차이가 1초과 혹은 -1 미만 이면 AVL 트리 규칙 위반이다.
     if((height(node.left)- height(node.right)>1) || (height(node.left)-height(node.right)< -1)){
       rebalance(node);
     }
     
-    // 만약 위 if문 조건에 부합하지 않거나 rebalance 메소드 실행이 끝나면
+    // 만약 위 if문 조건에 부합하지 않거나(AVL 트리 규칙 위반이 아닌 경우) rebalance 메소드 실행이 끝나면
     // 부모 노드의 높이 차이를 계속 확인해서 루트까지 가야 한다.
     if(node.parent = null) // 만약 부모가 null이라면 현재 node가 루트라는 뜻이기 때문에 더 이상 재귀 함수를 사용할 필요 없이 리턴을 해준다.
       return;
@@ -179,4 +179,20 @@ public void rebalance(Node<E> node){
     root=node;
 }
 ~~~
+
+
+
+## 1-7 adding data 예제
+
+
+
+<img width="1280" alt="스크린샷 2022-06-22 13 02 45" src="https://user-images.githubusercontent.com/88477839/174941012-bf567e33-c3ad-4aef-a498-6fd15c896127.png">
+
+<img width="1280" alt="스크린샷 2022-06-22 13 12 48" src="https://user-images.githubusercontent.com/88477839/174941994-0d4472df-a417-4ecc-ad2f-e5a503cbfc28.png">
+
+![mceclip0 (3)](https://user-images.githubusercontent.com/88477839/174942096-979a3d2f-ce98-4d40-874a-fbbeebf62938.png)
+
++ 위 사진은 지금까지 만든 add 메소드를 활용하여 43에 18, 22, 9, 21, 6, 8, 20, 63, 50, 62, 51을 순서대로 추가한 결과이다.
++ 먼저 트리의 규칙에 따라 내려가 잎에 새로운 데이터를 추가한다. 그리고 균형이 깨졌는지 확인하고 회전을 하여 균형을 유지한다.
++ 위 회전 과정을 보면 leftRotate, rightRotate 메소드 구현 코드에서 왜 node.right를 tmp.left(node.right.left)로, 또는 node.left를 tmp.right로 설정하는지 이해할 수 있다.
 
