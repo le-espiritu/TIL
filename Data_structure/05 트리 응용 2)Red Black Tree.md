@@ -273,3 +273,131 @@ public void correctTree(Node<K,V> node){
 ## 2-7 좌측 회전
 
 > 레드 블랙 트리에서 좌측 회전을 하는 방법에 대해 알아보자
+
+
+
+### 좌측 회전
+
++ 레드 블랙 트리에서 좌측 회전을 하는 코드는 다음과 같다. 
+
++ 힙 & 트리 기본 1-16강에서 배운 좌측 회전 코드와 유사하다. 
+
++ 다만, parent 노드를 가리키는 포인터와 isLeftChild 변수를 추가로 사용하기 때문에 이들을 고려해주어야 한다.
+
+  ~~~java
+  // 좌측 회전 : 조부모 노드를 부모 노드의 왼쪽 자식 노드 위치로 옮긴다.
+  
+  public void leftRotate(Node<K,V> node){
+    Node<K,V> temp = node.right;
+    node.right = temp.left;
+    if(node.right != null){
+      node.right.parent = node; // 부모가 temp에서 node.right로 바뀌었기 때문에 부모 포인터 갱신함.
+      node.right.isLeftChild = false; 
+      // temp의 왼쪽 자식이었을때는 isLeftChild 갸 true였는데
+      // node의 오른쪽 자식이 되면서 isLeftChild 를 false로 갱신함.
+    }
+    if(node.parent == null){ // 현재 node가 root인 경우
+      root = temp; // 회전을 하면 루트가 바뀌기 때문에 root를 temp로 바꿔준듯
+      temp.parent = null; // temp가 root이니까 당연히 temp의 부모는 null이다.
+    }else{ //현재 node가 root가 아니고 부모 가 있는 경우
+      temp.parent = node.parent; // node의 부모를 temp 의 부모로 지정해준다.
+      if(node.isLeftChild){
+        temp.isLeftChild = true; // node가 부모의 왼쪽자식이었다면 temp도 왼쪽 자식으로 지정해준다.
+        temp.parent.left = temp;
+      }else{ // node가 부모의 왼쪽자식이 아닌 경우 (오른쪽 자식인 경우)
+        temp.isLeftChild = false;
+        temp.parent.right = temp;
+      }
+    }
+    temp.left = node;
+    node.isLeftChild = true;
+    node.parent = temp;   
+  }
+  ~~~
+
+  
+
+## 2-8 좌측 - 우측 회전
+
+> 레드 블랙 트리에 좌측 - 우측 회전을 하는 방법에 대해 알아보자
+
+
+
+### 좌측 - 우측 회전
+
+~~~java
+//좌측 회전 후 우측 회전
+public void leftRightRotate(Node<K,V> node){
+  leftRotate(node.left);
+  rightRotate(node);
+}
+~~~
+
+
+
+## 2-9 높이
+
+> 트리의 높이를 구하는 방법에 대해 살펴보자
+
+
+
+### 높이
+
++ 재귀 메소드를 이용해 트리의 높이를 구할 수 있다.
+
+  ~~~java
+  public int height(){
+    if(root == null) // 트리가 비어있는 경우
+      return 0;
+    return height(root)-1; // 아래에서 +1해줬으니까 여기서 -1해줌
+  }
+  //트리의 어느 지점에서나 높이는 왼쪽과 오른쪽 중 가장 긴 경로의 길이이다.
+  public int height(Node<K,V> node){
+    if(node == null)
+      return 0;
+    
+    // +1은 현재 있는 노드까지 오는데 필요한 간선 한 개를 의미한다.
+    int leftHeight = height(node.left)+1; // 재귀 함수 호출을 사용하면서 null인 노드에 도착할때까지
+    // 계속 내려간다. 그럼 그제서야 0이 반환되고 차례대로 값들이 반환되면서 위로 올라온다.
+    // 이 과정이 끝날때까지 이 밑으로 코드는 실행되지 않는다.
+    // height(node.right)+1; 코드에서도 마찬가지로 위 과정처럼 진행된다.
+    int rightHeight = height(node.right)+1;
+    if(leftHeight>rightHeight)
+      return leftHeight;
+    return rightHeight;
+  }
+  ~~~
+
+  
+
+## 2-10 검은색 노드 개수
+
+> 레드 블랙 트리에서 검은색 노드 개수를 구하는 방법에 대해 알아보자
+
+
+
+### 검은색 노드 개수
+
++ 재귀 메소드를 이용해 레드 블랙 트리의 검은색 노드의 개수를 구할 수 있다.
+
+  ~~~java
+  public int blackNodes(Node<K,V> node){
+    if(node == null)
+      return 1; // null이면 블랙이기 때문에 1이 리턴됨.
+    int rightBlackNodes = blackNodes(node.right);
+    int leftBlackNodes = blackNodes(node.left);
+    
+    if(rightBlackNodes != leftBlackNodes)
+      //오른쪽과 왼쪽의 검은색 노드 개수가 다르면 에러를 내거나 고쳐준다.
+      // throw an error
+      // or fix the tree
+     
+    // 오른쪽과 왼쪽의 검은색 노드 개수가 같고, 노드가 검은색 노드이면 해당 노드의 수를 늘려준다.
+    if(node.black)
+      leftBlackNodes++;
+    return leftBlackNodes;
+  }
+  ~~~
+
+  + 사실 위 코드는 검은색 노드의 개수를 구한다기보다 루트로부터 잎까지 가는 모든 경로에 검은색 노드 개수가 동일한지 확인하는 코드로 보인다.
+
