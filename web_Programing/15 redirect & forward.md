@@ -115,7 +115,7 @@ public class FrontServlet extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		int diceValue = (int)(Math.random()*6) +1;
-		request.setAttribute("dice", diceValue); // 첫번째 인자와 두번째 인자는 키 밸류 같은 느낌, 그리고 두 번째 인자는 오브젝트 형태 
+		request.setAttribute("dice", diceValue); // 첫번째 인자와 두번째 인자는 키 밸류 같은 느낌, 그리고 두 번째 인자는 오브젝트 형태 아마 오토박싱 된듯
 		
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/next");
     //포워드할 경로는 같은 웹 어플리케이션 안에서만 가능하고 /로 시작한다.
@@ -165,6 +165,7 @@ public class NextServlet extends HttpServlet {
 		out.println("<head><title>form</title></head>");
 		out.println("<body>");
 		
+    //dice의 밸류가 오브젝트 형태기 때문에 Integer로 형변환함. 그리고 int로 오토언박싱된듯.
 		int dice = (Integer)request.getAttribute("dice");
 		out.println("dice : " + dice);
 		for(int i =0; i < dice; i++) {
