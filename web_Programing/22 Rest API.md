@@ -8,6 +8,8 @@
 
 
 
++ REST API에 대한 블로그 설명(이해하기 쉽게 되어 있음) - https://velog.io/@ellyheetov/REST-API
+
 
 
 ### API란?
