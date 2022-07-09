@@ -129,6 +129,7 @@ public int hashCode(String s){
 + **해시 충돌**을 **방지**하기 위해 해시의 크기를 최적화한다.
   + 예시 1: 해시의 크기를 홀수로 설정하여 % 연산자를 사용했을 때 나머지가 생겨 다양한 결과가 나오게 한다.
   + 예시 2: 해시의 크기를 소수로 설정하여 나머지가 다양한 숫자가 나오게 한다.
+    + 소수 : 1과 그 수 자신 이외의 자연수로는 나눌 수 없는 자연수. 2, 3, 5, 7, 11 따위가 있다.
 
 
 
@@ -137,6 +138,11 @@ public int hashCode(String s){
 
 
 ### 양수로 변환
+
++ 정수를 반환하는 hashCode()함수는 양수를 반환할 수도 있고 음수를 반환할 수도 있다.
++ 이렇게 반환된 수를 테이블(해시)에 넣으려면 반환된 수를 양수로 반환한다. (반환된 수가 인덱스로 활용되는데 인덱스는 음수가 될 수 없기 때문)
+  + 양수로 변환하는 방법은 첫 비트를 1에서 0을 바꿔준다. (첫 비트가 0이면 그대로 둔다.)
+  + hashCode 함수에서 반환된 값과 0xFFFFFFF(16진법으로 표현한것)를 & 연산하면 위 문장처럼 바뀐다.
 
 + 다음과 같이 연산하면 값을 **해시(테이블)에 포함되는 양수로** 나타낼 수 있다. (Java에서는 음수를 표현하기 위해 2의 보수를 활용한다. 첫 숫자가 0이면 양수고 1이면 음수다.) 
 
@@ -153,6 +159,12 @@ int hashVal = data.hashCode(s); // data에서 hashCode()를 재정의했다고 �
 hashVal = hashVal & 0x7FFFFFFF;
 hashVal = hashVal % tableSize;
 ~~~
+
+1. hashCode()함수에 문자열을 넣어 해시값을 얻어온다.
+2. 이 해시 값을 0x7FFFFFFF와 & 연산하여 양수로 바꾼다.
+   + hashCode() 실행 반환 값과 0x7FFFFFFF(16진법 숫자)를 & 연산하면 첫 비트를 제외한 나머지 비트들은 그대로 남고 , 첫 비트를 0으로 바꿔준다. ( 첫 비트가 1이면 0으로 바꿔주고 0이면 바꾸지 않는다.)
+3. 그렇게 해서 나온 결과값(양수)를 테이블(해시)의 크기 만큼 % 연산한다.
+   + 바로 이 과정때문에 해시의 크기를 홀수 또는 소수로 설정하는 듯 하다. (나머지 값이 나오기 때문에)
 
 + 값을 양수로 변환해야 하는 이유는 배열의 인덱스는 음수가 될 수 없기 때문이다.
 
@@ -238,6 +250,8 @@ hashVal = hashVal % tableSize;
 
 ### 재해싱
 
++ 적재율은 적을 수록 좋다.
+
 + 체인 해시에서 해시가 너무 많이 차면 **크기 조정**을 해야 한다.
 
   1. 크기가 2배인 배열을 만든다.
@@ -253,11 +267,26 @@ hashVal = hashVal % tableSize;
 
 + 연결 리스트의 위치를 그대로 하여 옮기면 정보를 다시 찾거나 제거하려 할 때 문제가 발생한다. 
 
-+ 정보의 위치를 지정할 때 다른 정보는 그대로인데, tableSize만 바뀌기 때문이다. 
+  + 연결 리스트의 위치 인덱스 값과, 정보를 찾기위해 위 코드를 실행하여 얻어진 인덱스 값이 달라지는 문제가 발생한다. 
+
++ 정보의 위치를 지정할 때 다른 정보는 그대로인데, tableSize만 바뀌기 때문이고, 이 바뀐 tableSize 때문에 위 코드를 실행했을떼 다른 인덱스 값이 얻어지는 것이다.
 
 + 그래서 각 요소의 위치를 초기화한 후, **처음부터 다시 위치를 지정**해주어야 한다.
 
 
+
+#### 참고
+
++ 일반적인 배열(hashCode()함수를 사용하지 않는)은 배열이 다 차게 되면 크기가 두배인 새로운 배열을 만든다.
+
++ 그리고 모든 값들을 인덱스 그대로 옮긴다.
+
+  + Old 배열의 0번째 인덱스에 있던 값을 new double 배열의 0번째 인덱스로 옮긴다.
+  + Old 배열의 1번째 인덱스에 있던 값을 new double 배열의 1번째 인덱스로 옮긴다.
+  + Old 배열의 2번째 인덱스에 있던 값을 new double 배열의 2번째 인덱스로 옮긴다.
+  + ...
+
+  
 
 ## 1-11 해시 클래스 , 1-12 내부 클래스
 
@@ -273,8 +302,9 @@ hashVal = hashVal % tableSize;
 
   ~~~java
   // 해시 클래스
+  // 키와 값이 뭐가 들어올지 몰라서 제네릭을 사용했다.
   public class Hash<K,V> implements HashInterface<K,V>{
-    class HashElement<K,V>implements Comparable<HashElement<K,V>{
+    class HashElement<K,V>implements Comparable<HashElement<K,V>>{
       //키와 값 정의
       K key;
       V value;
@@ -292,9 +322,17 @@ hashVal = hashVal % tableSize;
     int numElements, tableSize; // numElements는 해시 요소의 개수
     double maxLoadFactor; // 현재 적재율이 maxLoadFactor 값을 넘어가면 크기 조정을 해줌
     LinkedList<HashElement<K,V>>[] harray; // 해시 배열, 테이블, 연결 리스트들의 배열
-    // 해시엘리먼트가 들어있는 연결리스트들이 들어 있는 배열.
+    // 해시엘리먼트가 들어있는(<HashElement<K,V>>) 연결리스트들(LinkedList)이 들어 있는 배열([] harray).
   }
   ~~~
+  
+  + 위 HashElement 내부 클래스에서 equals(), toString(), hashCode() 메서드를 오버라이딩 하지 않았다.
+  + 내부 클래스 이고 다른곳에서 사용될 수 없기 때문에 굳이 오버라이딩 할 필요가 없었다.
+  + 해시 내부에서 해시 요소끼리 같은지 비교하기 위해서 equals()를 구현할 필요 없이 compareTo 메서드를 사용하면 된다.
+
+#### 참고
+
++ 연결리스트에서 꼭 구현해야하는 인터페이스는 Comparable 이다.
 
 
 
@@ -313,6 +351,9 @@ hashVal = hashVal % tableSize;
     //해시 구현
     public Hash(int tableSize){
       this tableSize = tableSize;
+      
+      // V 배열(테이블) 생성
+      // 해시엘리먼트가 들어있는(<HashElement<K,V>>) 연결리스트들(LinkedList)이 들어 있는 배열([] harray)
       harry = (LinkedList<HashElement<K,V>>[])new LinkedList[tableSize]; // 형변환
       //자바에서 제네릭으로 배열을 만드는 것은 어렵다.
       // 그래서 우선 객체로 배열을 만든 뒤 형변환을 해준다.
@@ -321,7 +362,7 @@ hashVal = hashVal % tableSize;
       
       //연결 리스트 체이닝
       for(int i=0; i<tableSize; i++)
-        harray[i] = new LinkedList<HashElement<K,V>();
+        harray[i] = new LinkedList<HashElement<K,V>>();
       maxLoadFactor = 0.75;
       numElements=0;
       
@@ -350,7 +391,7 @@ hashVal = hashVal % tableSize;
     int numElements, tableSize; // numElements는 해시 요소의 개수
     double maxLoadFactor; // 현재 적재율이 maxLoadFactor 값을 넘어가면 크기 조정을 해줌
     LinkedList<HashElement<K,V>>[] harray; // 해시 배열, 테이블, 연결 리스트들의 배열
-    // 해시엘리먼트가 들어있는 연결리스트들이 들어 있는 배열.
+    // 해시엘리먼트가 들어있는(<HashElement<K,V>>) 연결리스트들(LinkedList)이 들어 있는 배열([] harray)
   
     public Hash(int tableSize){
       this tableSize = tableSize;
@@ -424,6 +465,8 @@ public boolean add(K key, V value){
   hashVal = hashVal % tableSize;
   
   // add he
+  // harray의 hashVal번째 인덱스에 있는 연결리스트에 add 한다는 의미.
+  // 아래 add()메서드는 연결리스트의 메서드이다.
   harray[hashVal].add(he);
   
   numElements++;
@@ -438,18 +481,39 @@ public boolean add(K key, V value){
 + remove 메소드에서는 크기 조정을 걱정할 필요도 없고 객체를 생성할 일도 없다.
 
 ~~~java
-public boolean remove(K key, V value){ // remove(HashElement he)가 맞을 듯
+public boolean remove(K key, V value){ // remove(HashElement he)가 맞을 듯 가 아니라 remove(K key) 일듯
   //index 찾기
-  int hashVal = key.hashCoe(); // he.key.hashCoe(); 가 맞을 듯
+  int hashVal = key.hashCode(); // he.key.hashCoe(); 가 맞을 듯 가 아니라 key.hashCode가 맞을 듯
   hashVal = hashVal & 0x7FFFFFFF;
   hashVal = hashVal % tableSize;
   
   //해당하는 index의 키와 값 제거
-  harray[hashVal].remove(he);
+  harray[hashVal].remove(he); // <= 연결리스트 remove 메서드 구현코드를 보면 이렇게 작성하는게 맞는데 그렇게 되면 위의 코드들이 이상해진다. key값으로 해당 요소를 찾아서 제거하는 것일텐데 he 객체는 어떻게 만들것인지, he 객체를 만들려면 value를 알아야하는데 그러면 remove를 해줘야하는 의미가 없어진다. 이런것들을 고려할때 이 코드는 조금 이상 하며 그냥 remove를 해시체인에서 구현하기 위해서는 hasCode()를 활용하여 인덱스를 얻는다 정도로만 이해하자.
   
   numElements--;
   return true;
 }
+~~~
+
+~~~java
+// 아니면 아래 getValue코드를 응용해서 revmove 메소드를 이렇게 구현해볼 수도 있겠다. (창작)
+
+public boolean remove(K key){
+  int hashVal = key.hashCode();
+  hashVal = hashVal & 0x7FFFFFFF;
+  hashVal = hashVal % tableSize;
+  
+  for(HashElement<K,V>he : harray[hashVal]){
+    if(((Comparable<K>)key).compareTo(he.key)==0){
+      harray[hashVal].remove(he);
+      numElements--;
+      return true;
+    }
+  }
+  
+  return false;
+}
+
 ~~~
 
 
@@ -474,7 +538,7 @@ public V getValue(K key){
   hashVal = hashVal & 0x7FFFFFFF;
   hashVAl = hashVal % tableSize;
   
-  for(HashElement<K,V)he : harray[hashVal]){ // harray[hashVal]는 연결리스트임
+  for(HashElement<K,V>he : harray[hashVal]){ // harray[hashVal]는 연결리스트임
     if(((Comparable<K>)key).compareTo(he,key)==0){
       return he.value;
     }
@@ -536,6 +600,12 @@ public void resize(int newSize){
 
 ###  Key반복자
 
++ 연결리스트에서는 데이터를 항상 맨 앞이나 맨 뒤에 추가했다.
++ 하지만 해시에서는 데이터들의 순서를 보장할 수 없다.
++ 대부분의 언어에서 해시를 사용하면 상수 시간 안에 데이터에 접근할 수 있고, 데이터를 추가할 수 있지만 키의 순서에 대해서는 보장 받지 못한다.
+
+
+
 + 모든 키에 대해 반복하여 해시의 전체 내용을 살펴보자. (모든 키를 반환하기)
 + 시간 복잡도는  O(n) 이다.
 
@@ -543,24 +613,25 @@ public void resize(int newSize){
 class IteratorHelper<T> implement Iterator<T>{
   T[] keys;
   int position; // keys의 데이터를 확인할 때 사용하는 인덱스 변수
+  // position변수는 각각의 키를 탐색할 때 현재 위치를 나타내기 위한 것이다.
   
   public IteratorHelper(){ // 생성자
-    keys=(t[])Object[numElements];
+    keys=(t[])Object[numElements]; // 해시에 있는 요소의 개수(numElements) 크기의 배열을 생성한다.
     int p=0; // keys에 데이터를 넣을 때 사용하는 인덱스 변수
     for(int i=0; I<tableSize; i++){
       LinkedList<HashElement<K,V>> list = harray[i];
       for(HashElement<K,V>h : list)
-        keys[p++]=(T)h.key();
+        keys[p++]=(T)h.key(); // 위에서 T[] keys; 라고 타입 선언했기 때문에 T로 형변환함
     }
     position=0;
   }
   
-  //오버라이드
+  //Iterator의 hasNext() 오버라이드
   public boolean hasNext(){
     return position<keys.length;
   }
   
-  //오버라이드
+  //Iterator의 next() 오버라이드
   public T next(){
     if( !hasNext())
       return null;
