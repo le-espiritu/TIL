@@ -8,3 +8,76 @@
   + 일반적인 재귀 방식 과 DP는 매우 유사하다. 그러나 일반적인 재귀를 단순히 사용하면 동일한 작은 문제들이  여러 번 반복되는 경우 비효율적인 계산이 될 수 있으며 계산 횟수가 기하급수적으로 증가할 수도 있다.
 + 예시 : 1~10 숫자 중, 각각 이전값들을 합한 값 구하기 / 피보나치 수열
 + 이전의 값을 활용해서 시간복잡도 줄일 수 있음
+
+
+
+### 유튜브 영상 강의
+
++ https://www.youtube.com/watch?v=qLkFBk5-HrY
+
+
+
+### 문제 풀이
+
++ 백준 11726 2xn 타일링
+
++ <img width="899" alt="스크린샷 2022-12-08 01 27 23" src="https://user-images.githubusercontent.com/88477839/206235383-b8253cbf-39b4-4c7b-be13-22d0669c0659.png">
+  <img width="903" alt="스크린샷 2022-12-08 01 27 37" src="https://user-images.githubusercontent.com/88477839/206235406-b44143b3-56ad-46e0-a4a7-e7875c7eba9d.png">
+
++ 아이디어 -> 점화식을 구함
+
+  + A1:1  , A2:2,  A3:1+2
+  + 점화식 : An=A(n-1) + A(n-2)
+  + for문으로 3부터 N까지 돌면서
+  + 이전값과, 그 이전값을 더해서 저장
+
++ ~~~java
+  import java.util.Scanner;
+  
+  // 백준 11726 타일링 문제 - DP 알고리즘을 활용하여 풀이 
+  
+  /*
+   1.아이디어 
+   -점화식 : An = An-1 + An-2
+   -N값 구하기 위해, for문 3부터 N까지의 값을 구해주기
+   -이전값, 이전이전값 더해서, 10007로 나눠 저장
+   
+   2. 시간복잡도
+   -O(N)
+   
+   3. 자료구조
+   -DP값 저장하는 (경우의수) 배열 : int[]
+   - 최대값 : 10007보다 작음 > Int
+   
+   */
+  
+  public class Tiling {
+  	public static void main(String[] args) {
+  		Scanner sc = new Scanner(System.in);
+  		int n = sc.nextInt();
+  		
+  		int[] rs = new int[n+1];
+  		
+  		rs[0]=0;
+  		rs[1]=1;
+  		if(n>1) {
+  			rs[2]=2;
+  		}
+  		
+  		for(int i=3; i<rs.length; i++) {
+  			rs[i]=(rs[i-1]+rs[i-2])%10007;
+  		}
+  		
+  		System.out.println(rs[n]);
+  
+  	}
+  
+  }
+  ~~~
+
+
+
+### Tip
+
++ 어떻게 할지 모르겠을땐, 하나씩 그려보면서 규칙 찾기
++ 점화식을 명확하게 세우고 코드 짜기 
