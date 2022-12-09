@@ -6,15 +6,19 @@
 
 + Spanning Tree : 모든 노드가 연결된 트리
 
-+ MST : 최소의 비용으로 모든 노드가 연결된 트리 
++ MST : 최소의 비용(최소 가중치)으로 모든 노드가 연결된 트리 
+
+  + 비용은 거리가 될 수도 있다.
+
+  + Ex) 가장 짧은 거리로 모든 도시 잇기
 
 + MST 푸는 방법 : Kruskal or Prim
 
   + Kruskal : 전체 간선 중 작은것부터 연결
 
-  + Prim : 현재 연결된 트리에 이어진 간선중 가장 작은것을 추가 
+  + Prim : 현재 연결된 트리에 이어진 간선중 가장 작은비용인 것을 추가 
 
-    + 프림 알고리즘은 무향 연결 그래프가 주어질 때, '최소 스패닝 트리' 라고 부르는 서브 그래프를 찾는 알고리즘이다.
+    + 프림 알고리즘은 무향(무방향) 연결 그래프가 주어질 때, '최소 스패닝 트리' 라고 부르는 서브 그래프를 찾는 알고리즘이다.
 
     
 
@@ -39,3 +43,233 @@
   + 최대값, 최소값을 빠르게 계산하기 위한 자료구조
   + 이진 트리 구조
   + 처음에 저장할때부터 최대값 or 최소값 결정하도록 
+
++ Prim 자바 코드 구현
+
+  ~~~java
+  // 간선 저장 위한 클래스
+  class Edge Implements Comparable<Edge>{
+    int w; // 간선 들어오는 정점(=노드)
+    int cost; // 간선 가중치
+    
+    Edge(int w, int cost){
+      this.W=W;
+      this.cost = cost;
+    }
+    
+    //간선 오름차순으로 정렬
+    @Override
+    public int compareTo(Edge o){
+      return this.cost - o.cost; // 비용 비교
+    }
+  }
+  
+  public class PrimMain{
+    static List<Edge>[] graph;
+    
+    public static void main(String[] args) throws IOException{
+      BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+      int n = Integer.parseInt(bf.readLine()); // 정점의 갯수
+      int m = Integer.parseInt(bf.readLine()); // 간선의 갯수 굳이 필요한지 의문
+      
+      graph = new ArrayList[n+1];
+      for(int i=0; i<graph.length; i++){
+        graph[i] = new ArrayList<>();
+      }
+      
+      StringTokenizer st;
+      for(int i =0; i<m; i++){
+        st.new StringTokenizer(bf.readLine());
+        int v = Integer.parseInt(st.nextToken());// 시작 정점
+        int w = Integer.parseInt(st.nextToken());// 다음 정점
+        int cost = Integer.parseInt(st.nextToken());// 시작 정점과 다음 정점 사이의 비용
+        
+        graph[v].add(new Edge(w, cost));
+        graph[w].add(new Edge(v, cost));
+      }
+      
+      prim(1, n);
+      
+    }
+    
+    // 프림 알고리즘
+    public static void prim(int start, int n){ // n은 정점의 갯수인듯
+      boolean[] visit = new boolean[n+1]; // 0번 인덱스를 쓰지 않아서 +1 해주는 듯
+      // 각 정점을 방문했는지 boolean배열로 체크한다.
+      // 정점을 반문 했다면 이미 MST에 포함된 정점이다.
+      // 이코드에서 데이터와 인덱스를 동일하게 사용함
+      // 데이터가 1이면 인덱스도 1
+      
+      PriorityQueue<Edge> pq = new PriorityQueue<>();
+      pq.offer(new Edge(start, 0));
+      
+      int total =0; // 가중치, 가중 비용
+      
+      while(!pq.isEmpty()) { // 우선수위 큐가 비워질때까지 반복
+        //우선순위큐는 우선순위가 있는 노드부터 out되기 때문에 pq.poll()을 하면
+        // 내부적으로 자동으로 노드간 우선순위를 비교하는듯
+        // Edge에서는 Edge에서 오버라이딩한 compareTo() 메서드를 자동으로 호출하는 듯함
+        Edge edge = pq.poll();
+        int v = edge.w;
+        int cost = edge.cost;
+        
+        // 방문 했으면 건너뜀
+        if(visit[v]){ // 이코드에서 데이터와 인덱스를 동일하게 사용함
+          continue;
+        }
+        
+        // 방문 하지 않았으면 아래코드 그대로 실행
+        visit[v] = true;
+        total += cost;
+        
+        // pq에서 꺼낸 정점(graph[v]) 과 인접한 정점들(Edge e)을 순회하면서
+        // 방문한적이 없는 정점(Edge 클래스)들을 pq에 추가함.
+        for(Edge e : graph[v]){
+          if(!visit[e.w]){
+            pq.add(e);
+          }
+        }
+      }
+      
+      // 완성된 최소 신장 트리의 총 가중치 합 출력
+      System.out.println(total);
+      
+    }
+  }
+  
+  ~~~
+
+  + 참고 설명 (코드 및 설명에 종종 오타가 있으니 주의)- https://velog.io/@suk13574/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98Java-%ED%94%84%EB%A6%BCPrim-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98
+
+
+
+### 문제
+
++ 백준 1197 최소 스패닝 트리
++ <img width="887" alt="스크린샷 2022-12-09 13 39 33" src="https://user-images.githubusercontent.com/88477839/206625353-c644028c-4068-45a0-bf4e-23704d2a6889.png">
+  <img width="890" alt="스크린샷 2022-12-09 13 39 47" src="https://user-images.githubusercontent.com/88477839/206625368-74414a16-9bc0-4c27-988c-00f956304ac3.png">
++ 아이디어
+  + 최소스패닝 트리 기본문제(외우기)
+  + 간선을 **인접리스트** 형태로 저장
+  + 시작점부터 힙에 넣기
+  + 힙이 비워질때까지,
+    + 해당 노드 방문 안한곳일 경우
+    + 방문 체크, 비용 추가, 연결된 간선 새롭게 힙에 추가
+
++ 시간복잡도
+
+  + MST의 시간복잡도(외우기) : O(E log E) -> E는 edge, 간선을 의미함
+  + Edge 릴스트에 저장 : O(E)
+  + Heap안 모든 Edge에 연결된 간선 확인 : O(E+E)
+  + 모든 간선 힙에 삽입 : O(E log E)
+  + 위 시간복잡도를 모두 더하면
+    + O(E+2E+ElogE)=O(3E+ElogE)=O(E(3+logE))=O(ElogE)
+
++ 풀이
+
+  ~~~java
+  import java.io.BufferedReader;
+  import java.io.IOException;
+  import java.io.InputStreamReader;
+  import java.util.ArrayList;
+  import java.util.List;
+  import java.util.PriorityQueue;
+  import java.util.StringTokenizer;
+  
+  // 백준 1197 최소 스패닝 트리 - mst prim 알고리즘 활용하여 풀이  
+  
+  /*
+  1.아이디어 
+  - mst 기본문제, 외우기
+  - 힙에 시작점 넣기
+  - 힙이 비워질때까지 다음의 작업을 반복
+  	- 힙의 최소값 꺼내서, 해당 노드 방문 안했다면
+  	- 방문표시, 해당 비용 추가, 연결된 간선들 힙에 넣어주기  
+  
+  2. 시간복잡도
+  - mst : O(ElogE)
+  
+  3. 자료구조 
+  - 간선 저장 되는 인접리스트 
+  - 힙
+  - 방문 여부 : boolean[]
+  - mst 결과값 : int 
+  */
+  
+  public class Mst {
+  	public static class Edge implements Comparable<Edge>{
+  		
+  		int v;
+  		int ecost;
+  		
+  		public Edge(int v, int ecost) {
+  			this.v=v;
+  			this.ecost=ecost;
+  		}
+  
+  		@Override
+  		public int compareTo(Edge o) {
+  			return this.ecost-o.ecost;
+  		}
+  		
+  	}
+  	
+  	public static void main(String[] args) throws IOException {
+  		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+  		StringTokenizer st = new StringTokenizer(br.readLine());
+  		
+  		int v = Integer.parseInt(st.nextToken());
+  		int e = Integer.parseInt(st.nextToken());
+  		
+  		// 인접리스트 생성 
+  		// 2차원 배열을 생성해도 될듯.
+  		List<Edge>[] edges = new ArrayList[v+1];
+  		for(int i=0; i<edges.length; i++) {
+  			edges[i]=new ArrayList<>();
+  		}
+  		
+  		boolean[] chk = new boolean[v+1];
+  		int rs =0;
+  		
+  		for(int i=0; i<e; i++) {
+  			st= new StringTokenizer(br.readLine());
+  			int a = Integer.parseInt(st.nextToken());
+  			int b = Integer.parseInt(st.nextToken());
+  			int c = Integer.parseInt(st.nextToken());
+  			
+  			edges[a].add(new Edge(b,c));
+  			edges[b].add(new Edge(a,c));
+  		}
+  		
+  		PriorityQueue<Edge> pq = new PriorityQueue<>();
+  		pq.add(new Edge(1,0));
+  		
+  		while(!pq.isEmpty()) {
+  			Edge edge = pq.poll();
+  			if(chk[edge.v]==false) {
+  				chk[edge.v]=true;
+  				rs += edge.ecost;
+  				
+  				for(Edge nextEdge : edges[edge.v]) {
+  					if(chk[nextEdge.v]==false) {
+  						pq.add(nextEdge);
+  					}
+  				}
+  				
+  			}
+  		}
+  		
+  		System.out.println(rs);
+  		
+  
+  	}
+  
+  }
+  ~~~
+
+### Tip
+
++ 최소 스패닝 트리 코드는 그냥 외우기
++ 중요한건, 해당 문제가 MST 문제인지 알아내는 능력
+  + 모든 노드가 연결되도록 한다거나
+  + 이미 연결된 노드를 최소의 비용으로 줄이기 
