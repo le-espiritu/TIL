@@ -143,3 +143,59 @@ brew services start mysql
 brew services stop mysql
 ~~~
 
+
+
+## mysql 비밀번호 변경하기
+
+~~~
+mysql.server stop
+~~~
+
++ 위 명령어로 기존에 실행되고 있던 mysql 서버를 종료한다.
+
+~~~
+sudo mysqld_safe --skip-grant-tables
+~~~
+
++ 위 명령어를 사용하여 안전모드로 mysql 서버를 실행한다.
++ 위와 별개로 새로운 터미널을 하나 더 연다 (command + t)
+
+~~~
+mysql -u root
+~~~
+
++ 위 명령어를 사용하여 비밀번호 없이 mysql에 접속한다.
+
+ ~~~
+ udate mysql.user set authentication_string=null where user='root';
+ flush privileges;
+ exit;
+ ~~~
+
++ 위 명령어를 사용하여 root 계정의 비밀번호를 없애주고 mysql을 빠져나온다.
+
+~~~
+mysql -u root
+alter user 'root'@'localhost' identified with caching_sha2_password by'바꿀 비밀번호';
+flush privileges;
+exit
+~~~
+
++ 다시 root 계정으로 mysql에 접속하고
++ Root 계정의 비밀번호를 설정해주고 빠져나온다.
+
+~~~
+mysql.server stop
+~~~
+
++ mysql 서버를 종료해주고
+
+~~~
+mysql.server start
+~~~
+
++ mysql 서버를 시작하여준다.
+
+
+
++ 참고 - https://kwangkyun-world.tistory.com/entry/mysql-80-%ED%8C%A8%EC%8A%A4%EC%9B%8C%EB%93%9C-%EB%B3%80%EA%B2%BD-%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EC%B4%88%EA%B8%B0%ED%99%94-mac
