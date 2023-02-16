@@ -1,0 +1,70 @@
+@charset "UTF-8";
+
+*{margin:0px; padding:0px;}
+ul{list-style:none;} /* 리스트 앞에 점 같은거 제거*/
+a{text-decoration: none;} /* 링크에 밑줄 같은거 제거 */
+
+header{
+	width: 100%;
+	height: 110px;
+	background-color : #2d3a4b;
+	position:relative;
+}
+
+#logo{
+	position:absolute;
+	/* absolute는 기준점에 따라서 특별한 위치에 위치한다. 
+	absolute의 기준점은 상위 엘리먼트 중에 static이 아닌 position이 기준점이다.
+	따라서 상위 엘리먼트인 header의 position을 static이 아닌 relative로 해줌 
+	*/
+	top: 30px;
+	left: 30px;
+}
+
+#logo > a{
+	color:white;
+}
+
+#top_menu{
+	position:absolute;
+	top: 20px;
+	right: 10px;
+}
+#top_menu > a{
+	color:white;
+}
+
+nav{
+	position:absolute;
+	bottom: 10px;
+	left:30%;
+	font-size : 30px;
+}
+
+nav li{
+	display: inline;
+	margin-left: 30px;
+}
+
+nav li a {
+	color: white;
+	margin-left: 50px;
+}
+
+#content > #main > img{
+	width:100%;
+	border:1px solid gray;
+}
+
+#content #banner li{
+	border-bottom:1px solid gray;
+	display:inline;
+}
+
+#content > #banner li a{
+	text-align:center;
+}
+
+#content #banner img{
+	width:40%;
+}
