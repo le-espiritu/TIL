@@ -16,7 +16,7 @@ element. 으로 사용할 수 있는 APIs : [링크 바로가기](https://www.w3
 
 **몇 가지 유용 DOM 엘리먼트 속성**
 
-- **tagName** : 엘리먼트의 태그명 반환
+- **tagName** : 엘리먼트의 태그명 반환 (tagName이 아니라 nodeName인듯)
 - **textContent** : 노드의 텍스트 내용을 설정하거나 반환
 - **nodeType** : 노드의 노드 유형을 숫자로 반환
 
