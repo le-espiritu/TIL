@@ -36,3 +36,14 @@
 
 
 + 디폴트 서블릿 참고 자료 - https://pangtrue.tistory.com/108
+
+
+
+#### URL-pattern / 과 /*의 차이
+
++ 이 두 경로 패턴은 RESTfull API 와 연관이 있다.
+
++ / 은 url매핑명을 사용한 경로와 연관이 있음
++ /*은 확장자 또는 파일명과 연관있음
++ 자세한 설명 - https://multifrontgarden.tistory.com/145
++ 참고 설명 - https://blog.naver.com/bg_ellder/112422442
