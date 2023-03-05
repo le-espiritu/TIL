@@ -9,6 +9,7 @@
 
 
 + REST API에 대한 블로그 설명(이해하기 쉽게 되어 있음) - https://velog.io/@ellyheetov/REST-API
++ REST API를 보다 RESTful 하게 만들기 - https://pronist.dev/146
 
 
 

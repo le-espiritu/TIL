@@ -35,6 +35,8 @@ header{
 header>h1{
 	color:white;
 	margin-left: 20px;
+	display:block;
+	cursor:pointer;
 }
 
 header a{
@@ -63,6 +65,7 @@ header > nav > ul{
 	line-height: 35px;
 	font-weight:bold;
 	color:white;
+	display:block;
 }
 
 #banners{

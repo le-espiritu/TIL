@@ -338,6 +338,31 @@
 
 
 
+### 코어 태그 : 흐름제어 태그 - if null 체크
+
++ ~~~html
+  <c:if test="${empty sessionScope.userID}">
+    <nav>
+      <ul>
+        <li><a href="login">로그인</a></li>
+        <li><a href="join">회원가입</a></li>
+      </ul>
+    </nav>
+  </c:if>
+  <c:if test="${not empty sessionScope.userID}">
+    <nav>
+      <ul>
+        <li><a href="#">${sessionScope.userID}님 사용중</a></li>
+        <li><a href="join">회원가입</a></li>
+      </ul>
+    </nav>
+  </c:if>
+  ~~~
+
+
+
+
+
 ### 코어 태그 : 흐름제어 태그 - choose
 
 ![2_6_2__choose](https://user-images.githubusercontent.com/88477839/158041682-ab079ad1-7b05-4d38-b45b-4aaaf9132d5d.png)
