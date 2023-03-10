@@ -8,7 +8,10 @@ import javax.sql.DataSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import kr.or.bbs.BBSSpring.dto.User;
@@ -27,10 +30,16 @@ public class UserDao {
 	// 예를 들어 DB컬럼명이 user_id(snake_case) 이고, 객체의 속성명이 userID(camelCase) 라면 이 둘을 자동으로 매핑시켜준다.
 	//만약 위 경우 처럼 자동변환을 할 수 없다면 RowMapper를 직접 구현한다. (RowMapper는 인터페이스여서 구현해줘야 한다.)
 	
+	private SimpleJdbcInsert insertAction;
+	// insert문을 실행하기 위해서는 SimpleJdbcInsert 객체가 필요하다. 
+	
+	
 	//생성자
 	// @Autowired 어노테이션은 생성자가 한 개만 있을 경우 생략 가능 
 	public UserDao(DataSource dataSource) { // DataSource는 DBconfig에서 @Bean으로 등록
 		this.jdbc= new NamedParameterJdbcTemplate(dataSource);
+		this.insertAction = new SimpleJdbcInsert(dataSource).withTableName("user");
+		// .withTableName("tableName") - 어떤 테이블에 insert 할 것인지 명시하는 것. 
 		System.out.println("연결 완료");
 	}
 	
@@ -44,7 +53,7 @@ public class UserDao {
 			if(rs.getUserPassword().equals(userPassword)) {
 				return 1;
 			}else {
-				return 0;
+				return 0; // 비밀번호가 일치 하지 않음 
 			}
 			
 		}catch(EmptyResultDataAccessException e) {
@@ -69,5 +78,15 @@ public class UserDao {
 		}
 	}
 	//==============================================================================================
+	
+	
+	public int join(User user) {
+		try {
+			SqlParameterSource params = new BeanPropertySqlParameterSource(user); // user 객체에 있는 값을 맵으로 바꿔줌
+			return insertAction.execute(params);
+		} catch (Exception e) {
+			return -1; // 데이터베이스 오류 (아이디 중복)
+		}
+	}
 
 }

@@ -4,11 +4,13 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.or.bbs.BBSSpring.dto.User;
 import kr.or.bbs.BBSSpring.service.UserService;
 
 
@@ -31,9 +33,11 @@ public class UserController {
 	
 	@PostMapping(path="/login") // RequestParam 어노테이션 대신 ModelAttribute 어노테이션 사용해서 User객체로 한꺼번에 받아와도 됨 
 	public String login(@RequestParam(name="userID", required=true) String userID,
-			@RequestParam(name="userPassword", required=true)String userPassword, HttpSession session) {
+			@RequestParam(name="userPassword", required=true)String userPassword, HttpSession session, ModelMap model) {
 		int result = userService.login(userID, userPassword);
 		System.out.println("login result : "+result);
+		
+		model.addAttribute("loginResult", result);
 		
 		if(result==1) {
 			// 스프링을 사용하지 않을때는 세션을 사용하기 위해 request로 부터 getSession()메서드를 이용하여 얻어와야 했었는데 스프링은 이 일을 대신 처리해준다. 
@@ -41,7 +45,7 @@ public class UserController {
 			session.setAttribute("userID", userID);
 			return"redirect:/";
 		}else {
-			return"login";
+			return"loginResult";
 		}
 		
 	}
@@ -52,6 +56,23 @@ public class UserController {
 			return "redirect:/";
 		}else {
 			return "join";
+		}
+		
+	}
+	
+	@PostMapping(path="/join")
+	public String join(@ModelAttribute User user, HttpSession session, ModelMap model) {
+		// @ModelAttribute 를 사용하면 요청을 보낼때 작성한 form에서 name과 일치하는 User 객체의 멤버에 넣어준다. (객체 생성해서)
+		// 위 어노테이션을 사용하면 @RequestParam 어노테이션 처럼 파라미터를 하나씩 가져오지 않고, DTO로 한꺼번에 가져온다. 
+		int result = userService.join(user);
+		
+		model.addAttribute("joinResult", result);
+		
+		if(result==-1) {
+			return "joinResult";
+		}else {
+			session.setAttribute("userID", user.getUserID());
+			return "redirect:/";
 		}
 		
 	}

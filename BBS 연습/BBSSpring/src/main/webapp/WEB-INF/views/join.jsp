@@ -33,7 +33,7 @@
 			</nav>
 			
 			<section id="login_view">
-				<form action="login" method="post">
+				<form action="join" method="post">
 				<h2>회원가입 화면</h2>
 				<div>
 					<input type="text" placeholder="아이디" name="userID" maxlength="20">
