@@ -34,10 +34,9 @@ public class UserController {
 	@PostMapping(path="/login") // RequestParam 어노테이션 대신 ModelAttribute 어노테이션 사용해서 User객체로 한꺼번에 받아와도 됨 
 	public String login(@RequestParam(name="userID", required=true) String userID,
 			@RequestParam(name="userPassword", required=true)String userPassword, HttpSession session, ModelMap model) {
+		
 		int result = userService.login(userID, userPassword);
 		System.out.println("login result : "+result);
-		
-		model.addAttribute("loginResult", result);
 		
 		if(result==1) {
 			// 스프링을 사용하지 않을때는 세션을 사용하기 위해 request로 부터 getSession()메서드를 이용하여 얻어와야 했었는데 스프링은 이 일을 대신 처리해준다. 
@@ -45,6 +44,7 @@ public class UserController {
 			session.setAttribute("userID", userID);
 			return"redirect:/";
 		}else {
+			model.addAttribute("loginResult", result);
 			return"loginResult";
 		}
 		
