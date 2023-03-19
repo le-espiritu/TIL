@@ -13,8 +13,9 @@
 <link rel="stylesheet" href="css/main.css">
 
 <style>
-	#bbs_content >table{border:1px solid #ddd; text-align:center;}
+	#bbs_content > div > table{border:1px solid #ddd; text-align:center; width:50%; margin: 0 auto;}
 	#bbs_content th{background-color:#eee}
+	#bbs_content {text-align: center;}
 </style>
 
 </head>
@@ -51,24 +52,51 @@
 			</nav>
 			
 			<div id="bbs_content">
-				<table>
-					<thead>
-						<th>글 번호</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>날짜</th>
-					</thead>
-					<tbody>
-						<c:forEach	items="${list}" var="bbsPost">
-							<tr>
-								<td>${bbsPost.bbsID}</td>
-								<td>${bbsPost.bbsTitle}</td>
-								<td>${bbsPost.userID}</td>
-								<td>${bbsPost.bbsDate}</td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
+				<div>
+					<table>
+						<thead>
+							<th>글 번호</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>날짜</th>
+						</thead>
+						<tbody>
+							<c:forEach	items="${list}" var="bbsPost">
+								<tr>
+									<td>${bbsPost.bbsID}</td>
+									<td><a href="posts/${bbsPost.bbsID}">${bbsPost.bbsTitle}</a></td>
+									<td>${bbsPost.userID}</td>
+									<td>${bbsPost.bbsDate}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+					<a href="board"> 글 작성하기 </a>
+				</div>
+				
+				<div id="pageNumberDiv">
+					<c:if test="${start==0}">
+						<a href="#">이전</a>&nbsp; &nbsp;
+					</c:if>
+					<c:if test="${start!=0}">
+						<a href="bbs?start=${start-10}">이전</a>&nbsp; &nbsp;
+					</c:if>
+					
+					<c:forEach items="${pageStartList}" var="pageIndex" varStatus="status">
+						<a href="bbs?start=${pageIndex}">${status.index+1}</a>&nbsp; &nbsp;
+					</c:forEach>
+					
+					<c:if test="${isNextPage==false}">
+						<a href="#">다음</a>&nbsp; &nbsp;
+					</c:if>
+					<c:if test="${isNextPage==true }">
+						<a href="bbs?start=${start+10}">다음</a>&nbsp; &nbsp;
+					</c:if>
+					
+				</div>
+				
+				
+				
 			</div>
 		</section>
 		

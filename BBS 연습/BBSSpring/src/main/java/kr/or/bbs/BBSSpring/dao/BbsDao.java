@@ -9,7 +9,9 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -37,6 +39,35 @@ public class BbsDao {
 		params.put("start", start);
 		params.put("limit", limit);
 		return jdbc.query(SELECT_PAGING, params, rowMapper);
+	}
+	
+	public Bbs getPostView(int id) {
+		try {
+			Map<String,?> params = Collections.singletonMap("bbsID", id);
+			return jdbc.queryForObject(SELECT_BY_BBSID, params, rowMapper); //1건만 셀렉트 할때는 queryForObject 메서드를 사용한다. 
+		} catch (Exception e) {
+			return null;
+		}
+		
+	}
+	
+	public int getNextBbsID() {
+		try {
+			List<Bbs> list = jdbc.query(SELECT_BBSID, Collections.emptyMap(), rowMapper);
+			int bbsID = list.get(0).getBbsID();
+			return bbsID+1;
+		} catch (Exception e) { // 첫번째 게시물인 경우
+			return 1;
+		}
+	}
+	
+	public int insert(Bbs bbs) {
+		try {
+			SqlParameterSource params = new BeanPropertySqlParameterSource(bbs);
+			return insertAction.execute(params);
+		} catch (Exception e) {
+			return -1; // 데이터베이스 오류 
+		}
 	}
 	
 	public int selectCount() {

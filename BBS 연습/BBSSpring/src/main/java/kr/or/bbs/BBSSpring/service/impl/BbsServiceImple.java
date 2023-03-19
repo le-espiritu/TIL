@@ -32,4 +32,17 @@ public class BbsServiceImple implements BbsService {
 		return bbsDao.selectCount();
 	}
 
+	@Override
+	public int write(Bbs bbs) {
+		int nextBbsID = bbsDao.getNextBbsID();
+		bbs.setBbsID(nextBbsID);
+		
+		return bbsDao.insert(bbs);
+	}
+
+	@Override
+	public Bbs getPostView(int id) {
+		return bbsDao.getPostView(id);
+	}
+
 }
