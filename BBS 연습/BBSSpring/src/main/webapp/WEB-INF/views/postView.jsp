@@ -14,6 +14,13 @@
 <!-- href="css/main.css"를 href="/BBSSpring/css/main.css로 바꿔줌 " -->
 <link rel="stylesheet" href="/BBSSpring/css/main.css">
 
+<style>
+	#postView_content > div {width:70%; margin: 20px auto;}
+	#postView_content > div > table{border:solid 1px #eeeeee; text-align: center; width: 100%;}
+	#postView_content > div > table > thead > tr > th{background-color: #dddddd;}
+	#postView_content > div > table > tbody :last-child :last-child{min-height: 200px; text-align: left;}
+</style>
+
 </head>
 
 <body>
@@ -32,8 +39,8 @@
 			<c:if test="${empty sessionScope.userID}">
 				<nav>
 					<ul>
-						<li><a href="login">로그인</a></li>
-						<li><a href="join">회원가입</a></li>
+						<li><a href="/BBSSpring/login">로그인</a></li>
+						<li><a href="/BBSSpring/join">회원가입</a></li>
 					</ul>
 				</nav>
 			</c:if>
@@ -42,7 +49,7 @@
 				<nav>
 					<ul>
 						<li><a href="#">${sessionScope.userID}님 사용중</a></li>
-						<li><a href="logout">로그아웃 </a></li>
+						<li><a href="/BBSSpring/logout">로그아웃 </a></li>
 					</ul>
 				</nav>
 			</c:if>
@@ -52,8 +59,8 @@
 		<section id="main_content">
 			<nav>
 				<ul>
-					<li><a href="main">메인</a></li>
-					<li><a href="bbs">게시판</a></li>
+					<li><a href="/BBSSpring/main">메인</a></li>
+					<li><a href="/BBSSpring/bbs">게시판</a></li>
 				</ul>
 			</nav>
 			
@@ -84,6 +91,13 @@
 							</tr>
 						</tbody>
 					</table>
+					
+					<c:if test="${not empty sessionScope.userID && sessionScope.userID eq bbsForPostView.userID}">
+						<a href="/BBSSpring/board/${bbsForPostView.bbsID}">수정2</a>
+						<a href="javascript:void(0)" onclick="javascript:update(${bbsForPostView.bbsID})">수정</a>
+						<a href="#">삭제</a>
+					</c:if>
+					
 				</div>
 			</div>
 		</section>
@@ -95,10 +109,10 @@
 	</div>
 	
 	<!-- 컨트롤러의 @PathVariable과 관련하여 css,js 경로와 충돌이 일어나기 때문에 -->
-	<!-- href="js/main.css"를 href="/BBSSpring/js/main.js로 바꿔줌 " -->
+	<!-- src="js/main.css"를 src="/BBSSpring/js/main.js로 바꿔줌 " -->
 	<script src="/BBSSpring/js/main.js"></script>
 	<!-- 만약 스크립트가 동작하지 않을때는 캐시된 파일들을 삭제해본다. -->
-
+	<script src="/BBSSpring/js/postView.js"></script>
 	
 </body>
 

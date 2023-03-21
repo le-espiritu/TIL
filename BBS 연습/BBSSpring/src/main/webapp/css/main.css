@@ -53,6 +53,11 @@ header > nav > ul{
 	justify-content : space-between;
 }
 
+#main_content > nav > ul{
+	overflow: auto;
+	/* 자식이 float:left일때 이를 자식으로 인식하게 하기 위해 부모 엘리먼트에 overflow: auto를 해줘야 한다. */
+}
+
 #main_content > nav > ul >li{
 	background-color: gray;
 	float:left;

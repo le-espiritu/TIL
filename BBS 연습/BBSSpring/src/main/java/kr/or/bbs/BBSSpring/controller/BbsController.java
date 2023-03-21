@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -71,6 +72,22 @@ public class BbsController {
 		model.addAttribute("bbsForPostView", bbsForPostView);
 		
 		return "postView";
+	}
+	
+	
+	@PatchMapping(path="/posts/{id}")
+	public void updateTest(@PathVariable(name="id") int id, @RequestParam(name="bbsTitle") String bbsTitle,
+							@RequestParam(name="bbsContent")String bbsContent) {
+		System.out.println(bbsTitle);
+		System.out.println("bbsContent: "+bbsContent);
+		System.out.println("요청이 잘 전달되었습니다.");
+	}
+	
+	@GetMapping(path="/board/{id}")
+	public String getUpdateBoard(@PathVariable(name="id")int id, ModelMap model) {
+		Bbs bbsForUpdate = bbsService.getPostView(id);
+		model.addAttribute("bbsForUpdate", bbsForUpdate);
+		return"updateBoard";
 	}
 	
 	@GetMapping(path="/board")
