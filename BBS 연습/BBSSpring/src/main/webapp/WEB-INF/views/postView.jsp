@@ -93,9 +93,8 @@
 					</table>
 					
 					<c:if test="${not empty sessionScope.userID && sessionScope.userID eq bbsForPostView.userID}">
-						<a href="/BBSSpring/board/${bbsForPostView.bbsID}">수정2</a>
-						<a href="javascript:void(0)" onclick="javascript:update(${bbsForPostView.bbsID})">수정</a>
-						<a href="#">삭제</a>
+						<a href="/BBSSpring/board/${bbsForPostView.bbsID}">수정</a>
+						<a href="javascript:void(0)" onclick="javascript:deletePost(${bbsForPostView.bbsID})">삭제</a>
 					</c:if>
 					
 				</div>

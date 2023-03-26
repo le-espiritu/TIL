@@ -51,6 +51,30 @@ public class BbsDao {
 		
 	}
 	
+	public int update(int bbsID, String bbsTitle, String bbsContent) {
+		try {
+			Map<String,Object> params = new HashMap<>();
+			params.put("bbsID",bbsID);
+			params.put("bbsTitle", bbsTitle);
+			params.put("bbsContent", bbsContent);
+			
+			return jdbc.update(UPDATE, params);
+		} catch (Exception e) {
+			return -1; // 업데이트 실패 
+		}
+		
+	}
+	
+	public int delete(int bbsID) {
+		try {
+			Map<String,?> param = Collections.singletonMap("bbsID", bbsID);
+			return jdbc.update(DELETE, param);
+		} catch (Exception e) {
+			return -1; // 데이터베이스 오류 
+		}
+	}
+	
+	
 	public int getNextBbsID() {
 		try {
 			List<Bbs> list = jdbc.query(SELECT_BBSID, Collections.emptyMap(), rowMapper);

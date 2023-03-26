@@ -6,5 +6,7 @@ public class BbsDaoSqls {
 	// Offset 값은 0부터 시작한다.
 	public static final String SELECT_BY_BBSID = "SELECT * FROM bbs WHERE bbsID = :bbsID";
 	public static final String SELECT_BBSID = "SELECT bbsID FROM bbs ORDER BY bbsID DESC";
+	public static final String UPDATE = "UPDATE bbs set bbsTitle = :bbsTitle, bbsContent= :bbsContent where bbsID = :bbsID";
+	public static final String DELETE = "UPDATE bbs set bbsAvailable = 0 where bbsID = :bbsID";
 	public static final String SELECT_COUNT = "SELECT count(*) FROM bbs";
 }

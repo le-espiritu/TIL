@@ -10,11 +10,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.bbs.BBSSpring.dto.Bbs;
@@ -76,13 +78,30 @@ public class BbsController {
 	
 	
 	@PatchMapping(path="/posts/{id}")
-	public void updateTest(@PathVariable(name="id") int id, @RequestParam(name="bbsTitle") String bbsTitle,
+	public String updateTest(@PathVariable(name="id") int id, @RequestParam(name="bbsTitle") String bbsTitle,
 							@RequestParam(name="bbsContent")String bbsContent) {
-		System.out.println(bbsTitle);
-		System.out.println("bbsContent: "+bbsContent);
-		System.out.println("요청이 잘 전달되었습니다.");
+		
+		int result = bbsService.update(id, bbsTitle, bbsContent);
+		
+		if(result==-1) {
+			//업데이트 실패에 대한 처리 
+			return"redirect:/bbs";
+		}else {
+			return"redirect:/bbs";
+			// 리다이렉트하면 정상 작동한다.
+			// 포워드하면 DB에 update까진 되긴 하나 view로 포워드 할 수 없다.
+			// 아마 Patch메서드 이기 때문인 듯 하다.
+		}
 	}
 	
+	//게시글 삭제하는 메서드 
+	@DeleteMapping(path="/posts/{id}")
+	public String deletePost(@PathVariable(name="id")int id) {
+		int rs = bbsService.deletePost(id);
+		return"redirect:/bbs";
+	}
+	
+	//게시글 수정 화면을 불러오는 메서드
 	@GetMapping(path="/board/{id}")
 	public String getUpdateBoard(@PathVariable(name="id")int id, ModelMap model) {
 		Bbs bbsForUpdate = bbsService.getPostView(id);

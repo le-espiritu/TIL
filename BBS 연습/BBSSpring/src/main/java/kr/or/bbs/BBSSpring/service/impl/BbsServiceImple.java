@@ -45,4 +45,14 @@ public class BbsServiceImple implements BbsService {
 		return bbsDao.getPostView(id);
 	}
 
+	@Override
+	public int update(int bbsID, String bbsTitle, String bbsContent) {
+		return bbsDao.update(bbsID, bbsTitle, bbsContent);
+	}
+
+	@Override
+	public int deletePost(int bbsID) {
+		return bbsDao.delete(bbsID);
+	}
+
 }

@@ -2,18 +2,18 @@
  * 
  */
 
-function update(ID){
-	alert("업데이트 자바스크립트 함수가 잘 실행되었습니다.");
+function deletePost(ID){
+
 	let f = document.createElement('form');
 	f.setAttribute('method','post');
 	f.setAttribute('action','/BBSSpring/posts/'+ID);
 	
-	let i = document.createElement('input');
-	i.setAttribute('type','hidden');
-	i.setAttribute('name','_method');
-	i.setAttribute('value','patch');
+	let inp = document.createElement('input');
+	inp.setAttribute('type','hidden');
+	inp.setAttribute('name','_method');
+	inp.setAttribute('value','delete');
 	
-	f.appendChild(i);
+	f.appendChild(inp);
 	
 	document.body.appendChild(f);
 	f.submit();

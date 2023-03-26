@@ -70,14 +70,14 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td><input type="text" placeholder="글 제목" name="bbsTitle" maxlength="20";></td>
+								<td><input type="text" name="bbsTitle" maxlength="20" value="${bbsForUpdate.bbsTitle}"></td>
 							</tr>
 							<tr>
-								<td><textarea placeholder="글 내용" name="bbsContent" maxlength="2048"></textarea></td>
+								<td><textarea name="bbsContent" maxlength="2048">${bbsForUpdate.bbsContent}</textarea></td>
 							</tr>
 						</tbody>
 					</table>
-					<input type="submit" value="작성하기">
+					<input type="submit" value="수정하기">
 				</form>
 			</div>
 		</section>
