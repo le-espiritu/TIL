@@ -70,7 +70,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><input type="text" placeholder="게시글 제목" name="bbsTitle" mexlength="20"></td>
+							<td><input type="text" placeholder="게시글 제목" name="bbsTitle" maxlength="20"></td>
 						</tr>
 						<tr>
 							<td><textarea placeholder="글 내용" name="bbsContent" maxlength="2048" style="height:350px;"></textarea></td>

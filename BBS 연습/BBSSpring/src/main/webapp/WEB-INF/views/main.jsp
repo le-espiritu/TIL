@@ -21,8 +21,8 @@
 			<c:if test="${empty sessionScope.userID}">
 				<nav>
 					<ul>
-						<li><a href="login">로그인</a></li>
-						<li><a href="join">회원가입</a></li>
+						<li><a href="user">로그인</a></li>
+						<li><a href="member">회원가입</a></li>
 					</ul>
 				</nav>
 			</c:if>
@@ -30,7 +30,7 @@
 				<nav>
 					<ul>
 						<li><a href="#">${sessionScope.userID}님 사용중</a></li>
-						<li><a href="logout">로그아웃 </a></li>
+						<li><a href="javascript:void(0)" onclick="javscript:logout()">로그아웃 </a></li>
 					</ul>
 				</nav>
 			</c:if>

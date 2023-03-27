@@ -3,6 +3,7 @@
  */
 
 function deletePost(ID){
+	confirm('정말로 삭제하시겠습니까?');
 
 	let f = document.createElement('form');
 	f.setAttribute('method','post');

@@ -44,7 +44,7 @@
 				<nav>
 					<ul>
 						<li><a href="#">${sessionScope.userID}님 사용중</a></li>
-						<li><a href="logout">로그아웃 </a></li>
+						<li><a href="javascript:void(0)" onclick="javascript:logout()">로그아웃 </a></li>
 					</ul>
 				</nav>
 			</c:if>

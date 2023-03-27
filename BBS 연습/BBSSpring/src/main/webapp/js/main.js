@@ -10,18 +10,21 @@ function goMain(){
 }
 
 function logout(){
-	alert("hello");
-	let f = document.createElement('form');
-	f.setAttribute('method','post');
-	f.setAttribute('action','logout');
+	alert("로그아웃 요청을 받았습니다.");
 	
-/*	let i = document.createElement('input');
+	let f =document.createElement('form');
+	f.setAttribute('method','post');
+	f.setAttribute('action','/BBSSpring/user');
+	
+	let i =document.createElement('input');
 	i.setAttribute('type','hidden');
 	i.setAttribute('name','_method');
 	i.setAttribute('value','delete');
 	
-	f.appendChild(i);*/
+	f.appendChild(i);
 	
 	document.body.appendChild(f);
-	f.submit;
+	
+	f.submit();
+	
 }

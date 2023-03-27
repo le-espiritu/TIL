@@ -18,8 +18,8 @@
 			<h1 onclick="location.href='main'">BBS Spring 게시판</h1>
 			<nav>
 				<ul>
-					<li><a href="login">로그인</a></li>
-					<li><a href="join">회원가입</a></li>
+					<li><a href="user">로그인</a></li>
+					<li><a href="member">회원가입</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -33,7 +33,7 @@
 			</nav>
 			
 			<section id="login_view">
-				<form action="join" method="post">
+				<form action="member" method="post">
 				<h2>회원가입 화면</h2>
 				<div>
 					<input type="text" placeholder="아이디" name="userID" maxlength="20">

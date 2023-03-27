@@ -43,7 +43,7 @@
 				<nav>
 					<ul>
 						<li><a href="#">${sessionScope.userID}님 사용중</a></li>
-						<li><a href="/BBSSpring/logout">로그아웃 </a></li>
+						<li><a href="javascript:void()" onclick="javascript:logout()">로그아웃 </a></li>
 					</ul>
 				</nav>
 			</c:if>

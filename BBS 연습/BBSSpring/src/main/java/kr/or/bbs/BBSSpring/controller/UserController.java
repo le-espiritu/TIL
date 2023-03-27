@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,8 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@GetMapping(path="/login")
+	//로그인 화면 응답
+	@GetMapping(path="/user")
 	public String loginPage(HttpSession session) {
 		if(session.getAttribute("userID")!=null) { // 이미 로그인 되어 있는 경우 
 			return"redirect:/";
@@ -31,7 +33,8 @@ public class UserController {
 		
 	}
 	
-	@PostMapping(path="/login") // RequestParam 어노테이션 대신 ModelAttribute 어노테이션 사용해서 User객체로 한꺼번에 받아와도 됨 
+	//로그인 메서드 
+	@PostMapping(path="/user") // RequestParam 어노테이션 대신 ModelAttribute 어노테이션 사용해서 User객체로 한꺼번에 받아와도 됨 
 	public String login(@RequestParam(name="userID", required=true) String userID,
 			@RequestParam(name="userPassword", required=true)String userPassword, HttpSession session, ModelMap model) {
 		
@@ -50,7 +53,17 @@ public class UserController {
 		
 	}
 	
-	@GetMapping(path="/join")
+	//로그아웃 메서드 
+	@DeleteMapping(path="/user")
+	public String logout(HttpSession session) {
+		//System.out.println("로그아웃 컨트롤로 호출 완료");
+		session.removeAttribute("userID");
+		return"redirect:/";
+		
+	}
+	
+	//회원가입 화면 응답 
+	@GetMapping(path="/member")
 	public String joinPage(HttpSession session) {
 		if(session.getAttribute("userID")!=null) {
 			return "redirect:/";
@@ -60,15 +73,15 @@ public class UserController {
 		
 	}
 	
-	@PostMapping(path="/join")
+	//회원가입 메서드 
+	@PostMapping(path="/member")
 	public String join(@ModelAttribute User user, HttpSession session, ModelMap model) {
 		// @ModelAttribute 를 사용하면 요청을 보낼때 작성한 form에서 name과 일치하는 User 객체의 멤버에 넣어준다. (객체 생성해서)
 		// 위 어노테이션을 사용하면 @RequestParam 어노테이션 처럼 파라미터를 하나씩 가져오지 않고, DTO로 한꺼번에 가져온다. 
 		int result = userService.join(user);
 		
-		model.addAttribute("joinResult", result);
-		
 		if(result==-1) {
+			model.addAttribute("joinResult", result);
 			return "joinResult";
 		}else {
 			session.setAttribute("userID", user.getUserID());
@@ -77,11 +90,5 @@ public class UserController {
 		
 	}
 	
-	@GetMapping(path="/logout")
-	public String logout(HttpSession session) {
-		//System.out.println("로그아웃 컨트롤로 호출 완료");
-		session.removeAttribute("userID");
-		return"redirect:/";
-		
-	}
+	
 }

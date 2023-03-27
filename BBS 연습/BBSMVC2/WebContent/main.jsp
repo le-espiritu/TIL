@@ -10,6 +10,7 @@
 
 <link rel="stylesheet" href="./css/main.css">
 
+
 </head>
 <body>
 	<%
@@ -67,7 +68,18 @@
 		
 		<footer>
 			<span>푸터</span>
+			<button id="but">테스트 버튼</button>
 		</footer>
 	</div>
 </body>
+
+
+<script type="text/javascript">
+	var insertBeforeButton = document.getElementById("but");
+	
+	insertBeforeButton.addEventListener("click", function(){
+	  alert("hello");
+	});
+</script>
+
 </html>
