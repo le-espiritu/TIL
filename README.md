@@ -23,6 +23,6 @@
 
 + #### BBS 연습
 
-  + **[바로가기](https://github.com/le-espiritu/TIL/tree/master/BBS%20%EC%97%B0%EC%8A%B5)**
+  + **[바로가기](https://github.com/le-espiritu/BBS_Project)**
   + 간단한 게시판을 구현한 웹 토이 프로젝트입니다.
-  + 동일한 형태의 게시판을 각각 MVC1, MVC2, Spring MVC 형태들로 구현하였습니다.
+  + 동일한 형태의 게시판을 각각 MVC1, MVC2, Spring MVC 아키텍쳐들로 구현하였습니다.
