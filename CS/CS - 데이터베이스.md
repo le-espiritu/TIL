@@ -8,6 +8,208 @@
 
 
 
+---
+
+
+
+### data models
+
++ DB의 구조(structure)를 기술하는데 사용될 수 있는 개념들이 모인 집합
+  + DB 구조 : 데이터 유형, 데이터 관계(relationship), 제약 사항(constraints) 등등
++ DB 구조를 추상하해서 표현할 수 있는 수단을 제공한다.
++ Data model은 여러 종류가 있으며 추상화 수준과 DB 구조화 방식이 조금씩 다르다.
++ DB에서 읽고 쓰기 위한 기본적인 동작들(operations)도 포함한다.
+
+
+
+#### data models 분류
+
++ Conceptual data models (high-level data models)
++ logical data models (representational data models)
++ physical data models (low-level data models)
+
+
+
+#### conceptual data models
+
++ 일반 사용자들이 쉽게 이해할 수 있는 개념들로 이뤄진 모델
++ 추상화 수준이 가장 높음
+  + 데이터베이스의 구조를 높은 수준으로 추상화 함
++ 비즈니스 요구 사항을 추상화하여 기술할 때 사용
++ <img width="1197" alt="스크린샷 2023-04-09 21 23 29" src="https://user-images.githubusercontent.com/88477839/230772293-73b5182b-c191-40c6-843f-f5dc5b2ebc48.png">
+  + 위 그림에서 Student와 Book은 각각 entity이다.
+    + 각각의 entity는 attribute라고 불리우는 속성들이 있다. (Stu id, major, book id 등......)
+  + 이 둘은 관계는 reads라는 관계이다. 
+  + ERD
+
+
+
+#### logical data models
+
++ 이해하기 어렵지 않으면서도 디테일하게 DB를 구조화 할 수있는 개념들을 제공
++ 데이터가 컴퓨터에 저장될 때의 구조와 크게 다르지 않게 DB 구조화를 가능하게 함
++ 특정 DBMS나 storage에 종속되지 않는 수준에서 DB를 구조화할 수 있는 모델
+  + 어느 정도 추상화가 되어 있음
++ <img width="1068" alt="스크린샷 2023-04-09 21 32 33" src="https://user-images.githubusercontent.com/88477839/230772783-b4c4b04d-b2a3-4e9d-8e41-53016f461a2f.png">
+  + 테이블과 동일 
++ logical data models 종류
+  + relational data model - 가장 많이 사용됨
+    + 유명한 dbms들이 relational data model 기반
+  + object data model
+  + Object-relational data model
+
+
+
+#### physical data modles
+
++ 컴퓨터에 데이터가 어떻게 파일 형태로 저장되는지를 기술할 수 있는 수단을 제공
++ Data format, data orderings, access path 등등
++ access path : 데이터 검색을 빠르게 하기 위한 구조체
+  + 대표적인 예로 Index가 있음
+
+
+
+---
+
+
+
+### database schema
+
++ data model을 바탕으로 database의 구조를 기술 한 것
++ schema는 database를 설계할 때 정해지며 한번 정해진 후에는 자주 바뀌지 않는다.
++ <img width="1249" alt="스크린샷 2023-04-09 21 43 32" src="https://user-images.githubusercontent.com/88477839/230773177-8fd51074-1adf-4a9c-bfc9-dd6f1fc8de80.png">
+
+
+
+#### database state
+
++ database에 있는 실제 데이터는 꽤 자주 바뀔 수 있다.
++ 특정 시점에 database에 있는 데이터를 database state 혹은 snapshot이라고 한다.
++ 혹은 database에 있는 현재 instances의 집합이라고도 한다.
+
+
+
+#### three-schema architecture
+
++ Database system을 구축하는 architecture 중의 하나
++ user application으로 부터 물리적인 database를 분리시키는 목적
+  + 물리적인 database의 구조가 조금씩 바뀔 수있다.
+  + database의 구조가 바뀔때에도 이를 사용하는 user application에는 영향을 끼치지 않게 하기 위해 three-schema architecture를 사용한다. 
++ 세 가지 level이 존재하며 각각의 level마다 schema가 정의되어 있다.
+  + external schemas : external level
+  + conceptual schemas : conceptual level
+  + Internal schemas : internal level
++ <img width="730" alt="스크린샷 2023-04-09 21 54 41" src="https://user-images.githubusercontent.com/88477839/230773740-2755e6fb-5c3d-4e52-9948-0858fc7209a0.png">
+  + **internal schema**
+    + 물리적으로 데이터가 어떻게 저장되는지 physical data model을 통해 표현
+    + data storage, data structure, access path 등등 실체가 있는 내용 기술
+  + **external schema**
+    + 실제 유저가 바라보는 schema
+    + external views, user views 라고도 불림
+    + 특정 유저들이 필요로 하는 데이터만 표현
+    + 그 외 알려줄 필요가 없는 데이터는 숨긴다.
+    + logical data model을 통해 표현
+  + **conceptual schema**
+    + 전체 database에 대한 구조를 기술
+    + internal schema를 한번 추상화 시켜서 표현한 schema
+    + 물리적인 저장 구조에 관한 내용은 숨김
+    + entities, data types, relationships, user operations, constraints에 집중
+    + logical data model을 통해 기술 
++ Three-schema architecture의 목적
+  + 안정적으로 데이터베이스 시스템을 운영하기 위해서 사용되는 아키텍쳐이다.
+  + 각 레벨을 독립시켜서 어느 레벨에서의 변화가 상위 레벨에 영향을 주지 않기 위함이다.
+  + 대부분의 DBMS가 three level을 완벽하게 혹은 명시적으로 나누지는 않음
+  + 실제적으로 데이터가 존재하는 곳은 internal level이다.
+
+
+
+---
+
+
+
+### database Language
+
+#### data definition language (DDL)
+
++ conceptual schema를 정의하기 위해 사용되는 언어
+
++ internal schema까지 정의할 수 있는 경우도 있음
+
++ 사용 예
+
+  + ~~~sql
+    create table 테이블명( 
+              필드명1 타입 [NULL | NOT NULL][DEFAULT ][AUTO_INCREMENT], 
+              필드명2 타입 [NULL | NOT NULL][DEFAULT ][AUTO_INCREMENT], 
+              필드명3 타입 [NULL | NOT NULL][DEFAULT ][AUTO_INCREMENT], 
+              ........... 
+              PRIMARY KEY(필드명) 
+              );
+    ~~~
+
+  + ~~~sql
+    create table employee2(
+    	empno integer not null primary key,
+      name varchar(10),
+      job varchar(9),
+      boss Integer,
+      hiredate varchar(12),
+      salary decimal(7,2),
+      comm decimal(7,2),
+      deptno integer);
+    ~~~
+
+  + ~~~sql
+    alter table employee2 add birthdate varchar(12);
+    ~~~
+
+  + ~~~sql
+    alter table employee2 drop birthdate;
+    ~~~
+
+  + ~~~sql
+    alter table employee2 change deptno dept_no int(11);
+    ~~~
+
+  + ~~~sql
+    drop table 테이블 이름
+    ~~~
+
+
+
+#### storage definition language (SDL)
+
++ internal schema를 정의하는 용도로 사용되는 언어
++ 요즘은 특히 relational DBMS에서는 SDL이 거의 없고 파라미터 등의 설정으로 대체됨
+
+#### view definition language (VDL)
+
++ external schemas를 정의하기 위해 사용되는 언어
++ 대부분의 DBMS에서는 DDL이 VDL 역할까지 수행
+
+
+
+#### data manipulation language (DML)
+
++ Database 에 있는 data를 활용하기 위한 언어 (데이터 조작어)
++ data 추가, 삭제, 수정, 검색 등등의 기능을 제공하는 언어
+  + select
+  + Insert
+  + update
+  + delete
+
+
+
+**오늘날 DBMS는 DML, VDL, DDL이 따로 존재하기 보다는 통합된 언어로 존재 한다.	**
+
+**대표 적인 예로 relational database language : SQL 이 있다. **
+
+
+
+---
+
+
+
 ### NoSQL 참고자료
 
 + https://www.fun-coding.org/mongodb_basic1.html#gsc.tab=0
