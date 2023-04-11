@@ -16,7 +16,7 @@
 
 + DB의 구조(structure)를 기술하는데 사용될 수 있는 개념들이 모인 집합
   + DB 구조 : 데이터 유형, 데이터 관계(relationship), 제약 사항(constraints) 등등
-+ DB 구조를 추상하해서 표현할 수 있는 수단을 제공한다.
++ DB 구조를 추상화해서 표현할 수 있는 수단을 제공한다.
 + Data model은 여러 종류가 있으며 추상화 수준과 DB 구조화 방식이 조금씩 다르다.
 + DB에서 읽고 쓰기 위한 기본적인 동작들(operations)도 포함한다.
 
@@ -36,11 +36,13 @@
 + 추상화 수준이 가장 높음
   + 데이터베이스의 구조를 높은 수준으로 추상화 함
 + 비즈니스 요구 사항을 추상화하여 기술할 때 사용
-+ <img width="1197" alt="스크린샷 2023-04-09 21 23 29" src="https://user-images.githubusercontent.com/88477839/230772293-73b5182b-c191-40c6-843f-f5dc5b2ebc48.png">
-  + 위 그림에서 Student와 Book은 각각 entity이다.
-    + 각각의 entity는 attribute라고 불리우는 속성들이 있다. (Stu id, major, book id 등......)
-  + 이 둘은 관계는 reads라는 관계이다. 
-  + ERD
+
+<img width="1197" alt="스크린샷 2023-04-09 21 23 29" src="https://user-images.githubusercontent.com/88477839/230772293-73b5182b-c191-40c6-843f-f5dc5b2ebc48.png">
+
++ 위 그림에서 Student와 Book은 각각 entity이다.
+  + 각각의 entity는 attribute라고 불리우는 속성들이 있다. (Stu id, major, book id 등......)
++ 이 둘의 관계는 reads라는 관계이다. 
++ ERD ( entity-relationship diagram)
 
 
 
@@ -50,11 +52,13 @@
 + 데이터가 컴퓨터에 저장될 때의 구조와 크게 다르지 않게 DB 구조화를 가능하게 함
 + 특정 DBMS나 storage에 종속되지 않는 수준에서 DB를 구조화할 수 있는 모델
   + 어느 정도 추상화가 되어 있음
-+ <img width="1068" alt="스크린샷 2023-04-09 21 32 33" src="https://user-images.githubusercontent.com/88477839/230772783-b4c4b04d-b2a3-4e9d-8e41-53016f461a2f.png">
-  + 테이블과 동일 
+
+<img width="1068" alt="스크린샷 2023-04-09 21 32 33" src="https://user-images.githubusercontent.com/88477839/230772783-b4c4b04d-b2a3-4e9d-8e41-53016f461a2f.png">
+
++ 테이블과 동일 
 + logical data models 종류
   + relational data model - 가장 많이 사용됨
-    + 유명한 dbms들이 relational data model 기반
+    + 유명한 DBMS들이 relational data model 기반
   + object data model
   + Object-relational data model
 
@@ -77,7 +81,8 @@
 
 + data model을 바탕으로 database의 구조를 기술 한 것
 + schema는 database를 설계할 때 정해지며 한번 정해진 후에는 자주 바뀌지 않는다.
-+ <img width="1249" alt="스크린샷 2023-04-09 21 43 32" src="https://user-images.githubusercontent.com/88477839/230773177-8fd51074-1adf-4a9c-bfc9-dd6f1fc8de80.png">
+
+<img width="1249" alt="스크린샷 2023-04-09 21 43 32" src="https://user-images.githubusercontent.com/88477839/230773177-8fd51074-1adf-4a9c-bfc9-dd6f1fc8de80.png">
 
 
 
@@ -99,22 +104,24 @@
   + external schemas : external level
   + conceptual schemas : conceptual level
   + Internal schemas : internal level
-+ <img width="730" alt="스크린샷 2023-04-09 21 54 41" src="https://user-images.githubusercontent.com/88477839/230773740-2755e6fb-5c3d-4e52-9948-0858fc7209a0.png">
-  + **internal schema**
-    + 물리적으로 데이터가 어떻게 저장되는지 physical data model을 통해 표현
-    + data storage, data structure, access path 등등 실체가 있는 내용 기술
-  + **external schema**
-    + 실제 유저가 바라보는 schema
-    + external views, user views 라고도 불림
-    + 특정 유저들이 필요로 하는 데이터만 표현
-    + 그 외 알려줄 필요가 없는 데이터는 숨긴다.
-    + logical data model을 통해 표현
-  + **conceptual schema**
-    + 전체 database에 대한 구조를 기술
-    + internal schema를 한번 추상화 시켜서 표현한 schema
-    + 물리적인 저장 구조에 관한 내용은 숨김
-    + entities, data types, relationships, user operations, constraints에 집중
-    + logical data model을 통해 기술 
+
+<img width="730" alt="스크린샷 2023-04-09 21 54 41" src="https://user-images.githubusercontent.com/88477839/230773740-2755e6fb-5c3d-4e52-9948-0858fc7209a0.png">
+
++ **internal schema**
+  + 물리적으로 데이터가 어떻게 저장되는지 physical data model을 통해 표현
+  + data storage, data structure, access path 등등 실체가 있는 내용 기술
++ **external schema**
+  + 실제 유저가 바라보는 schema
+  + external views, user views 라고도 불림
+  + 특정 유저들이 필요로 하는 데이터만 표현
+  + 그 외 알려줄 필요가 없는 데이터는 숨긴다.
+  + logical data model을 통해 표현
++ **conceptual schema**
+  + 전체 database에 대한 구조를 기술
+  + internal schema를 한번 추상화 시켜서 표현한 schema
+  + 물리적인 저장 구조에 관한 내용은 숨김
+  + entities, data types, relationships, user operations, constraints에 집중
+  + logical data model을 통해 기술 
 + Three-schema architecture의 목적
   + 안정적으로 데이터베이스 시스템을 운영하기 위해서 사용되는 아키텍쳐이다.
   + 각 레벨을 독립시켜서 어느 레벨에서의 변화가 상위 레벨에 영향을 주지 않기 위함이다.
@@ -203,6 +210,96 @@
 **오늘날 DBMS는 DML, VDL, DDL이 따로 존재하기 보다는 통합된 언어로 존재 한다.	**
 
 **대표 적인 예로 relational database language : SQL 이 있다. **
+
+
+
+---
+
+
+
+### relational data model
+
++ **domain** : set of atomic values
++ **domain name** : domain 이름
++ **attribute** : domain이 relation에서 맡은 역할 이름
++ **tubple** : 각 attribute의 값으로 이루어진 리스트. 일부 값은 NULL일 수 있다.
++ **relation** : set of tuples (이를 표로 표현한것이 table)
++ **relation name** : relation의 이름
+
+
+
+#### constraints란?
+
++ 사전적 의미로 '제약조건'을 뜻함 
+
++ Relational database의 relations들이 언제나 항상 지켜줘야 하는 제약 사항
++ **implicit constraints**
+  + relational data model 자체가 가지는 constraints
+  + relation은 중복되는 tuple을 가질 수 없다.
+  + relation 내에서는 같은 이름의 attribute를 가질 수 없다.
++ **schema-based constraints**
+  + 주로 DDL을 통해 schema에 직접 명시할 수 있는 constraints
+  + Explicit constraints라고도 함
+  + **domain constraints**
+    + attribute의 value는 해당 attribute의 domain에 속한 value여야 한다.
+  + **key constraints**
+    + 서로 다른 tuples는 같은 value의 key를 가질 수 없다.
+  + **NULL value constraint**
+    + attribute가 NOT NULL로 명시됐다면 NULL을 값으로 가질 수 없다.
+  + **entity integrity constraint**
+    + primary key는 value에 NULL을 가질 수 없다.
+  + **referential integrity constraint**
+    + FK와 PK가 도메인이 같아야 하고 PK에 없는 value를 FK가 값으로 가질 수 없다.
+
+
+
+---
+
+
+
+### DB 정규화
+
+#### 정규화(Normalization)란?
+
++ 데이터베이스 정규화란 데이터베이스의 설계를 재구성 하는 테크닉이다.
++ 정규화를 통해 불필요한 데이터를 없앨 수 있고,
++ 삽입/갱신/삭제 시 발생할 수 있는 각종 이상현상들을 방지할 수 있다.
++ 테이블 간 중복된 데이터를 허용하지 않기 때문에
+  + 무결성(Integrity)를 유지할 수 있으며
+  + DB의 저장 용량 역시 줄일 수 있다.
+
+
+
+#### 제 1 정규화
+
++ 제 1 정규화란 테이블의 컬럼이 원자값을 갖도록 하는 것이다.
+
+
+
+#### 제 2 정규화
+
++ 제 1 정규화를 진행한 테이블에 대해 완전 함수 종속을 만족하도록 테이블을 분해하는 것
+  + 완전 함수 종속은 기본키의 부분집합이 결저앚가 되어선 안된다는 것을 의미한다.
+
+
+
+#### 제 3 정규화
+
++ 제 2 정규화를 진행한 테이블에 대해 이행적 종속을 없애도록 테이블을 분해하는 것
+  + 이행적 종속이란 a -> b, b -> c가 성립할 때 a -> c가 성립되는 것을 의미한다.
+
+
+
+#### BCNF 정규화
+
++ BCNF 정규화란 제 3 정규화를 진행한 테이블에 대해 모든 결정자가 후보키가 되도록 테이블을 분해하는 것이다.
+
+
+
+#### 정규화 참고 자료
+
++ https://mangkyu.tistory.com/110
++ https://3months.tistory.com/193
 
 
 
