@@ -257,6 +257,112 @@
 
 
 
+### 트랜잭션 (Transaction) 이란?
+
++ 데이터베이스에서의 단일한 논리적인 작업 단위 (a single logical unit of work)
++ 논리적인 이유로 여러 SQL문들을 단일 작업으로 묶어서 나눠질 수 없게 만든 것이 transaction이다.
++ transaction의 SQL문들 중에 일부만 성공해서 DB에 반영되는 일을 일어나지 않는다.
+
+
+
+---
+
+
+
+### INDEX
+
+#### Index를 쓰는 이유
+
++ 조건을 만족하는 튜플(들)을 빠르게 조회하기 위해
++ 빠르게 정렬(order by)하거나 그룹핑(group by) 하기 위해
+
+
+
+#### Index 생성 sql 문법
+
++ 하나의 컬럼에 대해 Index를 생성할 때 (컬럼의 값이 중복을 허용 할때)
+
+  + ~~~sql
+    CREATE INDEX 인덱스명 ON 테이블명(컬럼명);
+    ~~~
+
++ 여러개의 컬럼에 대해 Index를 생성할 때 (여러개의 컬럼이 and로 묶여서 튜플을 유니크하게 식별할 때 )
+
+  + ~~~sql
+    CREATE UNIQUE INDEX 인덱스명 ON 테이블명 (컬럼명1,컬럼명2);  //컬럼 순서 중요
+    ~~~
+
+<img width="732" alt="스크린샷 2023-04-12 09 07 35" src="https://user-images.githubusercontent.com/88477839/231314550-b56b54b8-5c04-42c2-be2f-c97430161933.png">
+
+
+
++ **테이블 생성과 동시에 인덱스 생성하기**
+
+  <img width="715" alt="스크린샷 2023-04-12 09 10 14" src="https://user-images.githubusercontent.com/88477839/231314927-97360e11-d9c1-466a-aeba-71bc5294a09f.png">
+
+
+
++ **primary key에는 index가 자동 생성된다**
+
+
+
+#### Index 조회 sql 문법
+
++ ~~~sql
+  SHOW INDEX FROM 테이블명
+  ~~~
+
+
+
+#### Index 동작 방식
+
++ Index가 생성되면 Index가 B Tree  기반으로 정렬된다.
++ B Tree 기반으로 정렬이 되면 찾고자 하는 인덱스를 Binay search로 찾게되고, 시간 복잡도는 logN이다.
+
+
+
+#### 특정 Index 선택 sql 문법
+
++ 하나의 컬럼에 대해 여러 인덱스가 생성되어있을 수 있다. (UNIQUE INDEX등)
++ 이 때 어느 인덱스를 사용할 것인지 선택할 수 있다.
+
++ 특정 인덱스를 사용할 것을 명시하기
+
+  + ~~~sql
+    SELECT * FROM 테이블명 USE INDEX (인덱스명)
+    WHERE 컬럼명 = 값;
+    ~~~
+
++ 특정 인덱스를 사용할 것을 권장하기
+
+  + ~~~sql
+    SELECT * FROM 테이블명 FORCE INDEX (인덱스명)
+    WHERE 컬럼명 = 값;
+    ~~~
+
+
+
+#### INDEX는 많이 만들어도 괜찮을까?
+
++ table에 insert, update, delete 할 때 마다 index도 변경 된다.
+  + 때문에 B Tree의 구조도 다시 정렬 되며 때문에 구조가 조정되는데 시간이 소요된다.
+  + 인덱스가 많아지만 많아질수록 insert, update, delete 할 때 마다 오버헤드가 발생한다. 
++ Index가 생성되면 추가적인 저장 공간을 차지한다.
++ 때문에 불필요한 INDEX를 만들지 말아야 한다.
+
+
+
+#### Full scan이 Index보다 좋은 경우
+
++ table에 데이터가 조금 있을 때
++ 조회하려는 데이터가 테이블의 상당 부분을 차지할 때 
+
+
+
+---
+
+
+
 ### DB 정규화
 
 #### 정규화(Normalization)란?
@@ -279,7 +385,7 @@
 #### 제 2 정규화
 
 + 제 1 정규화를 진행한 테이블에 대해 완전 함수 종속을 만족하도록 테이블을 분해하는 것
-  + 완전 함수 종속은 기본키의 부분집합이 결저앚가 되어선 안된다는 것을 의미한다.
+  + 완전 함수 종속은 기본키의 부분집합이 결정자가 되어선 안된다는 것을 의미한다.
 
 
 
