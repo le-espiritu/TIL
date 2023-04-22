@@ -1,0 +1,299 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.study</groupId>
+  <artifactId>mvcxml2</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  
+  <properties>
+  	<jdk-version>1.8</jdk-version>
+  	<!-- <spring-version>4.3.25.RELEASE</spring-version>  -->
+  	<spring-version>5.1.5.RELEASE</spring-version> <!-- jdk11버전이라서 스프링 프레임워크 5버전 이상 사용해야함 -->
+  	<org.aspectj-version>1.9.5</org.aspectj-version>
+  	<org.slf4j-version>1.6.6</org.slf4j-version>
+  	<org.springframework.security-version>4.2.1.RELEASE</org.springframework.security-version>
+  </properties>
+  
+  <dependencies>
+  
+  	<!-- @Inject를 지원하는 라이브러리 -->
+	<dependency>
+		<groupId>javax.inject</groupId>
+		<artifactId>javax.inject</artifactId>
+		<version>1</version>
+	</dependency>
+	<!-- 자바에서 지원하는 어노테이션이며, 스프링의 @Autowired와 동일한 기능을 가진다.
+		객체를 주입할때 사용한다. 특정 프레임워크에 종속적이지 않다는 특징을 갖고 있다. -->
+	
+  
+  	<!-- Spring-context -->
+  	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-context</artifactId>
+	  <version>${spring-version}</version>
+	  <exclusions>
+			<!-- Exclude Commons Logging in favor of SLF4j -->
+			<exclusion>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	
+	<!-- Spring-webmvc -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-webmvc</artifactId>
+  		<version>${spring-version}</version>
+  	</dependency>
+  	
+  	<!-- servlet -->
+  	<dependency>
+	  <groupId>javax.servlet</groupId>
+	  <artifactId>javax.servlet-api</artifactId>
+	  <version>3.1.0</version>
+	  <scope>provided</scope>
+	  <!-- 
+		  provided는 컴파일 시에만 사용되고 배포시에는 사용되지 않음을 의미한다.
+		  이전 다이나믹 웹 프로젝트에서 생성시에는 톰캣 was를 지정해줬기때문에 서블릿,jsp,jstl이 컴파일시에도 지원됐지만
+		  maven project에서는 톰캣 was를 따로 지정해주는 작업을하지 않았다. 그렇기 때문에 라이브러리를 추가해줘야 한다.
+		  하지만 이 라이브러리가 컴파일시에만 필요하고 런타임, 배포시에는 필요하지 않기 때문에 (왜냐하면 런타임시에 톰캣 was가 동작하기 때문에)
+		  provided라는 scope으로 이를(컴파일시에만 필요한 라이브러리) 표시해주는 것이다.
+	   -->
+	</dependency>
+	
+	<!-- jsp -->
+  	<dependency>
+	  <groupId>javax.servlet.jsp</groupId>
+	  <artifactId>javax.servlet.jsp-api</artifactId>
+	  <version>2.3.1</version>
+	  <scope>provided</scope>
+	</dependency>
+	
+	<!-- jstl -->
+	<dependency>
+	  <groupId>javax.servlet</groupId>
+	  <artifactId>jstl</artifactId>
+	  <version>1.2</version>
+	</dependency>
+	
+	<!-- spring jdbc 라이브러리 추가  -->
+	<!-- 
+		jdbc이용시 반복적인 코드가 등장한다. (연결, 스테이트먼트, 리저트셋,예외 처리 ,연결 닫기 작업등) 
+		이런 반복적인 코드 작업을 spring jdbc가 대신해준다. 
+	-->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-jdbc</artifactId>
+		<version>${spring-version}</version>
+	</dependency>
+	
+	<!-- 트랜잭션 사용하기 위한것   -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-tx</artifactId>
+		<version>${spring-version}</version>
+	</dependency>
+	
+	<!-- mysql jdbc 드라이버 라이브러리  -->
+	<!-- mysql 버전 8.x.x일 경우  -->
+	<dependency>
+	  <groupId>mysql</groupId>
+	  <artifactId>mysql-connector-java</artifactId>
+	  <version>8.0.28</version>
+	</dependency>
+	
+	<!-- basic data source 라이브러리 추가-->
+	<!-- DataSource는 커넥션 풀을 관리하는 객체이다.
+	ConnectionPool은 DBMS와 커넥션을 미리 많이 맺어둔 객체이다.
+	DataSource를 이용해 커넥션을 얻어오고 반납하는 등의 작업을 수행한다.
+	여기서 사용하는 DataSource는 Apache에서 제공하는 commons-dbcp2이다. -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-dbcp2</artifactId>
+	    <version>2.7.0</version>
+	</dependency>
+	
+	<!-- MyBatis라이브러리 -->
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis</artifactId>
+		<version>3.5.2</version>
+	</dependency>
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis-spring</artifactId>
+		<version>2.0.2</version>
+	</dependency>
+	
+	
+	<!-- Spring test를 위한 라이브러리 -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+		<version>${spring-version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.12</version>
+	    <scope>test</scope>
+	</dependency>
+	
+	<!-- Mockito (test 관련 라이브러리) -->
+	<dependency>
+	    <groupId>org.mockito</groupId>
+	    <artifactId>mockito-core</artifactId>
+	    <version>1.9.5</version>
+	    <scope>test</scope>
+	</dependency>
+
+	
+	<!-- AOP관련 라이브러리들 -->
+	<!-- AspectJ -->
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjrt</artifactId>
+		<version>${org.aspectj-version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.aspectj</groupId>
+	    <artifactId>aspectjweaver</artifactId>
+	    <version>${org.aspectj-version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.aspectj</groupId>
+	    <artifactId>aspectjtools</artifactId>
+	    <version>${org.aspectj-version}</version>
+	</dependency>
+	
+	<!-- AOP 라이브러리 -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-aop</artifactId>
+	    <version>${spring-version}</version>
+	</dependency>
+	
+	
+	<!-- Logging -->
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>${org.slf4j-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>jcl-over-slf4j</artifactId>
+		<version>${org.slf4j-version}</version>
+		<scope>runtime</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-log4j12</artifactId>
+		<version>${org.slf4j-version}</version>
+		<scope>runtime</scope>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.15</version>
+		<exclusions>
+			<exclusion>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>javax.jms</groupId>
+				<artifactId>jms</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>com.sun.jdmk</groupId>
+				<artifactId>jmxtools</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>com.sun.jmx</groupId>
+				<artifactId>jmxri</artifactId>
+			</exclusion>
+		</exclusions>
+		<scope>runtime</scope>
+	</dependency>
+	
+	
+	<!-- Spring Security -->
+	<dependency>
+	  <groupId>org.springframework.security</groupId>
+	  <artifactId>spring-security-web</artifactId>
+	  <version>${org.springframework.security-version}</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>org.springframework.security</groupId>
+	  <artifactId>spring-security-config</artifactId>
+	  <version>${org.springframework.security-version}</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>org.springframework.security</groupId>
+	  <artifactId>spring-security-core</artifactId>
+	  <version>${org.springframework.security-version}</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>org.springframework.security</groupId>
+	  <artifactId>spring-security-taglibs</artifactId>
+	  <version>${org.springframework.security-version}</version>
+	</dependency>
+	
+	
+  	
+  </dependencies>
+  
+  
+  
+  <build>
+  	<plugins>
+  	
+  		<!-- maven-eclipse-plugin : maven 프로젝트를 eclipse 프로젝트로 변환  -->
+  		<plugin>
+			<artifactId>maven-eclipse-plugin</artifactId>  
+			<version>2.9</version>
+			<configuration>
+				<additionalProjectnatures>
+					<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+				</additionalProjectnatures>
+				<additionalBuildcommands>
+					<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
+				</additionalBuildcommands>
+				<downloadSources>true</downloadSources>
+				<downloadJavadocs>true</downloadJavadocs>
+			</configuration>
+		</plugin>
+  	
+  		<!-- maven-compiler-plugin : maven 프로젝트를 빌드하기 위한 JDK 선택 플러그인  -->
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>3.6.1</version>
+  			<configuration>
+  				<source>${jdk-version}</source>
+  				<target>${jdk-version}</target>
+  				<encoding>utf-8</encoding>
+  			</configuration>
+  		</plugin>
+  		
+  		<!-- exec-maven-plugin : maven 프로젝트 빌드 시 외부 프로그램을 사용하기 위한 플러그인  -->
+  		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>exec-maven-plugin</artifactId>
+			<version>1.2.1</version>
+			<configuration>
+				<mainClass>org.test.int1.Main</mainClass>
+			</configuration>
+		</plugin>
+		
+  	</plugins>
+  </build>
+  
+</project>

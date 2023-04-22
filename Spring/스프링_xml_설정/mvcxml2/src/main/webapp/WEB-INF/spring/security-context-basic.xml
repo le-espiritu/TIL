@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/security 
+	http://www.springframework.org/schema/security/spring-security-4.2.xsd
+	http://www.springframework.org/schema/beans 
+	https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<http auto-config="true" use-expressions="false">
+		<intercept-url pattern="/**" access="ROLE_USER"/>
+	</http>
+	
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="user" password="user" authorities="ROLE_USER"/>
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+	
+</beans:beans>
+
+<!-- http://www.springframework.org/schema/security/spring-security.xsd를 다운로드 할 수 없다는 에러가 뜬다면 
+	http://www.springframework.org/schema/security/spring-security.xsd 에 버전을 명시해줘야한다. 
+	http://www.springframework.org/schema/security/spring-security-5.0.xsd (5.0버전일시 )-->
+	
+<!-- 설정 파일 코드를 블로그등에서 복사 붙여넣기 하면 오류가 날 수 있기 때문에 직접 작성하자.  -->
+
+<!-- <http auto-config="true" use-expressions="false"> 일 경우
+	access="ROLE_USER"로 해줘도 잘 작동된다.
+	
+	하지만 use-expressions="true"이거나 use-expressions에 관한 명시가 없다면
+	access="hasRole('USER')" 로 해줘야 작동 된다.  -->
+
+<!--태그설명
+
+	<http>
+		 웹과 관련된 모든 것을 정의할 수 있는 엘리먼트이며 
+		 사용자의 권한을 설정하여 사용자별로 접근할 수 있는 웹 상의 페이지를 제어하거나 
+		 로그인과 로그아웃시 처리하고 싶은 기능을 정의할 때 사용합니다.
+		 
+			- auto-config속성 : "true"로 설정하면 기본적으로 로그인페이지, http기본인증 로그아웃을 제공
+			- use-expressions : "true"로 지정하면 Spring EL을 사용한다는 의미
+		
+		
+	<interceptor-url>
+		http태그의 하위 엘리먼트
+		어떤 페이지를 액세스할 수 있는 권한을 정의하는 엘리먼트
+		
+			- pattern : 제어하고 싶은 path를 등록하여 롤을 정의하는 속성으로 접근할 수 있는 url을 정의
+			- access : access속성에 접근할 수 있는 사용자의 ROLE을 정의 합니다.
+					 이 ROLE은 security에서 제공되는 표현을 사용해야 하며 
+					 admin인 경우 ROLE_ADMIN, 
+					 일반 USER를 표현하는 것은 ROLE_USER입니다.
+					 
+					 use-expressions="false" 이면 access="ROLE_USER"
+					 use-expressions="true" 이면 access="hasRole('USER')"
+					 
+			해당 url 접근 권한이 없다면 로그인 페이지로 리다이렉트됨 
+					 
+					 
+	 <authentication-manager>
+		 인증과 관련된 내용을 정의하는 엘리먼트입니다. 
+		 인증 처리를 위해 구현한 클래스를 정의해야할 부분.
+
+
+	<authentication-provider>
+		<authentication-manager>의 하위 엘리먼트로 인증에 대한 정보를 제공하는 클래스를 정의합니다.
+
+
+	<user-service>
+		<authentication-provider>의 하위 엘리먼트  
+		이 안에 <user>태그를 이용하여 사용자를 지정합니다. 
+		
+		
+	<user>
+		<user-service>의 하위 엘리먼트로 
+		인증처리를 할 사용자의 userid와 password를 정의하고 role명을 정의합니다.
+		user엘리먼트의  authorities은 각 user의 권한명을 정의하며 
+		ROLE_ADMIN, ROLE_USER등을 정의합니다.
+	 
+ -->
+ 
+ <!-- 로그인 페이지
+ 
+ 	위 설정대로 기본적인 스프링 시큐리티 설정이 모두 완료되면,
+ 	우리가 로그인 페이지를 만들지 않았어도 스프링 시큐리티에서 제공해주는 로그인 페이지를 사용할 수 있다.
+ 	
+ 	때문에 <interceptor-url>로 정의한, 보안되는 페이지에 접근했을 경우,
+ 	로그인이 안되어 있다면,
+ 	자동으로 스프링 시큐리티에서 제공하는 기본 페이지로 이동시켜준다. 
+ 	
+ 	물론 내가 직접 만든 로그인페이지로 적용도 가능하다.  
+  -->

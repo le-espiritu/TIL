@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- 마이바티스 설정 파일 -->
+
+	<!-- dto 클래스에 alias를 붙여 키값처럼 사용하기 위해 명시 . -->
+	<typeAliases>
+		<typeAlias type="com.study.mvcxml2.practice.Practice" alias="practice"/>
+	</typeAliases>
+	
+	<!-- MyBatis mapper 파일이 추가될 때마다 지정해줘야함 . -->
+	<mappers>
+		<mapper resource="com/study/mvcxml2/practice/practiceMapper.xml"/>
+	</mappers>
+</configuration>
