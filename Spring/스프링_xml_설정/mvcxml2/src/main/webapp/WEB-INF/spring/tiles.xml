@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+       
+<tiles-definitions>
+	<!-- 템플릿 (레이아웃) 등록 / 템플릿(레이아웃)은 여러개 등록해서 필요할때마다 활용할 수 있다. -->
+	<definition name="main-layout" template="/WEB-INF/views/tiles/tiles-layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp"></put-attribute>
+	</definition>
+	<!-- 템플릿(레이아웃)은 여러개 등록해서 필요할때마다 활용할 수 있다. -->
+	<definition name="main-layout2" template="/WEB-INF/views/tiles/tiles-layout2.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp"></put-attribute>
+		<put-attribute name="aside" value="/WEB-INF/views/tiles/aside.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp"></put-attribute>
+	</definition>
+	
+	<!-- definition의 name은 컨트롤러에서 리턴된 문자열(뷰네임)을 의미한다. -->
+	<definition name="*/*" extends="main-layout">
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp"/>
+		<put-attribute name="title" value="home"/>
+		<put-attribute name="body-css" value="/css/{2}.css"/>
+	</definition>
+		<!-- */* 는 와일드카드 패턴을 의미함. {1}은 첫번째 *을 의미하고 {2}는 두번째 *을 의미한다. -->
+
+</tiles-definitions>

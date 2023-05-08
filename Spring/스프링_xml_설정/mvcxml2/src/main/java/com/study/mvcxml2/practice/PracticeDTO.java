@@ -1,6 +1,6 @@
 package com.study.mvcxml2.practice;
 
-public class Practice {
+public class PracticeDTO {
 	private int no;
 	private String name;
 	private int score;

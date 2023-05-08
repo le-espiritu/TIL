@@ -18,6 +18,8 @@
     http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- Root Context -->
+	<!-- root context에는 스프링 웹 기술에서 완전히 독립적인 비즈니스 서비스 계층과 데이터 액세스 계층관 관련된 설정들이 담긴다. -->
+	<!-- servelt-context에는 스프링 웹 기술을 기반으로 동작하는 웹 관련 빈과 관련된 설정이 담겨져있다. -->
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
@@ -65,6 +67,7 @@
 	<!-- 빈 등록  -->
 	<!-- <context:component-scan base-package="com.study.mvcxml2.service" />
 		 <context:component-scan base-package="com.study.mvcxml2.dao" /> -->
+	<!-- component-scan은 특정 패키지 안의 클래스들을 스캔하고, Annotation을 확인 후 bean 인스턴스를 생성한다 -->
 	<context:component-scan base-package="com.study.mvcxml2">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>

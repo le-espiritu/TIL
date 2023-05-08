@@ -10,8 +10,15 @@
 	https://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context 
 	https://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!-- servlet-context -->
+	<!-- servelt-context에는 스프링 웹 기술을 기반으로 동작하는 웹 관련 빈과 관련된 설정이 담겨져있다. -->
+	<!-- root context에는 스프링 웹 기술에서 완전히 독립적인 비즈니스 서비스 계층과 데이터 액세스 계층관 관련된 설정들이 담긴다. -->
+	
 
 	<annotation-driven/> <!-- Annotation기반의 Controller호출이나 bean객체 등록,매핑의 작업을 편리하게 해줌 -->
+						<!-- Spring MVC 컴포넌트들을 디폴트 설정을 통해 활성화한다. -->
+						<!-- Spring MVC @Controller에 요청을 보내기 위해 필요한 HandlerMapping과 HandlerAdapter를 Bean으로 등록한다. -->
 	
 	<default-servlet-handler/> <!-- DispatcherSerlvet이 처리하지 못한 요청을 디폴트 서블릿에게 넘겨주는 역할을 하는 핸들러 -->
 	
@@ -28,6 +35,7 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	    <beans:property name="prefix" value="/WEB-INF/views/" />
 	    <beans:property name="suffix" value=".jsp" />
+	    <beans:property name="order" value="2"/> <!-- 타일즈뷰리졸버보다 우선순위가 뒤임 -->
 	</beans:bean>
 	<!--  
 	<view-resolvers>
@@ -36,14 +44,31 @@
 	-->
 	
 	
+	<!-- tiles프레임워크 기반으로 뷰를 만들 수 있도록 뷰리졸버 등록  -->
+	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
+		<beans:property name="order" value="1"/> <!-- 인터널리소스뷰리졸버 보다 우선순위가 빠름 -->
+	</beans:bean>
+	<!-- TilesConfigurer를 빈으로 등록하고 tiles 설정파일을 읽음 -->
+	<beans:bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<beans:property name="definitions" value="/WEB-INF/spring/tiles.xml"/>
+	</beans:bean>
+	
 	
 	<!-- 빈 등록 -->
 	<!-- <beans:bean class="com.study.mvcxml2.controller.HelloController"/>  -->
 	<!-- <context:component-scan base-package="com.study.mvcxml2.controller" /> -->
+	<!-- component-scan은 특정 패키지 안의 클래스들을 스캔하고, Annotation을 확인 후 bean 인스턴스를 생성한다 -->
 	<context:component-scan base-package="com.study.mvcxml2" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	<!-- 디폴트 애노테이션들을 스캔대상에서 제외하고 @Controller만 스캔할 수 있도록 설정 -->
+	
+	<!-- 파일 등록을 위한 MultipartResolver 빈 등록 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="defaultEncoding" value="UTF-8"></beans:property>
+		<beans:property name="maxUploadSize" value="10485760"></beans:property> <!-- 1024*1024*10 최대 10메가 크기의 파일이 저장되도록 설정 -->
+	</beans:bean>
 	
 	
 	<!-- 인터셉터 등록 -->

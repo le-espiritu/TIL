@@ -17,7 +17,7 @@ public class HelloController {
 		return"hello";
 	}
 	
-	@GetMapping("/test")
+	@GetMapping("/test") // jdbcTemplate 테스트 
 	public String test(Model model) {
 		
 		String sql = "select count(*) from bbs";

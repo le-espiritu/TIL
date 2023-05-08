@@ -14,14 +14,14 @@ public class LoginController {
 	public String loginForm() {
 		logger.info("로그인 페이지 호출");
 		
-		return "login/loginForm";
+		return "login/loginFormBasic";
 	}
 	
-	@RequestMapping(value="/login/loginDenied", method = RequestMethod.GET)
+	@RequestMapping(value="/login/authDenied", method = RequestMethod.GET)
 	public String accessDenied() {
 		logger.info("접근이 거부되었습니다.");
 		
-		return "login/loginDenied";
+		return "login/authDenied";
 	}
 
 }

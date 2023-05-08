@@ -4,7 +4,13 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.study.mvcxml2.practice">
-	<select id="selectall" resultType="practice">
+	<select id="selectall" resultType="practiceDTO">
 		select * from practice
 	</select>
+	<insert id="insert" parameterType="practiceDTO">
+		insert into practice values(null,#{name},#{score})
+	</insert>
 </mapper>
+
+<!-- mysql에 auto_increment 가 설정되어 있을 시 null값을 입력시켜주면 자동으로 증가된 값들이 입력된다. -->
+<!-- 아니면 insert할 컬럼 명만 명시해서(auto_increment 적용되어있는 컬럼은 명시하지 않음) auto_increment가 자동 증가하게 해준다. -->

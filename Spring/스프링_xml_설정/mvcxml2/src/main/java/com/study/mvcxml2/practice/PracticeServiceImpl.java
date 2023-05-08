@@ -15,13 +15,14 @@ public class PracticeServiceImpl implements PracticeService {
 		this.dao=dao;
 	}
 
+	
 	@Override
-	public List<Practice> practiceList() {
+	public List<PracticeDTO> practiceList() {
 		return dao.practiceList();
 	}
 
 	@Override
-	public int insert(Practice practice) {
+	public int insert(PracticeDTO practice) {
 		return dao.insert(practice);
 	}
 

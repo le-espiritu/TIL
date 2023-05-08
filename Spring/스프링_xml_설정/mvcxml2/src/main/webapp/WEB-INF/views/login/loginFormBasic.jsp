@@ -34,3 +34,17 @@
 
 </body>
 </html>
+
+<!-- 
+
+	스프링 시큐리티 4 부터는 CSRF 방지 기능이 디폴트로 작동
+	form:form 태그를 사용하면 PATCH, POST, PUT, DELETE 요청에 CSRF 토큰이 자동으로 적용되는 듯 하다.
+	
+	만약 form:form태그를 사용하고 싶지 않다면
+	시큐리티 설정파일에서 <csrf disabled="true"/> 를 해주거나
+	
+	CSRF 토큰을 사용하면서 form:form 태그를 사용하고 싶지 않다면
+	<input type="hidden" name="${_csrf.parameterName}" value="${_crsf.token}"/>
+	위 코드를 추가해주면 된다.
+
+ -->

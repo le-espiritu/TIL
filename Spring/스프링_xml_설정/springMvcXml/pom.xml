@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.study</groupId>
+  <artifactId>springMvcXml</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  
+  <properties>
+  	<jdk-version>1.8</jdk-version>
+  	<springframework-version>4.3.25.RELEASE</springframework-version>
+  </properties>
+  
+  <dependencies>
+  
+  	<!-- Spring-context -->
+  	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-context</artifactId>
+	  <version>${springframework-version}</version>
+	</dependency>
+	
+	<!-- Spring-webmvc -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-webmvc</artifactId>
+  		<version>${springframework-version}</version>
+  	</dependency>
+  	
+  	<!-- servlet -->
+  	<dependency>
+	  <groupId>javax.servlet</groupId>
+	  <artifactId>javax.servlet-api</artifactId>
+	  <version>3.1.0</version>
+	  <scope>provided</scope>
+	  <!-- provided는 컴파일 시에만 사용되고 배포시에는 사용되지 않음을 의미한다. -->
+	  <!-- 이전 다이나믹 웹 프로젝트에서 생성시에는 톰캣 was를 지정해줬기때문에 서블릿,jsp,jstl이 컴파일시에도 지원됐지만 -->
+	  <!-- maven project에서는 톰캣 was를 따로 지정해주는 작업을하지 않았다. 그렇기 때문에 라이브러리를 추가해줘야 한다. -->
+	  <!-- 하지만 이 라이브러리가 컴파일시에만 필요하고 런타임, 배포시에는 필요하지 않기 때문에 (왜냐하면 런타임시에 톰캣 was가 동작하기 때문에) -->
+	  <!-- provided라는 scope으로 이를(컴파일시에만 필요한 라이브러리) 표시해주는 것이다. -->
+	</dependency>
+	
+	<!-- jsp -->
+  	<dependency>
+	  <groupId>javax.servlet.jsp</groupId>
+	  <artifactId>javax.servlet.jsp-api</artifactId>
+	  <version>2.3.1</version>
+	  <scope>provided</scope>
+	</dependency>
+	
+	<!-- jstl -->
+	<dependency>
+	  <groupId>javax.servlet</groupId>
+	  <artifactId>jstl</artifactId>
+	  <version>1.2</version>
+	</dependency>
+	
+  </dependencies>
+  
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>3.6.1</version>
+  			<configuration>
+  				<source>${jdk-version}</source>
+  				<target>${jdk-version}</target>
+  				<encoding>utf-8</encoding>
+  			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
+  
+</project>

@@ -17,13 +17,13 @@ public class PracticeDaoImpl implements PracticeDao {
 	}
 	
 	@Override
-	public List<Practice> practiceList() {
+	public List<PracticeDTO> practiceList() {
 		return sqlSession.selectList("com.study.mvcxml2.practice.selectall");
 	}
 
 	@Override
-	public int insert(Practice practice) {
-		return 0;
+	public int insert(PracticeDTO practice) {
+		return sqlSession.insert("com.study.mvcxml2.practice.insert", practice);
 	}
 
 }

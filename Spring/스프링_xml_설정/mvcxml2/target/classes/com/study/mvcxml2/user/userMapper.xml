@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.study.mvcxml2.user">
+	<select id="selectbyemail" resultType="userDTO" parameterType="String">
+		select * from member where email = #{email}
+	</select>
+	
+	<insert id="insert" parameterType="userDTO">
+		insert into member values(null,#{name},#{password},#{email},#{createDate},#{modifyDate})
+	</insert>
+</mapper>
+
+<!-- mysql에 auto_increment 가 설정되어 있을 시 null값을 입력시켜주면 자동으로 증가된 값들이 입력된다. -->
+<!-- 아니면 insert할 컬럼 명만 명시해서(auto_increment 적용되어있는 컬럼은 명시하지 않음) auto_increment가 자동 증가하게 해준다. -->

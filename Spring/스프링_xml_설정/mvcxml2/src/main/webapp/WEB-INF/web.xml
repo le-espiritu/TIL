@@ -9,13 +9,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <!-- web.xml은 배포 설명자 -->
   
-  <!-- 설정의 분리  -->
+  <!-- 설정의 분리  --> <!-- 설정을 분리하는 이유는 스프링 웹 서블릿 컨텍스트를 통째로 다른 기술로 대체할 수 있도록 하기 위함이다. -->
   <context-param>
   	<param-name>contextConfigLocation</param-name>
   	<param-value>
   		/WEB-INF/spring/root-context.xml
-  		/WEB-INF/spring/security-context.xml 
+  		/WEB-INF/spring/security-context.xml
   	</param-value>
   </context-param>
   
@@ -33,6 +34,10 @@
   		<param-value>
   			/WEB-INF/spring/appServlet/servlet-context.xml
   		</param-value>
+  	</init-param>
+  	<init-param> <!-- 400번 에러 발생시 처리를 위한 설정 -->
+  		<param-name>throwExceptionIfNoHandlerFound</param-name>
+  		<param-value>true</param-value>
   	</init-param>
   	<load-on-startup>1</load-on-startup> <!-- 서비스가 시작되자마자 서블릿 컨테이너가 로딩할 수 있도록 하는 설정 -->
   </servlet>
@@ -57,7 +62,6 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
   
-  
   <!-- 스프링 시큐리티 필터 -->
   <filter>
   	<filter-name>springSecurityFilterChain</filter-name>
@@ -66,7 +70,12 @@
   <filter-mapping>
   	<filter-name>springSecurityFilterChain</filter-name>
 	<url-pattern>/*</url-pattern>
-  </filter-mapping>
-
+  </filter-mapping> 
+  
+  <!-- ExceptionHandler로 처리되지 못한 경우를 대비하여 web.xml에 예외처리 작성 -->
+  <error-page>
+  	<error-code>404</error-code>
+  	<location>/WEB-INF/views/error/custom404.jsp</location>
+  </error-page>
 
 </web-app>

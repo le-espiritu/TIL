@@ -6,14 +6,25 @@
 <configuration>
 
 	<!-- 마이바티스 설정 파일 -->
+	
+	<settings>
+		<!-- 카멜표기법 설정 -->
+	    <setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
 
 	<!-- dto 클래스에 alias를 붙여 키값처럼 사용하기 위해 명시 . -->
 	<typeAliases>
-		<typeAlias type="com.study.mvcxml2.practice.Practice" alias="practice"/>
+		<typeAlias type="com.study.mvcxml2.practice.PracticeDTO" alias="practiceDTO"/>
+		<typeAlias type="com.study.mvcxml2.user.UserDTO" alias="userDTO"/>
+		<typeAlias type="com.study.mvcxml2.user.UserRoleDTO" alias="userRoleDTO"/>
+		<typeAlias type="com.study.mvcxml2.board.BoardDTO" alias="boardDTO"/>
 	</typeAliases>
 	
 	<!-- MyBatis mapper 파일이 추가될 때마다 지정해줘야함 . -->
 	<mappers>
 		<mapper resource="com/study/mvcxml2/practice/practiceMapper.xml"/>
+		<mapper resource="com/study/mvcxml2/user/userMapper.xml"/>
+		<mapper resource="com/study/mvcxml2/user/userRoleMapper.xml"/>
+		<mapper resource="com/study/mvcxml2/board/boardMapper.xml"/>
 	</mappers>
 </configuration>

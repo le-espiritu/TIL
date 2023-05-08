@@ -1,0 +1,22 @@
+@charset "UTF-8";
+*{
+	margin:0px;
+	padding:0px;
+	box-sizing:border-box;
+	color:#000000;
+}
+
+.wrap{
+	width:80%;
+	margin: 0 auto;
+}
+
+header{
+	background-color:blue;
+	height:350px;
+}
+
+footer{
+	background-color:yellow;
+	height:350px;
+}

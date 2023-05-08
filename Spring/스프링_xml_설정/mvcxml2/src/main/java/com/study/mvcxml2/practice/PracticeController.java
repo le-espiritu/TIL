@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -18,10 +20,10 @@ public class PracticeController {
 	}
 	
 	@GetMapping("/practice")
-	public ModelAndView getPractices() {
+	public ModelAndView getPracticeList() {
 		ModelAndView mv = new ModelAndView();
 		
-		List<Practice> list = practiceService.practiceList();
+		List<PracticeDTO> list = practiceService.practiceList();
 		
 		mv.addObject("no", list.get(0).getNo());
 		mv.addObject("name", list.get(0).getName());
@@ -30,6 +32,13 @@ public class PracticeController {
 		mv.setViewName("test");
 		
 		return mv;
+	}
+	
+	@PostMapping("/practice")
+	public String insertPractice(@ModelAttribute PracticeDTO practice) {
+		practiceService.insert(practice);
+		return "redirect:/practice";
+		//리다이렉트시 무조건 get 방식으로만 이동함
 	}
 
 }
