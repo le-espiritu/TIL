@@ -307,6 +307,185 @@
 #### semaphore(세마포어)
 
 + signal mechanisam을 가진, 하나 이상의 프로세스/스레드가 critical section에 접근 가능하도록 하는 장치
++ 뮤텍스의 lock이 세마포어에서는 wait / 뮤텍스의 unlock이 세마포어에서는 signal 
++ 세마포어는 signal mechanism으로 인해 순서를 정해줄 때도 사용한다 
+
+
+
+#### 모니터(monitor)
+
+	+ mutual exclusion을 보장
+	+ 조건에 따라 스레드가 대기(waiting)상태로 전환 가능
+	+ 모니터는 한번에 하나의 스레드만 실행돼야 할때 사용되고,
+	+ 여러 스레드와 협업(cooperation)이 필요할 때 사용된다. 
+ + 모니터는 mutex와 condition variable(s)로 이루어져 있다.
+   + mutex
+     + mutex는 ciritical section에서 mutual exclusion을 보장하는 장치이다.
+     + critical section에 진입하려면 mutex lock을 취득해야 한다.
+     + mutex lock을 취득하지 못한 스레드는 큐에 들어간 후 대기(waiting ) 상태로 전환된다. 
+     + Mutex lock을 쥔 스레드가 lock을 반환하면, 락을 기다리며 큐에 대기 상태로 있던 스레드 중 하나가 실행된다.  
+   + condition variable
+     + waiting queue를 가진다. ( waiting queue는 조건이 충족되길 기다리는 스레드들이 대기 상태로 머무는 곳이다.)
+   + condition variable에서의 주요 동작(operation)
+     + Wait - thread가 자기 자신을 condition variable의 waiting queue에 넣고 대기 상태로 전환 (자신이 기대한 어떤 조건이 아직 충족되지 않았을때 wait를 호출, 이 때 자신이 가진 뮤텍스 락을 반환한다. (자신이 대기하는 동안 다른 프로세스가 임계영역에 진입할 수 있도록 하기 위함.))
+     + signal - waiting queue에서 대기중인 스레드 중 하나를 깨움 
+     + Broadcast - waiting queue에서 대기중인 스레드 전부를 깨움 
+   + 모니터에는 두 개의 큐가 존재한다.
+     + Entry queue : ciritical section에 진입을 기다리는 큐 (뮤텍스에서 관리)
+     + waiting queue : 조건이 충족되길 기다리는 큐 (condition variable에서 관리)
+ + 자바에서 모니터 
+   + 자바에서 모든 객체는 내부적으로 모니터를 가진다. 
+   + 모니터의 mutual exclusion 기능은 synchronized 키워드로 사용한다.
+   + 자바의 모니터는 condition variable를 하나만 가진다. 
+   + 자바 모니터의 세 가지 동작
+     + wait
+     + notify
+     + notifyAll 
+
+
+
+### 뮤텍스와 세마포어의 차이점
+
+	+ 뮤텍스는 락을 가진 자만 락을 해제할 수 있지만 세마포어는 그렇지 않다. 
+ + 뮤텍스는 priority inheritance속성을 가진다.
+   + 세마포어는 그 속성이 없다.  
+
+
+
+---
+
+### Deadlock(교착상태)
+
+#### deadlock이란?
+
++ 두개 이상의 프로세스 혹은 스레드가 리소스를 점유한 상태에서 서로가 가진 리소스를 기다리는 상태
+
+
+
+#### 데드락을 만드는 네 가지 조건
+
++ mutual exclusion : 상호 배제 / 한번에 하나의 프로세스(또는 스레드)만 리소스를 사용할 수 있다.
++ Hold and wait(점유 대기) : 프로세스가 이미 하나 이상의 리소스를 취득한(hold) 상태에서 다른 프로세스가 사용하고 있는 리소스를 추가로 기다린다.(wait)
++ No preemption(비선점) : 리소스 반환은 오직 그 리소스를 취득한 프로세스만 할 수 있다. (다른 프로세스가 점유한 리소스를 강제로 선점할 수 없다.)
++ Circular wait (순환대기) : 프로세스들이 순환(circular) 형태로 서로의 리소스를 기다린다.  
+
+
+
+#### OS의 데드락 해결 방법
+
++ 데드락 방지
+  1. 데드락을 만드는 네 가지 조건 중 하나가 충족되지 않게 시스템을 디자인
+
+     + mutual exclusion -> 리소스를 공유 가능하게 변경 (현실적으로 불가능)
+     + Hold and wait 조건을 충족시키지 않는 경우 
+       + 사용할 리소스들을 모두 획득한 뒤에 시작
+       + 혹은 리소스를 전혀 가지지 않은 상태에서만 리소스 요청할 수 있도록 함
+     + No preemption(비선점)을 충족시키지 않는 경우
+       + 추가적인 리소스를 기다려야 한다면 이미 획득한 리소스를 다른 프로세스가 선점 가능하도록 한다.
+       + 시분할 시스템과 유사 (타임 슬라이스를 다 사용하면 다른 프로세스에게 cpu 양보)
+
+     + circular wait(순환대기)를 충족시키지 않는 경우
+       + 모든 리소스에 순서 체계를 부여해서 오름차순으로 리소스를 요청
+         + 즉 자신이 점유한 리소스보다 순서 숫자가 더 큰 리소스만 확보할 수 있도록 하는 것
+         + 이렇게 되면 가장 순서 숫자가 큰 리소스는 다음 리소스를 확보할 수 없기 때문에 순환 형태가 깨지게 된다.
+         + 리소스가 여러개 필요한 경우 순서 숫자가 작은 리소스를 먼저 확보하고 그 다음 순서를 확보하게 한다.
+
++ 데드락 회피
+
+   + 실행 환경에서 추가적인 정보(현재 사용 가능한 리소스들, 이미 누군가에게 할당된 리소스들, 미래에 있을 리소스 요청이나 반환등에 관한 정보)를 활용해서 데드락이 발생할 것 같은 상황을 회피하는 것 
+   + banker altorithm
+     + 리소스 요청을 허락해줬을 때 데드락이 발생할 가능성이 있으면 리소스를 할당해도 안전할 때 까지 계속 요청을 거절하는 알고리즘 
++ 데드락 감지와 복구
+
+   + 데드락을 허용하고 데드락이 발생하면 복구하는 전략 
+     + 프로세스를 종료하는 방법
+     + 리소스의 일시적인 선점을 허용한다. 
++ 데드락 무시 
+
+​	
+
+---
+
+### OS 프로세스 상태
+
+#### 프로세스의 상태
+
++ new : 프로세스가 새로 생성됨 
++ ready : 프로세스가 cpu에서 실행되기 위해 기다리는 상태 
++ running : cpu를 할당받아 실행되는 상태
+  + 시분할 시스템(멀티태스킹)에서 자신에게 할당된 타임 슬라이스를 모두  소진하게 되면 다시 ready 상태로 돌아감 
++ waiting : I/O 작업이 발생했거나 critical section에 진입하지 못해 대기하는 상태
+  + I/O작업이 모두 완료 됐거나 critical section에 진입할 수 있게 되면 ready상태로 바뀐다. 
+  + cpu에서 다른 작업을 하고 있을 수도 있기 때문에 바로 running으로 바뀌지 않고 ready로 바뀐다. 
++ Terminated : 프로세스가 종료됨 
+
+
+
+---
+
+### CPU scheduler와 dispatcher
+
+#### CPU scheduler
+
++ 어떤 프로세스에게 cpu를 할당할지 선택하는 역할을 함 
++ ready상태의 프로세스 들이 모여있는 큐를 ready 큐라고 하는데 cpu 스케줄러는 이 ready큐에서 어떤 프로세스에게 cpu를 할당할지 선택하는 역할을 한다. 
+
+
+
+#### dispatcher
+
++ 선택된 프로세스에게 CPU를 할당하는 역할
++ dispatcher가 context switching을 수행한다.
+
+
+
+---
+
+### 스케줄링의 선점 방식
+
+#### Nonpreemptive(비선점) scheduling
+
++ 어떤 프로세스가 cpu를 모두 사용할때까지 기다려줌 
++ 신사적, 협력적(cooperative), 느린 응답성 
+
+
+
+#### Preemptive(선점) scheduling
+
++ 프로세스가 cpu에서 실행이 다 끝나지 않았음에도 운영체제에서 개입해서 상태를 ready로 만드는 경우 
+  + 예를 들어 시분할 시스템(멀티 태스킹) : 타임 슬라이스를 모두 소진하면 ready 상태로 변경
++ 적극적, 강제적, 빠른 응답성, 데이터 일관성 문제 
+
+
+
+---
+
+### 스케줄링 알고리즘
+
+#### FCFS(first-come, first-served)
+
++ ready큐에 먼저 도착한 프로세스 순서대로 처리 
+
+#### SJF(shortest-job-first)
+
++ 프로세스의 다음 CPU burst가 가장 짧은 프로세스부터 실행 
+
+#### SRTF(shortest-remaining-time-first)
+
++ 남은 CPU busrt가 가장 짧은 프로세스부터 실행 
++ SJF에서 선점 방식이 적용된 것이 SRTF이다. 
+
+#### Priority
+
++ 우선순위가 높은 프로세스부터 실행
+
+#### RR(round-robin)
+
++ time slice로 나눠진 CPU time을 번갈아가며 실행 
+
+#### Multilevel queue
+
++ 프로세스들을 그룹화해서 그룹마다 큐를 두는 방식 
 
 
 
@@ -460,6 +639,61 @@
 
 
 
+---
+
+### 스레드 종류
+
+#### Hardware thread
+
++ 코어(core)의 고민 - 코어에서 진행하는 연산작업에 비해 메모리에서 데이터를 기다리는 시간이 꽤 오래 걸린다.
++ 그래서 메모리를 기다리는 동안 코어를 낭비하지 않기 위해 다른 스레드를 실행한다. 
++ 이렇게 연산을 하다가 메모리와 관련된 작업을 하는 동안에는 코어에서 연산을 진행하는 또다른 스레드를 실행한다.
++ 이때 이 각각의 스레드가 하드웨어 스레드이다. 
++ 그래서 물리적인 코어마다 하드웨어 스레드가 두개 존재하게 된다.
++ 즉 하드웨어 스레드는 OS관점에서 가상의(logical) 코어이다.
++ 만약에 싱글 코어 cpu에 하드웨어 스레드가 두개라면 OS는 이 CPU를 듀얼 코어로 인식하고 듀얼 코어에 맞춰서 OS레벨의 스레드들을 스케줄링 한다. 
+
+
+
+#### OS thread
+
++ OS 커널 레벨에서 생성되고 관리되는 스레드 
++ OS 스레드는 CPU에서 실제로 실행되는 단위, CPU 스케줄링의 단위이다.
++ OS스레드의 컨텍스트 스위칭은 커널이 개입 -> 비용 발생한다.
++ 사용자 코드와 커널 코드 모두 OS 스레드에서 실행된다.
++ 네이티브 스레드, 커널 스레드, 커널-레벨 스레드, OS-레벨 스레드 등으로 불리기도 함 
+
++ kernel thread는 os커널의 역할을 수행하는 스레드를 의미하기도 한다. 
+
+#### user thread
+
++ 유저 스레드는 유저-레벨 스레드라고 불리기도 한다.
++ 유저 스레드는 스레드 개념을 프로그래밍 레벨에서 추상화 한 것이다. 
+  + Thread thread = new Thread();
+  + thread.start();
++ 유저 스레드가 CPU에서 실행되려면 OS스레드와 반드시 연결돼야 한다.
+
+
+
+#### 유저 스레드와 os스레드를 어떻게 연결시킬 것인가?
+
++ One-to-One model
+  + 유저스레드와 os스레드가 1:1 매핑이 되는 것
+  + 스레드 관리를 OS에 위임한다.
+  + 스케줄링을 커널이 수행함
+  + 멀티코어도 잘 활용함
+  + 한 스레드가 블락이 되도 다른 스레드는 잘 동작한다.
+  + race condition이 발생할 수도 있다.
++ Many-to-One model
+  + 한개의 OS스레드에 여러개의 유저 스레드가 매핑되는 경우 
+  + 유저 스레드간의 컨텍스트 스위칭이 빠르다는 특징이 있다.
+  + OS스레드는 한개이기 때문에 race condition이 일어날 가능성이 적다.
+  + 하지만 역시 OS스레드가 한개이기 때문에 멀티코어를 활용하지 못한다.
+  + 한 유저 스레드가 블락이 되면 나머지 다른 모든 유저 스레드들도 블락이 된다.
++ Many-to-many model
+  + Ont-to-one과 many-to-one의 장점을 합친 모델
+  + 구현이 어렵다는 특징이 있다. 
+
 
 
 ---
@@ -553,3 +787,95 @@
 
 + https://velog.io/@mooh2jj/Tomcat-Thread-Pool-%EC%A0%95%EB%A6%AC
 + https://velog.io/@devel_sujin/%EB%8F%99%EC%8B%9C-%EC%9A%94%EC%B2%AD-%EB%A9%80%ED%8B%B0-%EC%93%B0%EB%A0%88%EB%93%9C
+
+
+
+---
+
+### block I/O와 non-block I/O
+
+#### I/O
+
++ input/output, 데이터의 입출력을 의미 
++ I/O 종류
+  + Network(socket)
+  + file
+  + Pipe (프로세스간 통신할때 사용)
+  + Device - 모니터나 키보드등 디바이스에 관한 input/output
+
+
+
+#### block I/O
+
++ I/O 작업을 요청한 프로세스/스레드는 요청이 완료될 때까지 블락됨을 의미
+
+
+
+#### non-block I/O
+
++ 프로세스 / 스레드를 블락시키지 않고 요청에 대한 현재 상태를 즉시 리턴
++ 스레드가 블락되지 않고 즉시 리턴하기 때문에 스레드가 다른 작업을 수행할 수 있다.
+
+
+
+#### non-block I/O 결과 처리 방식
+
++ non-block I/O의 이슈 - I/O 작업 완료를 어떻게 확인할 것인가?
+
+1. 완료됐는지 반복적으로 확인
+   + 완료된 시간과 완료를 확인한 시간 사이의 갭으로 인해 처리 속도가 느려질 수 있다는 단점이 있음
+   + 완료됐는지 반복적으로 확인하는 것은 CPU를 낭비함 
+2. I/O multiplexing(다중 입출력) 사용
+   + 관심있는 I/O 작업들을 동시에 모니터링하고 그 중에 완료된 I/O 작업들을 한번에 알려줌 
+   + I/O multiplexing system call을 이용하는 경우에 스레드는 블락되거나, 블락되지 않고 계속 실행될수도 있다. 
+   + I/O multiplexing의 종류
+     + select
+     + poll
+     + epoll
+     + kqueue
+     + IOCP(I/O completion port)
+3. Callback/signal 사용
+   + callback의 경우 응답이 오면 OS가 별도의 스레드를 만들고 그 스레드에서 콜백 코드를 실행하게 된다. 
+
+
+
+#### non-block I/O의 핵심
+
++ Non-block I/O를 통해 I/O 요청 완료 전에도 다른일을 할 수 있다는 것이다. 
++ I/O 작업을 하고 있는 동안에 CPU가 놀고 있는것이 아니라 계속해서 다른 작업을 실행할 수 있게 함으로써 CPU를 더 잘 활용할 수 있다. 
+
+
+
+---
+
+###  비동기 프로그래밍
+
+#### synchronous programming
+
++ 동기 프로그래밍
++ 여러 작업(task)들을 순차적으로 실행하도록 개발
+
+
+
+#### asynchronous programming
+
++ 비동기 프로그래밍
++ 여러 작업들을 독립적으로 실행하도록 개발
++ asynchronous programming은 여러 작업을 동시에 실행하는 프로그래밍 방법론이다.
+  + multithreading은 asynchronous programming의 한 종류이다. 
++ Asynchronous programming을 가능하게 하는 것은 multi-threads와 non-block I/O이다. 
+  + 이를 잘 활용하면 스레드를 적게 쓰면서도 non-block I/O를 통해 전체 처리량을 효율적으로 늘릴 수 있다.
+
+
+
+### I/O 관점에서의 asynchronous
+
++ synchronous I/O = block I/O
++ Asynchronous I/O = non-block I/O
++ synchronous I/O : 요청자가 I/O완료까지 챙겨야 할 때
++ Asynchronous I/O : I/O작업의 완료를 noti주거나 callback으로 처리
+
+
+
++ Asynchronous I/O :block I/O를 실행해야하는 경우 다른 thread에서 실행
+

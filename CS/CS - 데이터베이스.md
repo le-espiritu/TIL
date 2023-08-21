@@ -10,7 +10,41 @@
 
 ---
 
+### database 기본 개념
 
+#### database(DB)
+
++ 전자적으로 저장되고 사용되는, 관련있는 데이터들의 조직화된 집합  
+
+
+
+#### DBMS
+
++ database management systems
++ 사용자에게 DB를 정의하고 만들고 관리하는 기능을 제공하는 소프트웨어 시스템 
++ DB를 정의하다 보면 부가적인 데이터가 발생된다.
+  + 이 부가적인 데이터를 metadata라고 부른다.
+
+
+
+#### metadata
+
++ data about data
+  + 데이터를 설명하기 위한 데이터
+  + 예를 들어 사진(데이터)의 해상도, 포맷 등 사진과 관련된 부가적인 정보 
++ DB에서 metadata란 database를 정의하거나 기술하는(descriptive) data
++ catalog라고도 부름
++ e.g.) 데이터 유형, 구조, 제약 조건, 보안, 저장, 인덱스, 사용자 그룹 등등
++ metadata 또한 DBMS를 통해 저장/관리된다.
+
+
+
+#### database system
+
++ database + DBMS + 연관된 applications
++ 줄여서 database라고도 부름 
+
+---
 
 ### data models
 
@@ -72,6 +106,7 @@
 #### physical data modles
 
 + 컴퓨터에 데이터가 어떻게 파일 형태로 저장되는지를 기술할 수 있는 수단을 제공
++ 데이터가 실제로 저장장치에 저장되는 형태에 가장 근접하게 데이터베이스 구조를 표현할 수 있는 데이터 모델 
 + Data format, data orderings, access path 등등
 + access path : 데이터 검색을 빠르게 하기 위한 구조체
   + 대표적인 예로 Index가 있음
@@ -106,23 +141,28 @@
   + 물리적인 database의 구조가 조금씩 바뀔 수있다.
   + database의 구조가 바뀔때에도 이를 사용하는 user application에는 영향을 끼치지 않게 하기 위해 three-schema architecture를 사용한다. 
 + 세 가지 level이 존재하며 각각의 level마다 schema가 정의되어 있다.
-  + external schemas : external level
-  + conceptual schemas : conceptual level
-  + Internal schemas : internal level
+  + external schemas(외부스키마) : external level
+  + conceptual schemas(개념스키마) : conceptual level
+  + Internal schemas(내부스키마) : internal level
 
 <img width="730" alt="스크린샷 2023-04-09 21 54 41" src="https://user-images.githubusercontent.com/88477839/230773740-2755e6fb-5c3d-4e52-9948-0858fc7209a0.png">
 
-+ **internal schema**
++ **internal schema**(내부 스키마)
   + 물리적으로 데이터가 어떻게 저장되는지 physical data model을 통해 표현
   + data storage, data structure, access path 등등 실체가 있는 내용 기술
-+ **external schema**
+  + 내부스키마란 실제 구현에 관한 이야기로, 이 속성이 어떠한 형태(Integer or Varchar or 등등)이며 어느정도의 크기를 갖는지 등에 관해서 기술해둔 스키마를 의미
++ **external schema**(외부 스키마)
   + 실제 유저가 바라보는 schema
+  + 일반 사용자나 응용 프로그래머가 접근하는 계층으로 전체 데이터베이스 중 하나의 논리적인 부분을 의미
+  + 여러 개의 외부 스키마가 있을 수 있음
+  + 서브 스키마(Sub Schema)라고도 하며, View의 개념임
   + external views, user views 라고도 불림
   + 특정 유저들이 필요로 하는 데이터만 표현
   + 그 외 알려줄 필요가 없는 데이터는 숨긴다.
   + logical data model을 통해 표현
-+ **conceptual schema**
++ **conceptual schema**(개념 스키마)
   + 전체 database에 대한 구조를 기술
+  + 개념스키마란 개발하는데 필요한 모든 데이터베이스를 정의해 놓은 것
   + internal schema를 한번 추상화 시켜서 표현한 schema
   + 물리적인 저장 구조에 관한 내용은 숨김
   + entities, data types, relationships, user operations, constraints에 집중
@@ -227,7 +267,7 @@
 + **domain** : set of atomic values
 + **domain name** : domain 이름
 + **attribute** : domain이 relation에서 맡은 역할 이름
-+ **tubple** : 각 attribute의 값으로 이루어진 리스트. 일부 값은 NULL일 수 있다.
++ **tupple** : 각 attribute의 값으로 이루어진 리스트. 일부 값은 NULL일 수 있다.
 + **relation** : set of tuples (이를 표로 표현한것이 table)
 + **relation name** : relation의 이름
 
