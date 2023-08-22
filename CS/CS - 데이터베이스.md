@@ -260,9 +260,35 @@
 
 ---
 
+### relational database
+
+#### set
+
++ 서로 다른 elements를 가지는 collection
+  + 중복된 elements를 가지지 않는다.
++ 하나의 set에서 elements의 순서는 중요하지 않다.
++ e.g.{1,3,11,4,7}
 
 
-### relational data model
+
+#### 수학에서의 relation
+
++ 각 set의 원소들이 관계를 맺으며 리스트를 형성하는 것 
+  + 여기서 리스트는 튜플이라 불리울 수 있다.
+  + 각 set의 원소들이 관계를 맺어 만들어지는 리스트의  모든 경우의 수를 cartesian product 라고 함 
++ subset of cartesian product
++ set of tuples
+
+
+
+#### relational data model에서의 relation
+
++ relational data model에서의 set은 도매인(엘리먼트, 혹은 밸류들의 집합)을 의미함
++ relational data model에서 역할에 따라 동일한 도매인이 여러개 사용될 수 있으며 그 역할은 attribute를 활용하여 구분한다.
+
+
+
+#### relational data model
 
 + **domain** : set of atomic values
 + **domain name** : domain 이름
@@ -273,40 +299,195 @@
 
 
 
+#### relation schema
+
++ relation 의 구조를 나타낸다
++ relation 이름과 attributes 리스트로 표기된다.
+  + ex) STUDENT(id, name, grade, major, phone_num, emer_phone_num)
++ attributes와 관련된 constraints도 포함한다.
+
+
+
+#### degree of a relation
+
++ degree란 차수를 의미함
++ relation schema에서 attributes의 수 
+  + ex) STUDENT(id, name, grade, major, phone_num, emer_phone_num) -> degree 6
+
+
+
+#### relational database
+
++ relational data model에 기반하여 구조화된 database
++ relational database는 여러 개의 relations로 구성된다.
+
+
+
+#### relation의 특징들
+
++ relation은 중복된 tuple을 가질 수 없다.
+
+  + relation이란  튜플들의 set 이고, set은 중복된 원소를 허용하지 않기 때문이다.
+
++ relation의 tuple을 식별하기 위해 attribute의 부분 집합을 key로 설정한다.
+
++ relation에서 tuple의 순서는 중요하지 않다.
+
++ 하나의 relation에서 attribute의 이름은 중복되면 안된다.
+
++ 하나의 tuple에서 attribute의 순서는 중요하지 않다.
+
++ attribute는 atomic 해야 한다. (composite(합성의) or multivalued attribute 허용 안됨)
+
+  
+
+#### DB에서 NULL의 의미
+
++ 값이 존재하지 않는다.
++ 값이 존재하나 아직 그 값이 무엇인지 알지 못한다
++ 해당 사항과 관련이 없다.
+
+
+
+#### DB에서의 key
+
++ superkey - relation에서 tuples를 unique하게 식별할 수 있는 attributes set
++ candidate key - 어느 한 attribute라도 제거하면 unique하게 tuples를 식별할 수 없는 super key
+  + (또는 더이상 쪼개질 수 없는 super key )
++ primary key - relation에서 tupes를 unique하게 식별하기 위해 선택된 candidate key
++ unique key - primary key가 아닌 candidate keys
+  + 또는 alternate key(대체키)라고도 함 
++ foreign key - 다른 relation의 pk를 참조하는 attributes set 
+
+
+
 #### constraints란?
 
 + 사전적 의미로 '제약조건'을 뜻함 
 
 + Relational database의 relations들이 언제나 항상 지켜줘야 하는 제약 사항
-+ **implicit constraints**
+
++ **implicit constraints** (implicit - 내포된 )
+  
   + relational data model 자체가 가지는 constraints
   + relation은 중복되는 tuple을 가질 수 없다.
   + relation 내에서는 같은 이름의 attribute를 가질 수 없다.
+  
 + **schema-based constraints**
   + 주로 DDL을 통해 schema에 직접 명시할 수 있는 constraints
-  + Explicit constraints라고도 함
+  
+  + Explicit constraints라고도 함 ( explicit - 명백한, 노골적인 )
+  
   + **domain constraints**
     + attribute의 value는 해당 attribute의 domain에 속한 value여야 한다.
+    
   + **key constraints**
+    
     + 서로 다른 tuples는 같은 value의 key를 가질 수 없다.
+    
   + **NULL value constraint**
     + attribute가 NOT NULL로 명시됐다면 NULL을 값으로 가질 수 없다.
-  + **entity integrity constraint**
+    
+  + **entity integrity constraint** ( integrity  - 무결성)
+    
     + primary key는 value에 NULL을 가질 수 없다.
-  + **referential integrity constraint**
+    
+  + **referential integrity constraint** ( referential  - 참조의)
+    
     + FK와 PK가 도메인이 같아야 하고 PK에 없는 value를 FK가 값으로 가질 수 없다.
+    
+    
 
+---
 
+### SQL
+
+#### SQL 뜻
+
++ Structured Query Language
++ 현업에서 쓰이는 relational DBMS의 표준 언어
++ 종합적인 database 언어 (DDL + DML + VDL)
 
 ---
 
 
 
-### 트랜잭션 (Transaction) 이란?
+### 트랜잭션
+
+#### 트랜잭션 (Transaction) 이란?
 
 + 데이터베이스에서의 단일한 논리적인 작업 단위 (a single logical unit of work)
 + 논리적인 이유로 여러 SQL문들을 단일 작업으로 묶어서 나눠질 수 없게 만든 것이 transaction이다.
 + transaction의 SQL문들 중에 일부만 성공해서 DB에 반영되는 일을 일어나지 않는다.
+  + 모두 성공해야만 DB에 반영된다. 
+
+
+
+
+#### 트랜잭션 구현
+
+~~~sql
+START TRANSACTION;
+UPDATE account SET balance = balance-200000 WHERE id = 'J';
+UPDATE account SET balance = balance+200000 WHERE id = 'H';
+COMMIT;
+~~~
+
++ commit이란?
+  + 지금까지 작업한 내용을 DB에 영구적으로(permanently) 저장하라는 의미
+  + 동시에 transaction을 종료한다는 의미도 있음
++ ROLLBACK이란?
+  + 지금까지 작업들을 모두 취소하고 transaction 이전 상태로 되돌린다는 의미
+  + 동시에 transaction을 종료 한다. 
+
+
+
+#### AUTOCOMMIT
+
++ 각각의 SQL문을 자동으로 transaction 처리 해주는 개념
++ SQL문이 성공적으로 실행하면 자동으로 commit 한다.
++ 실행 중에 문제가 있었다면 알아서 rollback 한다.
++ MySQL에서는 default로 autocommit이 활성화되어 있다.
++ 다른 DBMS에서도 대부분 같은 기능을 제공한다.
++ mysql에서는 start transaction 실행과 동시에 autocommit은 off 된다.
+  + commit / rollback과 함께 transaction이 종료되면 원래 autocommit 상태로 돌아간다.
+
+
+
+#### 일반적인 transaction 사용 패턴
+
+1. transaction을 시작한다.
+2. 데이터를 읽거나 쓰는 등의 SQL문들을 포함해서 로직을 수행한다.
+3. 일련의 과정들이 문제없이 동작했다면 transaction을 commit 한다.
+4. 중간에 문제가 발생했다면 transaction을 rollback 한다.
+
+
+
+#### ACID - 트랜잭션의 속성
+
++ Atomicity
+  + 모두 성공하거나 모두 실패하거나 ( ALL or NOTHING)
+  + transaction은 논리적으로 쪼개질 수 없는 작업 단위이기 때문에 내부의 SQL문들이 모두 성공해야 한다.
+  + 중간에 SQL문이 실패하면 지금까지의 작업을 모두 취소하여 아무 일도 없었던 것처럼 rollback 한다.
++ Consistency
+  + transaction은 DB상태를 consistent 상태에서 또 다른 consistent상태로 바꿔줘야 한다.
+  + constraints, trigger 등을 통해 DB에 정의된 rules을 transaction이 위반했다면 rollback 해야 한다.
+  + transaction이 DB에 정의된 rule을 위반했는지는 DBMS가 commit 전에 확인하고 알려준다.
+  + 그 외에 application 관점에서 transaction이 consistent하게 동작하는지는 개발자가 챙겨야 한다.
++ Isolation
+  + 여러 transaction들이 동시에 실행될 때도 각각의 transaction이 마치 혼자 실행되는 것처럼 동작하게 만든다.
+  + isolation은 엄격하게 구현하면 DB서버의 퍼포먼스가 줄어들기 때문에  DBMS는 여러 종류의 isolation level을 제공한다.
+    + isolation level이 높으면 높을수록 보다 엄격하게 격리를 시켜서 다른 트랜잭션으로부터 영향을 받을 경우가 줄어들게 됨
+    + 하지만 isolation이 엄격한 만큼 동시에 실행시킬 수 있는 동시성이 떨어지기 때문에 DB서버의 퍼포먼스는 줄어들게 된다. 
+  + 개발자는 isolation level 중에 어떤 level로 transaction을 동작시킬지 설정할 수 있다.
+  + concurrency control의 주된 목표가 isolation이다.
++ Durability
+  + commit된 transaction은 DB에 영구적으로 저장한다.
+  + 즉, DB system에 문제(power fail or DB crash)가 생겨도 commit된 transaction은 DB에 남아 있는다.
+  + '영구적으로 저장한다' 라고 할 때는 일반적으로 '비휘발성 메모리(HDD, SSD, ...)에 저장함'을 의미한다.
+  + 기본적으로 transaction의 durability는 DBMS가 보장한다. 
+
+
 
 
 
@@ -318,7 +499,7 @@
 
 #### Index를 쓰는 이유
 
-+ 조건을 만족하는 튜플(들)을 빠르게 조회하기 위해
++ 특정 조건을 만족하는 튜플(들)을 빠르게 조회하기 위해
 + 빠르게 정렬(order by)하거나 그룹핑(group by) 하기 위해
 
 
