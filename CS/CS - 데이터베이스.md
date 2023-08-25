@@ -578,10 +578,77 @@ COMMIT;
 
 
 
+#### Covering index
+
++ 조회하는 attribute를 index가 모두 cover할 때
++ 조회 성능이 더 빠름 (원래 테이블까지 방문할 필요가 없어서)
+
+
+
 #### Full scan이 Index보다 좋은 경우
 
 + table에 데이터가 조금 있을 때
 + 조회하려는 데이터가 테이블의 상당 부분을 차지할 때 
+
+
+
+---
+
+### functional dependency (함수 종속)
+
+#### functional dependency란
+
++ 한 테이블에 있는 두 개의 attribute(s) 집합(set) 사이의 제약 (a constraint)
++ <img width="749" alt="스크린샷 2023-08-24 20 27 19" src="https://github.com/le-espiritu/TIL/assets/88477839/94291a6f-ca17-426e-9025-3156b11f7061">
+  + 특징 : X값이 같다면 Y값도 같다.
+  + X값에 따라 Y값이 유일하게 결정될 때 
+    + 'X가 Y를 함수적으로 결정한다. (Functionally determine)'
+    + 'Y가 X에 함수적으로 의존한다. (Functionally dependent)'
+    + 라고 말할 수 있고, 두 집합 사이의 이러한 제약 관계를 
+    + Functional dependency(FD) 라고 부른다.
+
+
+
+#### Functional dependency(FD) 파악하기
+
++ 테이블의 스키마를 보고 의미적으로 파악해야 한다.
++ 즉, 테이블의 state를 보고 FD를 파악해서는 안된다.
+  + 테이블의 특정 순간의 특정 상태(state)만 보고 functional dependency가 존재한다고 생각하면 안된다.
+
++ X가 Y를 함수적으로 결정한다고 해서 그 반대의 경우(Y가 X를 함수적으로 결정하는 경우)가 반드시 성립하는 것은 아니다.
+  + 그렇다고해서 Y가 X를 함수적으로 결정하는 경우가 반드시 없는것도 아니다. (결정하는 경우도 있다.)
+
+
+
+#### Functional dependency의 종류
+
++ Trivial functional dependency
+  + X가 Y를 결정하는 함수 종속이 유효할때( X->Y ) , 만약 Y가 X의 부분집합이라면 X->Y 함수종속은 Trivial functional dependency이다.
+    + ex) {a,b,c} -> {c} 는 trivial FD이다. 
+    + ex) {a,b,c} -> {a,c} 는 trivial FD이다. 
+    + ex) {a,b,c} -> {a,b,c} 는 trivial FD이다. 
++ Non-trivial functional dependency
+  + X가 Y를 결정하는 함수 종속이 유효할때( X->Y ) , 만약 Y가 X의 부분집합이 아니라면 X->Y 함수종속은 non-trivial functional dependency이다.
+    + ex) {a,b,c} -> {b,c,d} 는 non-trivial FD이다. 
+    + ex) {a,b,c} -> {d,e} 는 non-trivial FD이다. 
+      + 이 두 집합은 공통된 attribute가 하나도 없다. 이 경우 completely non-trivial FD라고 부른다.
+
++ Partial functional dependendy
+  + when X->Y holds, if  'any proper subset of X'  can determine Y, then X -> Y is partial FD
+  + X가 Y를 결정짓는 함수종속이 존재할때 X의 proper subset의 어떤 값 하나라도 Y를 여전히 함수적으로 결정할 수 있다면 partial functional dependency 라고 한다.
+  + proper subset이란?
+    + 집합 X의 proper subset은 X의 부분 집합이지만 X와 동일하지는 않은 집합이다.
+    + 예를 들어, X={a,b,c} 일 때,
+      + {a,c}, {a}, {}는 모두 X의 proper subset이다.
+      + 반면에 {a,b,c}는 X의 proper subset이 아니다.
+  + 예) {empl_id, empl_name} -> {birth_date} 는 partial FD이다.
+    + proper subset인 {empl_id} 가 {birth_date}를 dertmine 할 수 있기 때문이다.
++ Full functional dependency
+  + when X->Y holds, if  'every proper subset of X'  can NOT determine Y, then X -> Y is full FD
+  + X가 Y를 결정짓는 함수종속이 존재할때 X의 모든 proper subset이 Y를 함수적으로 결정할 수 없다면 full functional dependency 라고 한다.
+  + 예) when {stu_id, class_id} -> {grade} holds,
+  + Because {stu_id}, {class_id}, {} can NOT determine {grade},
+  + then this FD is full FD
 
 
 
@@ -593,6 +660,9 @@ COMMIT;
 
 #### 정규화(Normalization)란?
 
++ 데이터 중복과 insertion, update, deletion anomaly(변칙, 이례)를 최소화하기 위해 일련의 normal forms(NF)에 따라 relational DB를 구성하는 과정
+  + Normal forms : 정규화 되기 위해 준수해야 하는 몇 가지 rule들이 있는데 이 각각의 rule을 normal form(NF)이라고 부른다.
+
 + 데이터베이스 정규화란 데이터베이스의 설계를 재구성 하는 테크닉이다.
 + 정규화를 통해 불필요한 데이터를 없앨 수 있고,
 + 삽입/갱신/삭제 시 발생할 수 있는 각종 이상현상들을 방지할 수 있다.
@@ -602,16 +672,32 @@ COMMIT;
 
 
 
-#### 제 1 정규화
+#### DB 정규화 과정
+
++ <img width="694" alt="스크린샷 2023-08-25 22 09 46" src="https://github.com/le-espiritu/TIL/assets/88477839/75a0ec60-4231-4be7-9e4c-ba3d420498c7">
+  + 1NF~BCNF : FD와 key만으로 정의되는 normal forms이다.
+  + 3NF까지 도달하면 정규화 됐다고 말하기도 한다.
+  + 보통 실무에서는 3NF 혹은 BCNF까지 진행한다.
+
+
+
+#### 제 1 정규화 (1NF)
 
 + 제 1 정규화란 테이블의 컬럼이 원자값을 갖도록 하는 것이다.
++ attribute의 value는 반드시 나눠질 수 없는 단일한 값이어야 한다.
++ 1NF을 하는 과정에서 한 컬럼의 값을 원자적으로 나누는 과정에서 해당 컬럼을 제외하고 나머지 컬럼들은 모두 중복값을 같는 튜플이 하나 더 생겨나게 된다. 따라서 이를 구분짓기 위해 primary key를 변경하게 되고(기존 primary key에 컬럼 추가), 따라서 모든 non-prime attribute들이 key값에 partially dependent 하게되는 문제가 발생한다. 이를 해결하기 위해 2NF을 해준다. 
+  + Non-prime attribute란 prime attribute가 아닌 attribute이다. 즉, 어떤 key에도 속하지 않은 attribute이다.
+  + Prime attribute란 임의의 key에 속하는 attribute이다.
 
 
 
-#### 제 2 정규화
 
+#### 제 2 정규화(2NF)
+
++ 모든 non-prime attribute는 모든 key에 fully functionally dependent 해야 한다. 
 + 제 1 정규화를 진행한 테이블에 대해 완전 함수 종속을 만족하도록 테이블을 분해하는 것
   + 완전 함수 종속은 기본키의 부분집합이 결정자가 되어선 안된다는 것을 의미한다.
++ 2NF부터는 테이블이 나눠진다. 
 
 
 
